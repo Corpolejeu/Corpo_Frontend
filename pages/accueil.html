@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+
+        <!-- 🔥 Affichage du pseudo -->
+        <div class="nav-user">
+            <span id="userPseudo"></span>
+        </div>
+
+        <div class="nav-links-right">
+            <button id="logoutBtn" class="btn" style="display:none;">Se déconnecter</button>
+        </div>
+    </div>
+
+    <main class="main accueil-container">
+
+        <div class="box accueil-left">
+            <h1>Bienvenue<br>sur Corpo!</h1>
+
+            <button class="btn" onclick="window.location.href='creer_partie.html'">Créer une partie</button>
+            <button class="btn" onclick="window.location.href='rejoindre_partie.html'">Rejoindre une partie</button>
+        </div>
+
+        <div class="box accueil-right" id="registerBox">
+            <h2>Créer un compte</h2>
+
+            <label>Pseudo :</label>
+            <input type="text" id="pseudo" placeholder="Votre pseudo">
+
+            <label>Email :</label>
+            <input type="email" id="email" placeholder="Votre email">
+
+            <label>Mot de passe :</label>
+            <input type="password" id="password" placeholder="Votre mot de passe">
+
+            <button class="btn" id="registerBtn">Créer mon compte</button>
+
+            <p style="margin-top:10px; font-size:14px;">
+                Déjà un compte ?
+                <a href="login.html" style="color:#c0392b; text-decoration:none; font-weight:bold;">
+                    Se connecter !
+                </a>
+            </p>
+        </div>
+
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        // 🔥 Afficher le pseudo dans la navbar si connecté
+        const savedPseudo = localStorage.getItem("pseudo");
+        if (savedPseudo) {
+            const el = document.getElementById("userPseudo");
+            if (el) el.textContent = savedPseudo;
+        }
+
+        // 🔥 Vérifie si l'utilisateur est connecté
+        if (savedPseudo) {
+            document.getElementById("registerBox").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "inline-block";
+        }
+
+        // 🔥 Déconnexion
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("pseudo");
+            alert("Vous êtes déconnecté !");
+            window.location.href = "accueil.html";
+        });
+
+        // 🔥 Création de compte
+        document.getElementById("registerBtn").addEventListener("click", async () => {
+            const pseudo = document.getElementById("pseudo").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!pseudo || !email || !password) {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            const response = await fetch("http://127.0.0.1:8000/account/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pseudo, email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("pseudo", pseudo);
+                alert("Compte créé avec succès !");
+                window.location.href = "accueil.html";
+            } else {
+                alert(data.detail || "Erreur lors de la création du compte");
+            }
+        });
+    </script>
+
+</body>
+
+</html>

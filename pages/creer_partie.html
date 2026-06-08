@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Créer une partie - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+
+        <div class="nav-user">
+            <span id="userPseudo"></span>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="box">
+            <h1>Créer<br>une<br>partie</h1>
+            <p>Entrez votre pseudo pour créer un meeting.</p>
+
+            <input type="text" id="pseudo" placeholder="Votre pseudo">
+
+            <label style="display:block;margin-top:10px;">
+                <input type="checkbox" id="isPrivate"> Partie privée
+            </label>
+
+            <button class="btn" id="createBtn">Créer la partie</button>
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        const savedPseudo = localStorage.getItem("pseudo");
+        if (savedPseudo) {
+            const el = document.getElementById("userPseudo");
+            if (el) el.textContent = savedPseudo;
+        }
+
+        document.getElementById("createBtn").addEventListener("click", async () => {
+            const pseudo = document.getElementById("pseudo").value;
+            const isPrivate = document.getElementById("isPrivate").checked;
+
+            if (!pseudo) {
+                alert("Veuillez entrer un pseudo !");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/party/create", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ pseudo, is_private: isPrivate })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem("pseudo", pseudo);
+                    localStorage.setItem("partyCode", data.code);
+
+                    localStorage.setItem("playerId", data.player_id);
+
+                    window.location.href = `lobby.html?code=${data.code}`;
+                } else {
+                    alert(data.detail || "Erreur lors de la création de la partie");
+                }
+            } catch (error) {
+                alert("Erreur de connexion au serveur !");
+                console.error(error);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+        <div class="nav-user"><span id="userPseudo"></span></div>
+    </div>
+
+    <main class="main feedback-container">
+        <div class="feedback-box">
+
+            <h1>Feedback / Débat</h1>
+
+            <!-- Badge indiquant le contexte -->
+            <div id="contextBadge" style="
+                display:inline-block; padding:6px 16px; border-radius:20px;
+                font-weight:bold; margin-bottom:12px; font-size:14px;
+                background:#c0392b; color:white;">
+                …
+            </div>
+
+            <div class="cho-message">
+                <p><strong>CHO :</strong> <span id="choText">Le débat est ouvert !</span></p>
+            </div>
+
+            <div class="feedback-timer">
+                Temps restant : <span id="timerDisplay">120s</span>
+            </div>
+
+            <div class="feedback-center">
+                <p class="feedback-info">Débattez ensemble pour désigner les suspects…</p>
+            </div>
+
+            <!-- Chat -->
+            <div class="chat-box">
+                <div class="chat-messages" id="chatMessages">
+                    <p class="chat-placeholder">Le chat est ouvert. Commencez à discuter…</p>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Écrire un message…">
+                    <button class="chat-send-btn" id="sendBtn">Envoyer</button>
+                </div>
+            </div>
+
+            <!-- Bouton HOST : change selon le contexte -->
+            <div id="actionContainer" style="display:none; margin-top:20px;">
+                <button class="btn feedback-vote-btn" id="actionBtn">…</button>
+            </div>
+
+            <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
+                ⏳ En attente de l'hôte…
+            </p>
+
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        const API_URL   = "http://127.0.0.1:8000";
+        const partyCode = localStorage.getItem("partyCode");
+        const pseudo    = localStorage.getItem("pseudo");
+        const playerId  = localStorage.getItem("playerId");
+
+        document.getElementById("userPseudo").textContent = pseudo;
+
+        // Lire le mode depuis l'URL ou localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        let feedbackMode = urlParams.get("mode") || localStorage.getItem("feedbackMode") || "pre_vote";
+        localStorage.setItem("feedbackMode", feedbackMode);
+
+        // Configurer l'UI selon le mode
+        function setupUI() {
+            const badge  = document.getElementById("contextBadge");
+            const cho    = document.getElementById("choText");
+            const btn    = document.getElementById("actionBtn");
+
+            if (feedbackMode === "pre_vote") {
+                badge.textContent      = "🗣 Débat avant le vote";
+                badge.style.background = "#c0392b";
+                cho.textContent        = "Débattez et désignez vos suspects. Le vote arrive !";
+                btn.textContent        = "🗳 Passer au vote";
+                btn.onclick            = triggerVote;
+            } else {
+                // post_vote → après le défi du vote, prochain meeting
+                badge.textContent      = "🏁 Débat final du tour";
+                badge.style.background = "#2c3e50";
+                cho.textContent        = "Dernier débat avant le prochain meeting !";
+                btn.textContent        = "▶ Lancer le meeting suivant";
+                btn.onclick            = triggerNextMeeting;
+            }
+        }
+
+        // ---------------------------------------------------
+        // Timer 2 minutes
+        // ---------------------------------------------------
+        let timeLeft = 120;
+        const timerEl = document.getElementById("timerDisplay");
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = timeLeft + "s";
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerEl.textContent = "Temps écoulé !";
+            }
+        }, 1000);
+
+        // ---------------------------------------------------
+        // Vérifier si le joueur est host
+        // ---------------------------------------------------
+        async function checkHost() {
+            try {
+                const res  = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                const data = await res.json();
+                if (data.host_id === parseInt(playerId)) {
+                    document.getElementById("actionContainer").style.display = "block";
+                } else {
+                    document.getElementById("waitingMsg").style.display = "block";
+                }
+            } catch (e) {
+                console.error("Erreur vérification host :", e);
+            }
+        }
+
+        // ---------------------------------------------------
+        // Actions host
+        // ---------------------------------------------------
+        async function triggerVote() {
+            document.getElementById("actionBtn").disabled = true;
+            try {
+                await fetch(`${API_URL}/meeting/phase/vote/${partyCode}`, { method: "POST" });
+            } catch (e) {
+                console.error("Erreur passage au vote :", e);
+                document.getElementById("actionBtn").disabled = false;
+            }
+        }
+
+        async function triggerNextMeeting() {
+            document.getElementById("actionBtn").disabled = true;
+            try {
+                await fetch(`${API_URL}/party/next_meeting/${partyCode}`, { method: "POST" });
+            } catch (e) {
+                console.error("Erreur next meeting :", e);
+                document.getElementById("actionBtn").disabled = false;
+            }
+        }
+
+        // ---------------------------------------------------
+        // WebSocket
+        // ---------------------------------------------------
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+
+        ws.onmessage = (event) => {
+            const msg = event.data;
+
+            if (msg.startsWith("chat:")) {
+                const text   = msg.substring(5);
+                const isMine = text.startsWith(pseudo + " : ");
+                addMessage(text, false, isMine);
+                return;
+            }
+            if (msg.startsWith("chat_warning:")) {
+                addMessage(msg.substring(13), true, false);
+                return;
+            }
+            if (msg.startsWith("tiff_mots:")) {
+                try {
+                    window._motsInterdits = JSON.parse(msg.substring(10));
+                    addMessage(`🚫 Nouveaux mots interdits : ${window._motsInterdits.join(", ")}`, true, false);
+                } catch(e) {}
+                return;
+            }
+            if (msg.startsWith("player_eliminated_direct:")) {
+                const parts = msg.split(":");
+                addMessage(`❌ ${parts[1]} a été licencié(e) ! (Rôle : ${parts[2]})`, true, false);
+                return;
+            }
+            if (msg.startsWith("mot_interdit:")) {
+                const parts = msg.split(":");
+                addMessage(`🚫 ${parts[1]} a dit un mot interdit : "${parts[2]}" → Licenciement en cours !`, true, false);
+                return;
+            }
+            if (msg === "phase:vote") {
+                clearInterval(timerInterval);
+                localStorage.removeItem("feedbackMode");
+                window.location.href = `vote.html?code=${partyCode}`;
+                return;
+            }
+            if (msg.startsWith("next_meeting:")) {
+                clearInterval(timerInterval);
+                localStorage.removeItem("feedbackMode");
+                window.location.href = `meeting1.html?code=${partyCode}`;
+                return;
+            }
+            if (msg.startsWith("game_over:")) {
+                clearInterval(timerInterval);
+                localStorage.removeItem("feedbackMode");
+                const result = msg.split(":")[1];
+                window.location.href = result === "victoire_collabs" ? "victoire.html"
+                                     : result === "match_nul"        ? "match_nul.html"
+                                     : "defaite.html";
+                return;
+            }
+        };
+
+        // ---------------------------------------------------
+        // Chat
+        // ---------------------------------------------------
+        function addMessage(text, isWarning = false, isMine = false) {
+            const msgs = document.getElementById("chatMessages");
+            // Supprimer le placeholder si présent
+            const placeholder = msgs.querySelector(".chat-placeholder");
+            if (placeholder) placeholder.remove();
+
+            const p = document.createElement("p");
+            p.textContent = text;
+            p.style.cssText = `
+                margin: 6px 0; padding: 8px 12px; border-radius: 8px;
+                font-size: 14px; max-width: 85%; word-break: break-word;
+            `;
+            if (isWarning) {
+                p.style.background = "#fff3cd";
+                p.style.color      = "#856404";
+                p.style.border     = "1px solid #ffc107";
+                p.style.alignSelf  = "center";
+                p.style.textAlign  = "center";
+                p.style.maxWidth   = "100%";
+            } else if (isMine) {
+                p.style.background = "#c0392b";
+                p.style.color      = "white";
+                p.style.marginLeft = "auto";
+            } else {
+                p.style.background = "#f0f0f0";
+                p.style.color      = "#2c3e50";
+            }
+            msgs.appendChild(p);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        document.getElementById("sendBtn").addEventListener("click", sendChat);
+        document.getElementById("chatInput").addEventListener("keydown", (e) => {
+            if (e.key === "Enter") sendChat();
+        });
+
+        function sendChat() {
+            const input = document.getElementById("chatInput");
+            const text  = input.value.trim();
+            if (!text || ws.readyState !== WebSocket.OPEN) return;
+            ws.send(JSON.stringify({ type: "chat", pseudo, message: text }));
+            input.value = "";
+        }
+
+        
+        // 🔥 Vérifier si le joueur est vivant
+        (async function checkAlive() {
+            try {
+                const res  = await fetch(`${API_URL}/party/is_alive/${playerId}`);
+                const data = await res.json();
+                if (!data.is_alive) {
+                    window.location.href = "salle_morts.html";
+                }
+            } catch(e) {}
+        })();
+
+        setupUI();
+        checkHost();
+        loadMotsInterdits();
+
+        // Charger les mots interdits actifs
+        async function loadMotsInterdits() {
+            try {
+                const res  = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
+                const data = await res.json();
+                window._motsInterdits = data.mots_actifs || [];
+                if (window._motsInterdits.length > 0) {
+                    addMessage(`🚫 Mots interdits actifs : ${window._motsInterdits.join(", ")}`, true, false);
+                }
+            } catch(e) { window._motsInterdits = []; }
+        }
+    </script>
+
+</body>
+</html>

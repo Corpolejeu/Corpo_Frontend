@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lobby - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style>
+        .player-list {
+            margin-top: 20px;
+            padding: 10px;
+            background: #ffffffaa;
+            border-radius: 10px;
+        }
+        .player-item {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .player-item:last-child {
+            border-bottom: none;
+        }
+        #startBtn {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+        <div class="nav-user">
+            <span id="userPseudo"></span>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="box">
+
+            <h1>Lobby</h1>
+            <p>En attente des joueurs...</p>
+
+            <h3>Code de la partie :</h3>
+            <p id="partyCode" style="font-size:28px; font-weight:bold; letter-spacing:4px;"></p>
+
+            <h3>Joueurs connectés :</h3>
+            <div id="playersList" class="player-list">
+                <p>Chargement...</p>
+            </div>
+
+            <p id="waitingMsg" style="color:#444; font-weight:bold; margin-top:15px;">
+                En attente de 4 joueurs pour démarrer...
+            </p>
+
+            <button id="startBtn" class="btn">Lancer la partie</button>
+
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+
+        const pseudo = localStorage.getItem("pseudo");
+        const playerId = localStorage.getItem("playerId");
+
+        document.getElementById("userPseudo").textContent = pseudo;
+        document.getElementById("partyCode").textContent = code;
+        localStorage.setItem("partyCode", code);
+
+        let partyId = null;
+        let hostId = null;
+        let partyLaunched = false;
+
+        // -------------------------------------------------------------------------
+        // 🔥 FIX : Ajout du paramètre obligatoire ?player_id= pour ouvrir la room
+        // -------------------------------------------------------------------------
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${code}?player_id=${playerId}`);
+
+        ws.onopen = () => {
+            console.log("✅ Connexion WebSocket établie avec succès dans la room :", code);
+        };
+
+        ws.onmessage = (event) => {
+            console.log("📩 Signal reçu du serveur :", event.data);
+            if (event.data === "start" || event.data === "phase:decouverte_role") {
+                partyLaunched = true;
+                window.location.href = `decouverte_role.html?code=${code}`;
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error("❌ Erreur WebSocket :", error);
+        };
+
+        async function loadPartyInfo() {
+            try {
+                const res = await fetch(`${API_URL}/party/verify/${code}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                partyId = data.party_id;
+                hostId = data.host_id;
+            } catch (e) {
+                console.error("Erreur loadPartyInfo :", e);
+            }
+        }
+
+        async function loadPlayers() {
+            if (!partyId) return;
+
+            try {
+                const res = await fetch(`${API_URL}/party/players/${partyId}`);
+                if (!res.ok) return;
+                const players = await res.json();
+
+                const container = document.getElementById("playersList");
+                container.innerHTML = "";
+
+                players.forEach(p => {
+                    const div = document.createElement("div");
+                    div.classList.add("player-item");
+                    div.textContent = p.pseudo;
+                    container.appendChild(div);
+                });
+
+                const waitingMsg = document.getElementById("waitingMsg");
+                const startBtn = document.getElementById("startBtn");
+
+                // Note : Ajuste à 1 ou 2 si tu testes seul ou à deux joueurs pour la phase de dev
+                if (players.length < 4) {
+                    waitingMsg.textContent = `En attente de joueurs (${players.length}/4)...`;
+                    waitingMsg.style.display = "block";
+                    startBtn.style.display = "none";
+                } else {
+                    waitingMsg.style.display = "none";
+                    if (Number(playerId) === Number(hostId)) {
+                        startBtn.style.display = "block";
+                    }
+                }
+            } catch (e) {
+                console.error("Erreur loadPlayers :", e);
+            }
+        }
+
+        async function initLobby() {
+            await loadPartyInfo();
+            // Charger une première fois immédiatement
+            await loadPlayers();
+            // Puis actualiser la liste toutes les 2 secondes
+            setInterval(loadPlayers, 2000);
+
+            document.getElementById("startBtn").addEventListener("click", async () => {
+                if (!partyId) {
+                    alert("Erreur : partyId non défini !");
+                    return;
+                }
+
+                partyLaunched = true;
+
+                try {
+                    const res = await fetch(`${API_URL}/party/start/${partyId}`, { method: "POST" });
+                    const data = await res.json();
+
+                    if (!res.ok) {
+                        partyLaunched = false; 
+                        alert(data.detail || "Impossible de lancer la partie.");
+                    }
+                } catch (e) {
+                    partyLaunched = false;
+                    console.error("Erreur lors du lancement de la partie :", e);
+                }
+            });
+        }
+
+        initLobby();
+
+        // Heartbeat pour maintenir la session active
+        function sendHeartbeat() {
+            if (playerId) {
+                fetch(`${API_URL}/party/heartbeat/${playerId}`, { method: "POST" }).catch(() => {});
+            }
+        }
+        sendHeartbeat();
+        setInterval(sendHeartbeat, 5000);
+
+        window.addEventListener("beforeunload", () => {
+            if (!partyLaunched && playerId) {
+                navigator.sendBeacon(`${API_URL}/party/leave/${playerId}`);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

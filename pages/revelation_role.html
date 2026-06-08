@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Révélation du rôle - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .revelation-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .eliminated-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #c0392b;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .badge-manager {
+            background: #c0392b;
+            color: white;
+        }
+
+        .badge-collab {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+        <div class="nav-user"><span id="userPseudo"></span></div>
+    </div>
+
+    <main class="main">
+        <div class="revelation-box">
+
+            <h1>⚡ Révélation !</h1>
+
+            <div class="cho-message">
+                <p id="choMsg"><strong>CHO :</strong> Chargement…</p>
+            </div>
+
+            <img id="eliminatedImg" class="eliminated-img" src="../assets/images/joueur1.png" alt="Éliminé">
+            <h2 id="eliminatedName">…</h2>
+            <!-- Rôle caché par défaut, révélé seulement si défi échoué -->
+            <p id="eliminatedRole" class="role-badge" style="display:none;">…</p>
+            <p id="eliminatedTeam" style="font-size:16px; color:#666; display:none;"></p>
+
+            <!-- Section pour le joueur éliminé lui-même -->
+            <div id="defiSection" style="display:none; margin-top:20px;">
+                <p style="font-size:18px;">Vous avez été licencié(e). Relevez un défi Corpo! pour tenter de rester !</p>
+                <p id="defiTimer" style="font-size:20px; color:#c0392b; font-weight:bold; margin:10px 0;"></p>
+                <div class="btn-group">
+                    <button class="btn" id="lancerDefiBtn">🎯 Lancer le défi</button>
+                </div>
+            </div>
+
+            <!-- Section pour les autres joueurs -->
+            <div id="nextSection" style="display:none; margin-top:20px;">
+                <p id="waitingDefiMsg" style="font-size:16px; color:#888; font-style:italic;"></p>
+                <div class="btn-group">
+                    <a id="btnRetour" class="btn" href="accueil.html">🏠 Retour accueil</a>
+                    <a id="btnNextMeeting" class="btn" href="#">▶ Meeting suivant</a>
+                    <a id="btnVictoire" class="btn" href="victoire.html" style="display:none;">🏆 Victoire !</a>
+                    <a id="btnDefaite" class="btn" href="defaite.html" style="display:none;">💀 Défaite</a>
+                </div>
+            </div>
+
+            <!-- Personne éliminé : déjà utilisé défi -->
+            <div id="eliminatedSection" style="display:none; margin-top:20px;">
+                <p style="font-size:16px; color:#c0392b;">Vous avez déjà utilisé votre carte action Corpo!. Vous êtes
+                    définitivement licencié(e).</p>
+                <div class="btn-group">
+                    <a class="btn" href="salle_morts.html">💀 Salle des morts</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        // 🔥 Vérification : joueur éliminé → désactiver les actions
+        (async function checkIfAlive() {
+            const pid = localStorage.getItem("playerId");
+            if (!pid) return;
+            try {
+                const r = await fetch(`http://127.0.0.1:8000/party/is_alive/${pid}`);
+                const d = await r.json();
+                if (!d.is_alive) {
+                    // Désactiver tous les boutons et inputs
+                    document.querySelectorAll("button, input, select").forEach(el => {
+                        el.disabled = true;
+                    });
+                    // Afficher un bandeau "éliminé"
+                    const banner = document.createElement("div");
+                    banner.style.cssText = "position:fixed;top:60px;left:0;right:0;background:#c0392b;color:white;text-align:center;padding:10px;font-weight:bold;z-index:9999;";
+                    banner.textContent = "💀 Vous êtes éliminé — Mode spectateur";
+                    document.body.appendChild(banner);
+                }
+            } catch (e) { }
+        })();
+
+        const API_URL = "http://127.0.0.1:8000";
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code") || localStorage.getItem("partyCode");
+        const partyCode = localStorage.getItem("partyCode");
+        const pseudo = localStorage.getItem("pseudo");
+        const playerId = parseInt(localStorage.getItem("playerId"), 10);
+
+        document.getElementById("userPseudo").textContent = pseudo;
+
+        // 🔥 WebSocket — écouter le signal go_defi pour rediriger tout le monde
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}`);
+        ws.onmessage = (event) => {
+            if (event.data === "go_defi") {
+                window.location.href = `defi_corpo.html?code=${partyCode}`;
+            }
+        };
+
+        // 🔥 Si les infos ne sont pas dans le localStorage, les récupérer depuis l'API
+        async function ensureVictimInfo() {
+            const storedId = localStorage.getItem("eliminatedPlayerId");
+            if (storedId) return; // déjà là
+
+            try {
+                const res = await fetch(`${API_URL}/party/meeting_victim/${code}`);
+                const data = await res.json();
+                if (data.victim) {
+                    localStorage.setItem("eliminatedPlayerId", data.victim.player_id);
+                    localStorage.setItem("eliminatedPseudo", data.victim.pseudo);
+                    const imgs = {
+                        "Fabien": "fabien.png", "Claire": "claire.png", "La Plante": "plante.png",
+                        "Benjamin": "benjamin.png", "Pascal": "pascal.png", "Tiff": "tiff.png",
+                        "Stéphane": "stephane.png", "Cindy": "cindy.png", "Denis": "denis.png",
+                        "Corentin": "corentin.png", "Abdel": "abdel.png"
+                    };
+                    localStorage.setItem("eliminatedImg", imgs[data.victim.role] || "joueur1.png");
+                }
+            } catch (e) { console.error("Erreur récupération victime:", e); }
+        }
+
+        const roleImages = {
+            "Fabien": "fabien.png",
+            "Claire": "claire.png",
+            "La Plante": "plante.png",
+            "Benjamin": "benjamin.png",
+            "Pascal": "pascal.png",
+            "Tiff": "tiff.png",
+            "Stéphane": "stephane.png",
+            "Cindy": "cindy.png",
+            "Denis": "denis.png",
+            "Corentin": "corentin.png",
+            "Abdel": "abdel.png",
+        };
+
+        async function loadVoteResult() {
+            try {
+                const res = await fetch(`${API_URL}/party/vote_result/${code}`);
+                const data = await res.json();
+
+                if (!data.eliminated) {
+                    document.getElementById("choMsg").innerHTML = "<strong>CHO :</strong> Personne n'a été éliminé ce tour. Le meeting continue !";
+                    document.getElementById("nextSection").style.display = "block";
+                    document.getElementById("btnNextMeeting").href = `meeting1.html?code=${partyCode}`;
+                    document.getElementById("waitingDefiMsg").textContent = "";
+                    return;
+                }
+
+                const eliminated = data.eliminated;
+                const imgFile = roleImages[eliminated.role] || "joueur1.png";
+                const imgSrc = `../assets/images/${imgFile}`;
+
+                document.getElementById("eliminatedImg").src = imgSrc;
+                document.getElementById("eliminatedName").textContent = eliminated.pseudo;
+                document.getElementById("eliminatedRole").textContent = eliminated.role;
+                document.getElementById("eliminatedTeam").textContent = `Équipe : ${eliminated.team}`;
+
+                const badge = document.getElementById("eliminatedRole");
+                badge.className = "role-badge " + (eliminated.team === "Managers" ? "badge-manager" : "badge-collab");
+
+                // 🔥 Ne pas révéler le rôle ici !
+                document.getElementById("choMsg").innerHTML =
+                    `<strong>CHO :</strong> ${eliminated.pseudo} a été licencié(e) ! Il/Elle doit relever un défi Corpo! pour rester en jeu.`;
+
+                // Stocker les infos de l'éliminé pour les pages suivantes
+                localStorage.setItem("eliminatedPseudo", eliminated.pseudo);
+                localStorage.setItem("eliminatedImg", imgFile);
+                localStorage.setItem("eliminatedPlayerId", eliminated.player_id);
+
+                // 🔥 Est-ce que c'est MOI qui suis éliminé ?
+                const iAmEliminated = parseInt(eliminated.player_id, 10) === parseInt(playerId, 10);
+
+                if (iAmEliminated) {
+                    // Vérifier si j'ai déjà utilisé ma carte défi
+                    if (eliminated.has_drawn_corpocard) {
+                        // Déjà utilisé → direct salle des morts
+                        document.getElementById("eliminatedSection").style.display = "block";
+                    } else {
+                        // Proposer le défi
+                        document.getElementById("defiSection").style.display = "block";
+
+                        // 🔥 Timer 15s pour valider, sinon mort automatique
+                        let defiTimeLeft = 15;
+                        const defiTimerEl = document.getElementById("defiTimer");
+                        defiTimerEl.textContent = `⏱ ${defiTimeLeft}s pour accepter le défi !`;
+
+                        const defiCountdown = setInterval(async () => {
+                            defiTimeLeft--;
+                            defiTimerEl.textContent = `⏱ ${defiTimeLeft}s pour accepter le défi !`;
+                            if (defiTimeLeft <= 0) {
+                                clearInterval(defiCountdown);
+                                // Temps écoulé → mort automatique
+                                defiTimerEl.textContent = "⏱ Temps écoulé ! Vous êtes définitivement licencié(e).";
+                                document.getElementById("lancerDefiBtn").disabled = true;
+                                try {
+                                    await fetch(`${API_URL}/party/defi_result`, {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ player_id: playerId, success: false })
+                                    });
+                                } catch (e) { }
+                                // Broadcaster salle des morts
+                                if (ws.readyState === WebSocket.OPEN) {
+                                    ws.send(JSON.stringify({ type: "go_salle_morts" }));
+                                }
+                                setTimeout(() => { window.location.href = "salle_morts.html"; }, 2000);
+                            }
+                        }, 1000);
+
+                        document.getElementById("lancerDefiBtn").addEventListener("click", async () => {
+                            clearInterval(defiCountdown);
+                            try {
+                                await fetch(`${API_URL}/party/draw_corpocard/${playerId}`, { method: "POST" });
+                            } catch (e) {
+                                console.error("Erreur draw_corpocard :", e);
+                            }
+                            // 🔥 Broadcaster à tout le monde → aller sur defi_corpo
+                            if (ws.readyState === WebSocket.OPEN) {
+                                ws.send(JSON.stringify({ type: "go_defi" }));
+                            }
+                            window.location.href = `defi_corpo.html?code=${partyCode}`;
+                        });
+                    }
+                } else {
+                    // Je ne suis pas éliminé → boutons pour les autres
+                    document.getElementById("nextSection").style.display = "block";
+                    document.getElementById("btnNextMeeting").style.display = "none";
+
+                    if (eliminated.has_drawn_corpocard) {
+                        // Déjà utilisé sa carte → directement au feedback
+                        document.getElementById("waitingDefiMsg").textContent = "Ce joueur a déjà utilisé sa carte défi. Il est définitivement licencié.";
+                        document.getElementById("btnNextMeeting").textContent = "▶ Passer au feedback";
+                        document.getElementById("btnNextMeeting").onclick = (e) => {
+                            e.preventDefault();
+                            window.location.href = `feedback.html?code=${partyCode}`;
+                        };
+                        document.getElementById("btnNextMeeting").style.display = "inline-block";
+                    } else {
+                        // 🔥 Le joueur doit faire le défi → defi_corpo directement
+                        document.getElementById("waitingDefiMsg").textContent = `⏳ ${eliminated.pseudo} doit relever un défi Corpo!...`;
+                        setTimeout(() => {
+                            window.location.href = `defi_corpo.html?code=${partyCode}`;
+                        }, 2000);
+                    }
+
+                    // Conditions de victoire
+                    if (data.game_over) {
+                        if (data.winner === "Collaborateurs") {
+                            document.getElementById("btnVictoire").style.display = "inline-block";
+                            document.getElementById("btnNextMeeting").style.display = "none";
+                        } else {
+                            document.getElementById("btnDefaite").style.display = "inline-block";
+                            document.getElementById("btnNextMeeting").style.display = "none";
+                        }
+                    }
+                }
+
+            } catch (e) {
+                document.getElementById("choMsg").innerHTML = "<strong>CHO :</strong> Résultat en attente…";
+                console.error(e);
+            }
+        }
+
+        ensureVictimInfo().then(() => loadVoteResult());
+    </script>
+
+</body>
+
+</html>

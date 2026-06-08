@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body { background: #f5f5f5; }
+
+        .meeting-page {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 20px;
+            align-items: flex-start;
+        }
+
+        /* ── TABLE OVALE ── */
+        .table-col { flex: 1; min-width: 0; }
+
+        .box-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+            padding: 20px;
+        }
+
+        .box-table h2 {
+            color: #c0392b;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .oval-wrap {
+            position: relative;
+            width: 100%;
+            padding-bottom: 62%;
+        }
+
+        .oval-surface {
+            position: absolute;
+            top: 14%; left: 14%; right: 14%; bottom: 14%;
+            background: linear-gradient(145deg, #fdecea, #fff5f5);
+            border-radius: 50%;
+            border: 3px solid #c0392b;
+            box-shadow: 0 4px 20px rgba(192,57,43,0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #tableTurnRole {
+            font-size: 16px;
+            font-weight: bold;
+            color: #c0392b;
+        }
+        #tableTurnLabel {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+        #timerCenter {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c0392b;
+            margin-top: 6px;
+            font-family: monospace;
+        }
+        #timerCenter.urgent {
+            color: #e74c3c;
+            animation: blink .5s infinite alternate;
+        }
+        @keyframes blink { from{opacity:1} to{opacity:.4} }
+
+        /* Sièges */
+        .player-seat {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            transform: translate(-50%, -50%);
+        }
+
+        .seat-avatar {
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            overflow: hidden;
+            background: #f9f9f9;
+            transition: all .2s;
+            position: relative;
+        }
+        .seat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .seat-avatar.me    { border-color: #c0392b; box-shadow: 0 0 0 3px rgba(192,57,43,0.18); }
+        .seat-avatar.active{ border-color: #f39c12; box-shadow: 0 0 14px rgba(243,156,18,0.55); animation: activePulse 1s infinite; }
+        .seat-avatar.neighbor { border-color: #f39c12; box-shadow: 0 0 8px rgba(243,156,18,0.4); }
+        .seat-avatar.dead  { opacity: .4; filter: grayscale(1); }
+        .seat-avatar.clickable { cursor: pointer; }
+        .seat-avatar.clickable:hover { border-color: #c0392b; transform: scale(1.1); }
+
+        @keyframes activePulse {
+            0%,100%{ box-shadow:0 0 8px rgba(243,156,18,.5) }
+            50%{ box-shadow:0 0 22px rgba(243,156,18,.9) }
+        }
+
+        .dead-icon {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,.55);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; border-radius: 50%;
+        }
+
+        .seat-name {
+            font-size: 10px; font-weight: 600; color: #555;
+            text-align: center; max-width: 66px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .seat-name.me { color: #c0392b; font-weight: 700; }
+
+        .neighbor-badge {
+            font-size: 9px;
+            background: #fff3cd; border: 1px solid #ffc107;
+            color: #856404; border-radius: 5px; padding: 1px 5px;
+            display: none;
+        }
+        .neighbor-badge.show { display: block; }
+
+        /* Sélection sur la table */
+        .player-seat.selected .seat-avatar {
+            border-color: #c0392b !important;
+            box-shadow: 0 0 14px rgba(192,57,43,0.5) !important;
+        }
+
+        /* ── PANNEAU DROIT ── */
+        .action-col { width: 290px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px; }
+
+        .box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+            padding: 18px;
+        }
+
+        .box h3 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #c0392b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #fdecea;
+            padding-bottom: 8px;
+        }
+
+        #turnStatusText { font-size: 14px; color: #333; line-height: 1.5; }
+        #turnInstructionText { font-size: 12px; color: #999; font-style: italic; margin-top: 6px; line-height: 1.5; }
+
+        /* Info secrète */
+        .info-reveal {
+            background: #fff3cd; border: 2px solid #ffc107;
+            border-radius: 8px; padding: 10px;
+            font-size: 13px; color: #856404; font-weight: 500;
+        }
+
+        /* Mon rôle badge */
+        #myRoleBadge {
+            background: #c0392b; color: white;
+            border-radius: 8px; padding: 10px 14px;
+            font-size: 13px; font-weight: 700;
+            text-align: center;
+        }
+
+        /* Action desc */
+        #actionDesc { font-size: 13px; color: #555; margin-bottom: 10px; line-height: 1.5; }
+
+        /* Grille sélection joueurs */
+        #playerGrid { display: none; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+        #playerGrid.show { display: flex; }
+
+        .player-select-card {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            cursor: pointer; padding: 6px; border-radius: 8px;
+            border: 2px solid #eee; background: #fafafa; width: 66px; transition: all .15s;
+        }
+        .player-select-card:hover  { border-color: #c0392b; background: #fdecea; }
+        .player-select-card.selected { border-color: #c0392b; background: #fdecea; }
+        .player-select-card img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; }
+        .player-select-card.selected img { border-color: #c0392b; }
+        .player-select-card span { font-size: 10px; font-weight: 600; color: #444; text-align: center; }
+
+        #selectedInfo { font-size: 12px; color: #27ae60; font-weight: 600; min-height: 16px; margin-bottom: 8px; }
+
+        /* Boutons */
+        #actionButtons { display: flex; flex-direction: column; gap: 8px; }
+        #actionButtons .btn {
+            padding: 9px 14px; border: none; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: all .15s; text-align: left; width: 100%;
+        }
+        #actionButtons .btn-main  { background: #c0392b; color: white; }
+        #actionButtons .btn-main:hover  { background: #a93226; }
+        #actionButtons .btn-ok    { background: #27ae60; color: white; }
+        #actionButtons .btn-ok:hover    { background: #219150; }
+        #actionButtons .btn-skip  { background: #f0f0f0; color: #555; }
+        #actionButtons .btn-skip:hover  { background: #e0e0e0; }
+        #actionButtons .btn:disabled { opacity: .4; cursor: default; }
+
+        /* Attente */
+        #waitingMsg { font-size: 13px; color: #aaa; font-style: italic; padding: 8px 0; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .meeting-page { gap: 14px; padding: 0 12px; margin: 16px auto; }
+            .action-col { width: 230px; }
+            .seat-avatar { width: 44px; height: 44px; }
+            .seat-name { font-size: 9px; max-width: 54px; }
+            .oval-wrap { padding-bottom: 70%; }
+        }
+
+        @media (max-width: 640px) {
+            .meeting-page {
+                flex-direction: column;
+                gap: 12px;
+                padding: 0 10px;
+                margin: 10px auto;
+            }
+            .table-col { width: 100%; }
+            .action-col { width: 100%; }
+            .oval-wrap { padding-bottom: 75%; }
+            .seat-avatar { width: 36px; height: 36px; border-width: 2px; }
+            .dead-icon { font-size: 16px; }
+            .seat-name { font-size: 8px; max-width: 44px; }
+            .neighbor-badge { display: none !important; }
+            #tableTurnRole { font-size: 13px; }
+            #tableTurnLabel { font-size: 10px; }
+            #timerCenter { font-size: 18px; }
+            .box-table { padding: 12px; }
+            .box-table h2 { font-size: 15px; margin-bottom: 10px; }
+            .box { padding: 14px; }
+            #myRoleBadge { font-size: 12px; padding: 8px 12px; }
+            #turnStatusText { font-size: 13px; }
+            .player-select-card { width: 58px; padding: 5px; }
+            .player-select-card img { width: 34px; height: 34px; }
+            .player-select-card span { font-size: 9px; }
+            #actionButtons .btn { padding: 10px 12px; font-size: 12px; }
+        }
+
+        @media (max-width: 380px) {
+            .oval-wrap { padding-bottom: 85%; }
+            .seat-avatar { width: 30px; height: 30px; }
+            .seat-name { font-size: 7px; max-width: 38px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+    <div class="nav-links">
+        <a href="accueil.html">Accueil</a>
+    </div>
+    <div class="nav-user"><span id="userPseudo"></span></div>
+</div>
+
+<div class="meeting-page">
+
+    <!-- TABLE OVALE -->
+    <div class="table-col">
+        <div class="box-table">
+            <h2>🏢 Meeting en cours</h2>
+            <div class="oval-wrap" id="ovalWrap">
+                <div class="oval-surface">
+                    <div id="tableTurnRole">En attente…</div>
+                    <div id="tableTurnLabel">Le meeting va commencer</div>
+                    <div id="timerCenter">–</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANNEAU DROIT -->
+    <div class="action-col">
+
+        <!-- Mon rôle -->
+        <div id="myRoleBadge">🎭 Mon rôle : <span id="myRoleName">…</span></div>
+
+        <!-- Tour en cours -->
+        <div class="box">
+            <h3>Tour en cours</h3>
+            <div id="turnStatusText">En attente du meeting…</div>
+            <div id="turnInstructionText"></div>
+        </div>
+
+        <!-- Info secrète (caché par défaut) -->
+        <div class="box" id="infoBox" style="display:none;">
+            <h3>🔒 Info secrète</h3>
+            <div class="info-reveal" id="infoReveal"></div>
+        </div>
+
+        <!-- Action (mon tour) -->
+        <div class="box" id="actionBox" style="display:none;">
+            <h3>🎯 Ton action</h3>
+            <div id="actionDesc"></div>
+            <div id="playerGrid"></div>
+            <div id="selectedInfo"></div>
+            <div id="actionButtons"></div>
+            <div id="waitingMsg" style="display:none;">⏳ Action envoyée… En attente du suivant.</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="footer">
+    <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+</div>
+
+<script>
+    const API_URL    = "http://127.0.0.1:8000";
+    const urlParams  = new URLSearchParams(window.location.search);
+    const code       = urlParams.get("code") || localStorage.getItem("partyCode");
+    const playerId   = localStorage.getItem("playerId");
+    const playerRole = (localStorage.getItem("lastRole") || "").trim();
+    const partyCode  = localStorage.getItem("partyCode");
+    const pseudo     = localStorage.getItem("pseudo");
+
+    document.getElementById("myRoleName").textContent = playerRole || "?";
+    document.getElementById("userPseudo").textContent = pseudo;
+
+    let ws = null, meetingStarted = false, readyInterval = null;
+    let allPlayers = [], selectedTargetId = null;
+    let displayTimerInterval = null, displayTimeLeft = 0;
+    let myIndex = 0;
+
+    const roleInstructions = {
+        "Cindy":    "Tes voisins gauche/droite sont mis en évidence. Attends l'info du CHO.",
+        "La Plante":"Désigne ton arroseur sur la table ou dans la liste.",
+        "Benjamin": "Ronfle très fort ! Puis valide.",
+        "Fabien":   "Désigne secrètement un collaborateur à licencier.",
+        "Claire":   "Sauver la victime, désigner quelqu'un d'autre, ou passer (1 seule fois).",
+        "Tiff":     "Donne 3 mots interdits au CHO à voix haute, puis valide.",
+        "Pascal":   "Désigne un joueur pour savoir s'il est Manager.",
+        "Stéphane": "Désigne un joueur pour révéler mutuellement vos identités.",
+        "Denis":    "Échange ton identité avec un autre joueur, ou passe.",
+        "Corentin": "Prends le rôle d'un joueur éliminé, ou passe.",
+        "Abdel":    "Désigne secrètement un joueur à contaminer.",
+    };
+    const roleInstructionsOthers = {
+        "Cindy":"La secrétaire reçoit une info secrète sur ses voisins.",
+        "La Plante":"La Plante choisit son arroseur.",
+        "Benjamin":"Le consultant ronfle très fort !",
+        "Fabien":"Les Managers se concertent secrètement.",
+        "Claire":"La RH décide du sort de la victime.",
+        "Tiff":"Tiff donne 3 mots interdits au CHO.",
+        "Pascal":"Pascal inspecte secrètement un joueur.",
+        "Stéphane":"Stéphane révèle son identité à quelqu'un.",
+        "Denis":"Denis échange éventuellement son identité.",
+        "Corentin":"Corentin peut récupérer un rôle éliminé.",
+        "Abdel":"Abdel contamine secrètement un joueur.",
+    };
+
+    // ── CHARGER JOUEURS + TABLE ──
+    async function loadPlayers() {
+        try {
+            const vRes  = await fetch(`${API_URL}/party/verify/${code}`);
+            const party = await vRes.json();
+            const pRes  = await fetch(`${API_URL}/party/players/${party.party_id}`);
+            allPlayers  = await pRes.json();
+            buildTable();
+        } catch(e) { console.error(e); }
+    }
+
+    function buildTable() {
+        const wrap = document.getElementById("ovalWrap");
+        wrap.querySelectorAll(".player-seat").forEach(s => s.remove());
+
+        const total = allPlayers.length;
+        myIndex = allPlayers.findIndex(p => p.id === parseInt(playerId));
+        if (myIndex < 0) myIndex = 0;
+
+        allPlayers.forEach((p, i) => {
+            const offset = i - myIndex;
+            const angle  = (270 + (offset / total) * 360) * Math.PI / 180;
+            const rx = 45, ry = 40;
+            const x  = 50 + rx * Math.cos(angle);
+            const y  = 50 + ry * Math.sin(angle);
+
+            const isMe    = p.id === parseInt(playerId);
+            const lIdx    = ((myIndex - 1) + total) % total;
+            const rIdx    = (myIndex + 1) % total;
+            const isLeft  = i === lIdx;
+            const isRight = i === rIdx;
+
+            const seat = document.createElement("div");
+            seat.classList.add("player-seat");
+            seat.id = `seat-${p.id}`;
+            seat.style.left = `${x}%`;
+            seat.style.top  = `${y}%`;
+
+            seat.innerHTML = `
+                <div class="seat-avatar ${isMe ? 'me' : ''} ${!p.is_alive ? 'dead' : ''}" id="ring-${p.id}">
+                    <img src="../assets/images/joueur1.png" alt="${p.pseudo}">
+                    ${!p.is_alive ? '<div class="dead-icon">💀</div>' : ''}
+                </div>
+                <div class="seat-name ${isMe ? 'me' : ''}">${isMe ? '⭐ ' : ''}${p.pseudo}</div>
+                <div class="neighbor-badge ${isLeft ? 'show' : ''}">◀ voisin</div>
+                <div class="neighbor-badge ${isRight ? 'show' : ''}">voisin ▶</div>
+            `;
+            wrap.appendChild(seat);
+        });
+    }
+
+    function highlightActiveSeat(role) {
+        document.querySelectorAll(".seat-avatar").forEach(a => a.classList.remove("active"));
+        if (role.trim().toLowerCase() === playerRole.trim().toLowerCase()) {
+            const ring = document.getElementById(`ring-${playerId}`);
+            if (ring) ring.classList.add("active");
+        }
+    }
+
+    function highlightNeighbors(show) {
+        const total = allPlayers.length;
+        const li = allPlayers[((myIndex - 1) + total) % total];
+        const ri = allPlayers[(myIndex + 1) % total];
+        [li, ri].filter(Boolean).forEach(p => {
+            const ring = document.getElementById(`ring-${p.id}`);
+            if (ring) show ? ring.classList.add("neighbor") : ring.classList.remove("neighbor");
+        });
+    }
+
+    // ── TIMER ──
+    function startDisplayTimer(s) {
+        clearInterval(displayTimerInterval);
+        displayTimeLeft = s;
+        const el = document.getElementById("timerCenter");
+        el.classList.remove("urgent");
+        el.textContent = `⏱ ${s}s`;
+        displayTimerInterval = setInterval(() => {
+            displayTimeLeft--;
+            if (displayTimeLeft <= 0) { clearInterval(displayTimerInterval); el.textContent = "⌛"; el.classList.remove("urgent"); }
+            else { el.textContent = `⏱ ${displayTimeLeft}s`; if (displayTimeLeft <= 8) el.classList.add("urgent"); }
+        }, 1000);
+    }
+
+    // ── AFFICHER TOUR ──
+    function showRoleTurn(role) {
+        meetingStarted = true;
+        if (readyInterval) { clearInterval(readyInterval); readyInterval = null; }
+
+        document.getElementById("tableTurnRole").textContent = role;
+        highlightActiveSeat(role);
+        startDisplayTimer(25);
+
+        const isMyTurn = role.trim().toLowerCase() === playerRole.trim().toLowerCase();
+
+        if (isMyTurn) {
+            document.getElementById("tableTurnLabel").textContent     = "C'est TON tour !";
+            document.getElementById("turnStatusText").innerHTML       = `<strong style="color:#c0392b">🎤 C'est TON TOUR — ${role}</strong>`;
+            document.getElementById("turnInstructionText").textContent = roleInstructions[role] || "";
+            document.getElementById("actionBox").style.display        = "block";
+            document.getElementById("waitingMsg").style.display       = "none";
+            document.getElementById("actionButtons").innerHTML         = "";
+            document.getElementById("playerGrid").innerHTML            = "";
+            document.getElementById("playerGrid").classList.remove("show");
+            document.getElementById("selectedInfo").textContent        = "";
+            showActionZone(role);
+            if (role === "Cindy") highlightNeighbors(true);
+        } else {
+            document.getElementById("tableTurnLabel").textContent     = "En action…";
+            document.getElementById("turnStatusText").textContent     = `👤 Tour de : ${role}`;
+            document.getElementById("turnInstructionText").textContent = roleInstructionsOthers[role] || "";
+            document.getElementById("actionBox").style.display        = "none";
+            document.getElementById("infoBox").style.display          = "none";
+        }
+    }
+
+    // ── ACTIONS ──
+    function safeSend(data) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(data); }
+
+    function sendAction(action, targetId = null) {
+        const payload = { type:"action", action, playerId:parseInt(playerId), role:playerRole };
+        if (targetId) payload.target_id = targetId;
+        safeSend(JSON.stringify(payload));
+        // Reset UI
+        document.getElementById("actionButtons").innerHTML = "";
+        document.getElementById("playerGrid").innerHTML    = "";
+        document.getElementById("playerGrid").classList.remove("show");
+        document.getElementById("selectedInfo").textContent = "";
+        document.getElementById("waitingMsg").style.display = "block";
+        highlightNeighbors(false);
+        document.querySelectorAll(".player-seat").forEach(s => s.classList.remove("selected"));
+        document.querySelectorAll(".seat-avatar.clickable").forEach(a => { a.classList.remove("clickable"); a.parentElement.onclick = null; });
+    }
+
+    function buildPlayerGrid(includeEliminated = false) {
+        const grid = document.getElementById("playerGrid");
+        grid.innerHTML = ""; selectedTargetId = null;
+        document.getElementById("selectedInfo").textContent = "";
+
+        const filtered = allPlayers.filter(p => {
+            if (p.id === parseInt(playerId)) return false;
+            return includeEliminated ? !p.is_alive : p.is_alive;
+        });
+
+        if (!filtered.length) { grid.innerHTML = `<p style="font-size:12px;color:#aaa;">Aucun joueur disponible.</p>`; grid.classList.add("show"); return; }
+
+        filtered.forEach(p => {
+            const card = document.createElement("div");
+            card.classList.add("player-select-card");
+            card.innerHTML = `<img src="../assets/images/joueur1.png" alt="${p.pseudo}"><span>${p.pseudo}</span>`;
+            card.onclick = () => {
+                document.querySelectorAll(".player-select-card").forEach(c => c.classList.remove("selected"));
+                document.querySelectorAll(".player-seat").forEach(s => s.classList.remove("selected"));
+                card.classList.add("selected");
+                selectedTargetId = p.id;
+                document.getElementById("selectedInfo").textContent = `✅ ${p.pseudo} sélectionné`;
+                const seat = document.getElementById(`seat-${p.id}`);
+                if (seat) seat.classList.add("selected");
+            };
+            grid.appendChild(card);
+        });
+        grid.classList.add("show");
+
+        // Sièges cliquables sur la table
+        filtered.forEach((p, idx) => {
+            const seat = document.getElementById(`seat-${p.id}`);
+            if (!seat) return;
+            const ring = seat.querySelector(".seat-avatar");
+            if (ring) ring.classList.add("clickable");
+            seat.onclick = () => {
+                const card = grid.querySelectorAll(".player-select-card")[idx];
+                if (card) card.click();
+            };
+        });
+    }
+
+    function addBtn(container, label, cls, onClick) {
+        const btn = document.createElement("button");
+        btn.textContent = label; btn.className = `btn ${cls}`;
+        btn.onclick = () => { btn.disabled = true; onClick(); };
+        container.appendChild(btn);
+    }
+
+    // ── TIFFANY : choisir 3 mots parmi 5 ──
+    async function loadTiffMots(desc, btns) {
+        try {
+            const res  = await fetch(`${API_URL}/party/tiff/propose/${code}`);
+            const data = await res.json();
+            const mots = data.mots || [];
+
+            desc.textContent = "Coche 3 mots parmi les 5 proposés — ils seront interdits dans le chat !";
+
+            const grid = document.getElementById("playerGrid");
+            grid.innerHTML = "";
+            grid.style.display = "flex";
+            grid.style.flexWrap = "wrap";
+            grid.style.gap = "8px";
+            grid.style.marginBottom = "10px";
+
+            let selectedMots = [];
+
+            mots.forEach(mot => {
+                const btn = document.createElement("button");
+                btn.textContent = mot;
+                btn.style.cssText = `padding:8px 12px; border:2px solid #ddd; border-radius:8px;
+                    background:#fafafa; cursor:pointer; font-size:12px; font-weight:600;
+                    transition:all .15s; color:#444;`;
+                btn.onclick = () => {
+                    if (selectedMots.includes(mot)) {
+                        selectedMots = selectedMots.filter(m => m !== mot);
+                        btn.style.borderColor = "#ddd";
+                        btn.style.background  = "#fafafa";
+                        btn.style.color       = "#444";
+                    } else if (selectedMots.length < 3) {
+                        selectedMots.push(mot);
+                        btn.style.borderColor = "#c0392b";
+                        btn.style.background  = "#fdecea";
+                        btn.style.color       = "#c0392b";
+                    }
+                    document.getElementById("selectedInfo").textContent =
+                        selectedMots.length === 3 ? `✅ ${selectedMots.join(", ")}` : `${selectedMots.length}/3 mots sélectionnés`;
+                };
+                grid.appendChild(btn);
+            });
+
+            grid.classList.add("show");
+
+            addBtn(btns, "✅ Valider mes 3 mots interdits", "btn-main", async () => {
+                if (selectedMots.length !== 3) { alert("Tu dois choisir exactement 3 mots !"); return; }
+                try {
+                    await fetch(`${API_URL}/party/tiff/choisir`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ code, mots: selectedMots })
+                    });
+                    sendAction("done");
+                } catch(e) { console.error(e); }
+            });
+        } catch(e) {
+            console.error(e);
+            desc.textContent = "Donne 3 mots interdits au CHO à voix haute, puis valide.";
+            addBtn(btns, "✅ Mots donnés au CHO", "btn-ok", () => sendAction("done"));
+        }
+    }
+
+    function showActionZone(role) {
+        const desc = document.getElementById("actionDesc");
+        const btns = document.getElementById("actionButtons");
+        btns.innerHTML = "";
+
+        if (role === "Benjamin") {
+            desc.textContent = "Ronfle très fort ! (pour de vrai 😄)";
+            addBtn(btns, "😴 J'ai ronfle !", "btn-ok", () => sendAction("done"));
+        } else if (role === "Cindy") {
+            desc.textContent = "Tes voisins sont mis en évidence. Attends l'info du CHO.";
+            addBtn(btns, "✅ J'ai reçu l'info du CHO", "btn-ok", () => { highlightNeighbors(false); sendAction("done"); });
+        } else if (role === "Tiff") {
+            desc.textContent = "Choisis 3 mots secrets. Si quelqu'un les dit dans le chat, il est licencié !";
+            loadTiffMots(desc, btns);
+        } else if (role === "Fabien") {
+            desc.textContent = "Désigne secrètement un collaborateur à licencier :";
+            buildPlayerGrid(false);
+            addBtn(btns, "✅ Valider ma victime", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("manager_victim", selectedTargetId);
+            });
+        } else if (role === "Claire") {
+            desc.textContent = "Sauver la victime, désigner quelqu'un d'autre, ou passer (1 seule fois) :";
+            buildPlayerGrid(false);
+            addBtn(btns, "👍 Sauver la victime des Managers", "btn-ok", () => sendAction("claire_save"));
+            addBtn(btns, "👎 Licencier le joueur sélectionné", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("claire_fire", selectedTargetId);
+            });
+            addBtn(btns, "⏭ Passer sans agir", "btn-skip", () => sendAction("done"));
+        } else if (role === "Pascal") {
+            desc.textContent = "Désigne un joueur pour savoir s'il est Manager. Si oui, tu peux en désigner un 2ème (2 max) :";
+            buildPlayerGrid(false);
+            window._pascalInspectCount = 0;
+            addBtn(btns, "🔍 Inspecter ce joueur", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("pascal_inspect", selectedTargetId);
+            });
+        } else if (role === "Stéphane") {
+            desc.textContent = "Clique sur un joueur pour révéler mutuellement vos identités :";
+            buildPlayerGrid(false);
+            addBtn(btns, "🤝 Révéler nos identités", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("stephane_reveal", selectedTargetId);
+            });
+        } else if (role === "La Plante") {
+            desc.textContent = "Désigne ton arroseur :";
+            buildPlayerGrid(false);
+            addBtn(btns, "🌱 Choisir cet arroseur", "btn-ok", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("plante_water", selectedTargetId);
+            });
+        } else if (role === "Denis") {
+            desc.textContent = "Échange ton identité avec un autre joueur, ou passe :";
+            buildPlayerGrid(false);
+            addBtn(btns, "🔄 Échanger avec ce joueur", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("denis_swap", selectedTargetId);
+            });
+            addBtn(btns, "⏭ Passer", "btn-skip", () => sendAction("done"));
+        } else if (role === "Corentin") {
+            desc.textContent = "Prends le rôle d'un joueur éliminé, ou passe :";
+            buildPlayerGrid(true);
+            addBtn(btns, "🎓 Prendre ce rôle", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un éliminé !"); return; }
+                sendAction("corentin_swap", selectedTargetId);
+            });
+            addBtn(btns, "⏭ Passer", "btn-skip", () => sendAction("done"));
+        } else if (role === "Abdel") {
+            desc.textContent = "Désigne secrètement un joueur à contaminer :";
+            buildPlayerGrid(false);
+            addBtn(btns, "🦠 Contaminer ce joueur", "btn-main", () => {
+                if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                sendAction("abdel_virus", selectedTargetId);
+            });
+        }
+    }
+
+    // ── WS MESSAGES ──
+    function handleWSMessage(msg) {
+        console.log("📩", msg);
+
+        if (msg === "phase:meeting_start") {
+            meetingStarted = true;
+            if (readyInterval) { clearInterval(readyInterval); readyInterval = null; }
+            document.getElementById("tableTurnRole").textContent  = "Meeting lancé !";
+            document.getElementById("tableTurnLabel").textContent = "Premier tour…";
+            return;
+        }
+        if (msg.startsWith("role:")) { showRoleTurn(msg.substring(5).trim()); return; }
+        if (msg === "phase:defi_decision") { clearInterval(displayTimerInterval); window.location.href = `feedback_defi.html?code=${partyCode}`; return; }
+        if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") { clearInterval(displayTimerInterval); window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`; return; }
+        if (msg === "phase:vote") { clearInterval(displayTimerInterval); window.location.href = `vote.html?code=${partyCode}`; return; }
+        if (msg.startsWith("next_meeting:")) { clearInterval(displayTimerInterval); window.location.href = `meeting1.html?code=${partyCode}`; return; }
+        if (msg.startsWith("game_over:")) {
+            const r = msg.split(":")[1];
+            window.location.href = r==="victoire_collabs"?"victoire.html":r==="match_nul"?"match_nul.html":"defaite.html";
+            return;
+        }
+        if (msg.startsWith("cindy_voisin:")) {
+            // Signal privé pour Cindy — déjà géré via la route HTTP, mais fallback WS
+            const hasManager = msg.split(":")[1] === "oui";
+            document.getElementById("infoBox").style.display = "block";
+            document.getElementById("infoReveal").textContent = hasManager
+                ? "👍 OUI — L'un de tes voisins est un Manager."
+                : "👎 NON — Aucun voisin n'est Manager.";
+            return;
+        }
+
+        if (msg.startsWith("pascal_result:")) {
+            const p = msg.split(":");
+            const isManager = p[1] === "true";
+            document.getElementById("infoBox").style.display  = "block";
+            const prev = document.getElementById("infoReveal").textContent;
+            document.getElementById("infoReveal").textContent =
+                (prev ? prev + " | " : "") + (isManager ? `🔴 ${p[2]} EST un Manager !` : `🟢 ${p[2]} n'est PAS un Manager.`);
+
+            window._pascalInspectCount = (window._pascalInspectCount || 0) + 1;
+
+            if (isManager && window._pascalInspectCount < 2) {
+                // Peut inspecter un 2ème joueur
+                document.getElementById("actionBox").style.display = "block";
+                document.getElementById("waitingMsg").style.display = "none";
+                const btns = document.getElementById("actionButtons");
+                btns.innerHTML = "";
+                document.getElementById("actionDesc").textContent = "C'est un Manager ! Tu peux inspecter un 2ème joueur ou passer :";
+                buildPlayerGrid(false);
+                addBtn(btns, "🔍 Inspecter un 2ème joueur", "btn-main", () => {
+                    if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                    sendAction("pascal_inspect", selectedTargetId);
+                });
+                addBtn(btns, "⏭ Terminer", "btn-skip", () => sendAction("done"));
+            } else {
+                sendAction("done");
+            }
+            return;
+        }
+        if (msg.startsWith("stephane_result:")) {
+            const p = msg.split(":");
+            document.getElementById("infoBox").style.display    = "block";
+            document.getElementById("infoReveal").textContent   = `🤝 ${p[2]} est : ${p[1]} — garde ça secret !`;
+            sendAction("done"); return;
+        }
+        if (msg.startsWith("stephane_reveal_target:")) {
+            const p = msg.split(":");
+            document.getElementById("infoBox").style.display    = "block";
+            document.getElementById("infoReveal").textContent   = `🤝 ${p[2]} t'a révélé son identité : ${p[1]}`;
+            return;
+        }
+        if (msg.startsWith("new_role:")) {
+            const newRole = msg.substring(9);
+            localStorage.setItem("lastRole", newRole);
+            document.getElementById("myRoleName").textContent   = newRole;
+            document.getElementById("infoBox").style.display    = "block";
+            document.getElementById("infoReveal").textContent   = `🔄 Ton nouveau rôle est : ${newRole}`;
+            return;
+        }
+        if (msg.startsWith("plante_arroseur:")) {
+            document.getElementById("tableTurnLabel").textContent = `🌱 Arroseur : ${msg.split(":")[1]}`;
+            return;
+        }
+        if (msg.startsWith("player_eliminated_direct:") || msg.startsWith("player_fired:")) {
+            loadPlayers(); // Rafraîchir la table
+            return;
+        }
+    }
+
+    // ── WEBSOCKET ──
+    function sendReady() {
+        if (!meetingStarted && ws && ws.readyState === WebSocket.OPEN)
+            ws.send(JSON.stringify({ type:"ready", player_id:playerId }));
+    }
+
+    function connectWS() {
+        ws = new WebSocket(`ws://127.0.0.1:8000/ws/${code}?player_id=${playerId}`);
+        ws.onopen    = () => { sendReady(); if (!readyInterval) readyInterval = setInterval(sendReady, 2000); };
+        ws.onmessage = (e) => handleWSMessage(e.data);
+        ws.onclose   = () => setTimeout(connectWS, 1000);
+        ws.onerror   = () => ws.close();
+    }
+
+    async function checkAliveAndInit() {
+        try {
+            const res = await fetch(`${API_URL}/party/is_alive/${playerId}`);
+            const d   = await res.json();
+            if (!d.is_alive) { window.location.href = "salle_morts.html"; return; }
+        } catch(e) {}
+        await loadPlayers();
+        connectWS();
+    }
+
+    checkAliveAndInit();
+</script>
+</body>
+</html>

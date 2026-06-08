@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+
+        <!-- 🔥 Affichage du pseudo -->
+        <div class="nav-user">
+            <span id="userPseudo"></span>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="box">
+            <h1>Connexion</h1>
+            <p>Entrez vos identifiants pour accéder à Corpo!</p>
+
+            <!-- Champ pseudo -->
+            <input type="text" id="pseudo" placeholder="Votre pseudo">
+
+            <!-- Champ mot de passe -->
+            <input type="password" id="password" placeholder="Votre mot de passe">
+
+            <!-- Bouton connexion -->
+            <button class="btn" id="loginBtn">Se connecter</button>
+
+            <!-- 🔥 Lien vers création de compte -->
+            <p style="margin-top:10px; font-size:14px;">
+                Pas encore de compte ?
+                <a href="accueil.html" style="color:#c95d5d; text-decoration:none; font-weight:bold;">
+                    Créer un compte
+                </a>
+            </p>
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        // 🔥 Afficher le pseudo dans la navbar si déjà connecté
+        const savedPseudo = localStorage.getItem("pseudo");
+        if (savedPseudo) {
+            const el = document.getElementById("userPseudo");
+            if (el) el.textContent = savedPseudo;
+        }
+
+        // 🔥 Connexion
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const pseudo = document.getElementById("pseudo").value;
+            const password = document.getElementById("password").value;
+
+            if (!pseudo || !password) {
+                alert("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/account/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ pseudo, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // 🔥 Stocker le pseudo pour toutes les pages
+                    localStorage.setItem("pseudo", pseudo);
+
+                    alert("Connexion réussie !");
+                    window.location.href = "accueil.html";
+                } else {
+                    alert(data.detail || "Identifiants incorrects !");
+                }
+            } catch (error) {
+                alert("Erreur de connexion au serveur !");
+                console.error(error);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

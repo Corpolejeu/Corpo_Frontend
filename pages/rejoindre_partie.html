@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rejoindre une partie - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+
+        <div class="nav-links">
+            <a href="accueil.html">Accueil</a>
+            <a href="https://corpolejeu.com/" target="_blank">Site officiel</a>
+        </div>
+
+        <div class="nav-user">
+            <span id="userPseudo"></span>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="box">
+
+            <h1>Rejoindre<br>une<br>partie</h1>
+
+            <h2>Parties publiques disponibles</h2>
+            <div id="publicParties" class="public-list">
+                <p>Chargement des parties publiques...</p>
+            </div>
+
+            <hr>
+
+            <p>Entrez votre pseudo et le code du meeting.</p>
+
+            <input type="text" id="pseudo" placeholder="Votre pseudo">
+            <input type="text" id="code" placeholder="Code de la partie">
+
+            <button class="btn" id="joinBtn">Rejoindre</button>
+        </div>
+    </main>
+
+    <div class="footer">
+        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000";
+
+        const savedPseudo = localStorage.getItem("pseudo");
+        if (savedPseudo) {
+            document.getElementById("userPseudo").textContent = savedPseudo;
+        }
+
+        async function loadPublicParties() {
+            const response = await fetch(`${API_URL}/party/public`);
+            const parties = await response.json();
+
+            const container = document.getElementById("publicParties");
+            container.innerHTML = "";
+
+            if (parties.length === 0) {
+                container.innerHTML = "<p>Aucune partie publique disponible.</p>";
+                return;
+            }
+
+            parties.forEach(p => {
+                const div = document.createElement("div");
+                div.classList.add("public-party");
+
+                div.innerHTML = `
+                    <p><strong>Partie #${p.party_id}</strong></p>
+                    <p>Code : ${p.code}</p>
+                    <button onclick="joinPublic('${p.code}')" class="btn">Rejoindre</button>
+                    <hr>
+                `;
+
+                container.appendChild(div);
+            });
+        }
+
+        async function joinPublic(code) {
+            const pseudo = document.getElementById("pseudo").value || localStorage.getItem("pseudo");
+
+            if (!pseudo) {
+                alert("Veuillez entrer votre pseudo !");
+                return;
+            }
+
+            const response = await fetch(`${API_URL}/party/join`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pseudo, code })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.detail || "Erreur");
+                return;
+            }
+
+            localStorage.setItem("playerId", data.player_id);
+            localStorage.setItem("partyId", data.party_id);
+            localStorage.setItem("partyCode", data.code);
+            localStorage.setItem("pseudo", pseudo);
+
+            window.location.href = `lobby.html?code=${data.code}`;
+        }
+
+        document.getElementById("joinBtn").addEventListener("click", async () => {
+            const pseudo = document.getElementById("pseudo").value;
+            const code = document.getElementById("code").value;
+
+            if (!pseudo || !code) {
+                alert("Veuillez entrer un pseudo et un code !");
+                return;
+            }
+
+            const response = await fetch(`${API_URL}/party/join`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pseudo, code })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.detail || "Erreur lors de la connexion");
+                return;
+            }
+
+            localStorage.setItem("playerId", data.player_id);
+            localStorage.setItem("partyId", data.party_id);
+            localStorage.setItem("partyCode", data.code);
+            localStorage.setItem("pseudo", pseudo);
+
+            window.location.href = `lobby.html?code=${data.code}`;
+        });
+
+        loadPublicParties();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Défi Corpo - Corpo!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .defi-page { max-width: 680px; margin: 20px auto; padding: 0 16px; }
+        .defi-card {
+            background: white; border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12); margin-bottom: 16px;
+        }
+        .defi-header {
+            background: #c0392b; padding: 14px 20px;
+            display: flex; align-items: center; gap: 12px; color: white;
+            border-radius: 16px 16px 0 0;
+        }
+        .defi-header img { width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.4); }
+        .defi-header h2  { font-size: 18px; font-weight: 800; }
+        .defi-header p   { font-size: 12px; opacity: .8; }
+        .defi-body { padding: 20px; }
+
+        .type-badge {
+            display: inline-block; padding: 3px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 12px;
+        }
+        .badge-solo      { background: #d4edda; color: #155724; }
+        .badge-collectif { background: #cce5ff; color: #004085; }
+
+        .defi-text {
+            background: #fff3cd; border: 3px solid #ffc107;
+            border-radius: 12px; padding: 16px 18px;
+            font-size: 16px; font-weight: 700; color: #856404;
+            text-align: center; line-height: 1.6; margin-bottom: 16px;
+        }
+
+        /* Timer */
+        .timer-wrap { text-align: center; margin-bottom: 16px; display: none; }
+        .timer-circle {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 6px solid #c0392b; margin: 0 auto 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; font-weight: 800; color: #c0392b; font-family: monospace;
+        }
+        .timer-circle.urgent { border-color: #e74c3c; color: #e74c3c; animation: blink .4s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+        /* Zones */
+        .zone { display: none; }
+        .zone.show { display: block; }
+
+        /* Chat */
+        .chat-box {
+            background: #f8f9fa; border: 1px solid #eee;
+            border-radius: 10px; padding: 12px; max-height: 180px;
+            overflow-y: auto; margin-bottom: 10px;
+        }
+        .chat-msg { font-size: 13px; padding: 4px 0; border-bottom: 1px solid #eee; color: #333; }
+        .chat-msg:last-child { border: none; }
+        .chat-row { display: flex; gap: 8px; }
+        .chat-row input {
+            flex: 1; padding: 8px 12px; border: 2px solid #ddd;
+            border-radius: 8px; font-size: 13px;
+        }
+        .chat-row input:focus { border-color: #c0392b; outline: none; }
+
+        /* Grille joueurs */
+        .player-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+        .pcard {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            cursor: pointer; padding: 8px; border-radius: 10px;
+            border: 2px solid #eee; background: #fafafa; width: 70px;
+        }
+        .pcard:hover  { border-color: #c0392b; background: #fdecea; }
+        .pcard.sel    { border-color: #c0392b; background: #fdecea; }
+        .pcard img    { width: 42px; height: 42px; border-radius: 50%; }
+        .pcard span   { font-size: 10px; font-weight: 600; text-align: center; color: #444; }
+
+        /* Vote */
+        .vote-box { margin-top: 14px; display: none; }
+        .vote-box.show { display: block; }
+        .vote-box h4 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 10px; }
+        .vote-btns { display: flex; gap: 12px; }
+        .btn-yes { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; flex: 1; }
+        .btn-no  { background: #c0392b; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; flex: 1; }
+        .btn-yes:hover { background: #219150; }
+        .btn-no:hover  { background: #a93226; }
+        .btn-yes:disabled, .btn-no:disabled { opacity:.4; cursor:default; }
+
+        /* Info / warning */
+        .info  { background:#d4edda; border:1px solid #c3e6cb; border-radius:8px; padding:10px 14px; font-size:13px; color:#155724; margin:8px 0; }
+        .warn  { background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:10px 14px; font-size:13px; color:#856404; margin:8px 0; }
+        .host-section { background:#fdecea; border:2px solid #c0392b; border-radius:10px; padding:14px; margin-top:14px; }
+        .host-section h4 { font-size:13px; font-weight:700; color:#c0392b; margin-bottom:8px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+    <div class="nav-user"><span id="userPseudo"></span></div>
+</div>
+
+<div class="defi-page">
+<div class="defi-card">
+
+    <div class="defi-header">
+        <img src="../assets/images/joueur1.png" id="headerImg">
+        <div>
+            <h2 id="headerName">…</h2>
+            <p id="headerSub">Défi Corpo en cours</p>
+        </div>
+    </div>
+
+    <div class="defi-body">
+        <span class="type-badge badge-solo" id="typeBadge">Défi Solo</span>
+
+        <div class="defi-text" id="defiText">Chargement du défi…</div>
+
+        <!-- Timer -->
+        <div class="timer-wrap" id="timerWrap">
+            <div class="timer-circle" id="timerCircle">30</div>
+            <div style="font-size:12px;color:#999;">secondes restantes</div>
+        </div>
+
+        <!-- ══ ZONE VICTIME ══ -->
+        <div class="zone" id="zoneVictime">
+
+            <!-- Solo : bouton "J'ai terminé" -->
+            <div id="soloZone" style="display:none;">
+                <div class="info" id="soloInstructions"></div>
+                <button class="btn" id="doneBtn"
+                    style="width:100%;background:#27ae60;color:white;padding:12px;margin-top:10px;"
+                    onclick="performanceDone()">
+                    ✅ J'ai terminé mon défi !
+                </button>
+                <p id="waitingJury" style="display:none;color:#aaa;font-style:italic;font-size:13px;margin-top:8px;">
+                    ⏳ Le jury délibère…
+                </p>
+            </div>
+
+            <!-- Collectif : chat pour la victime aussi -->
+            <div id="collectifZoneVictime" style="display:none;">
+                <div class="info">👥 Tout le monde participe ! Répondez dans le chat.</div>
+                <div class="chat-box" id="chatVictime"></div>
+                <div class="chat-row">
+                    <input type="text" id="chatInputV" placeholder="Votre réponse…" onkeydown="if(event.key==='Enter') sendChat('V')">
+                    <button class="btn" onclick="sendChat('V')">Envoyer</button>
+                </div>
+                <button class="btn" id="doneBtnCollectif"
+                    style="width:100%;background:#27ae60;color:white;padding:12px;margin-top:10px;"
+                    onclick="performanceDone()">
+                    ✅ J'ai terminé le défi collectif !
+                </button>
+            </div>
+
+        </div>
+
+        <!-- ══ ZONE OBSERVATEURS ══ -->
+        <div class="zone" id="zoneOthers">
+
+            <!-- Solo : les observateurs regardent -->
+            <div id="soloWatchZone">
+                <p style="text-align:center;color:#888;font-style:italic;font-size:14px;" id="watchMsg">
+                    👀 <strong id="victimWatch"></strong> réalise son défi…
+                </p>
+            </div>
+
+            <!-- Collectif : les observateurs participent aussi -->
+            <div id="collectifZoneOthers" style="display:none;">
+                <div class="info">👥 Défi collectif ! Participez dans le chat.</div>
+                <div class="chat-box" id="chatOthers"></div>
+                <div class="chat-row">
+                    <input type="text" id="chatInputO" placeholder="Votre réponse…" onkeydown="if(event.key==='Enter') sendChat('O')">
+                    <button class="btn" onclick="sendChat('O')">Envoyer</button>
+                </div>
+
+                <!-- Host : déclarer le perdant -->
+                <div class="host-section" id="hostSection" style="display:none;">
+                    <h4>🎤 CHO — Désigne le perdant</h4>
+                    <div class="player-grid" id="loserGrid"></div>
+                    <button class="btn" onclick="declareLoser()"
+                        style="margin-top:8px;background:#c0392b;color:white;width:100%;">
+                        ❌ Éliminer ce joueur
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vote jury (apparaît après la performance) -->
+            <div class="vote-box" id="voteBox">
+                <h4>🗳 A-t-il/elle réussi son défi ?</h4>
+                <div class="vote-btns">
+                    <button class="btn-yes" id="btnYes" onclick="submitVote(true)">👍 Réussi !</button>
+                    <button class="btn-no"  id="btnNo"  onclick="submitVote(false)">👎 Échoué</button>
+                </div>
+                <p id="voteDone" style="display:none;color:#27ae60;font-style:italic;font-size:13px;margin-top:8px;">
+                    ✅ Vote enregistré !
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    const API_URL          = "http://127.0.0.1:8000";
+    const partyCode        = localStorage.getItem("partyCode");
+    const playerId         = parseInt(localStorage.getItem("playerId"));
+    const pseudo           = localStorage.getItem("pseudo");
+    const eliminatedPseudo = localStorage.getItem("eliminatedPseudo") || "?";
+    const eliminatedId     = parseInt(localStorage.getItem("eliminatedPlayerId"));
+
+    document.getElementById("userPseudo").textContent   = pseudo;
+    document.getElementById("headerName").textContent   = eliminatedPseudo;
+    document.getElementById("victimWatch").textContent  = eliminatedPseudo;
+
+    const iAmVictime = playerId === eliminatedId;
+
+    let currentCard  = null;
+    let timerIntvl   = null;
+    let perfDone     = false;
+    let allPlayers   = [];
+    let isHost       = false;
+    let loserSelected = null;
+    let ws           = null;
+
+    // ── INIT ──
+    async function init() {
+        try {
+            const vRes  = await fetch(`${API_URL}/party/verify/${partyCode}`);
+            const party = await vRes.json();
+            isHost = party.host_id === playerId;
+            const pRes  = await fetch(`${API_URL}/party/players/${party.party_id}`);
+            allPlayers  = await pRes.json();
+        } catch(e) {}
+        connectWS();
+    }
+
+    // ── WEBSOCKET ──
+    function connectWS() {
+        ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        ws.onopen    = () => {
+            // Demander le défi actuel au serveur
+            ws.send(JSON.stringify({ type: "ready", player_id: playerId }));
+            // Aussi charger via HTTP comme fallback
+            loadCardHTTP();
+        };
+        ws.onmessage = (e) => handleWS(e.data);
+        ws.onclose   = () => setTimeout(connectWS, 1000);
+    }
+
+    async function loadCardHTTP() {
+        try {
+            const res  = await fetch(`${API_URL}/party/current_corpocard/${partyCode}`);
+            const card = await res.json();
+            if (card && card.id && !currentCard) {
+                currentCard = card;
+                renderCard(card);
+            }
+        } catch(e) {}
+    }
+
+    function handleWS(msg) {
+        // Recevoir le défi broadcasté
+        if (msg.startsWith("defi_card:")) {
+            try {
+                const card = JSON.parse(msg.substring(10));
+                currentCard = card;
+                renderCard(card);
+            } catch(e) {}
+            return;
+        }
+
+        // Chat du défi collectif
+        if (msg.startsWith("chat:") && msg.includes("[DÉFI]")) {
+            const text = msg.substring(5);
+            addChat("chatVictime", text);
+            addChat("chatOthers",  text);
+            return;
+        }
+
+        // Fin de performance → afficher le vote aux observateurs
+        if (msg === "phase:resultat_defi") {
+            if (!iAmVictime) {
+                document.getElementById("soloWatchZone").style.display = "none";
+                document.getElementById("voteBox").classList.add("show");
+            }
+            return;
+        }
+
+        // Résultat du vote
+        if (msg.startsWith("defi_result:")) {
+            localStorage.setItem("defiOutcome", msg.split(":")[1]);
+            window.location.href = `resultat_defi.html?code=${partyCode}`;
+            return;
+        }
+
+        if (msg.startsWith("game_over:")) {
+            const r = msg.split(":")[1];
+            window.location.href = r === "victoire_collabs" ? "victoire.html"
+                                 : r === "match_nul"        ? "match_nul.html"
+                                 : "defaite.html";
+            return;
+        }
+        if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
+            window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
+            return;
+        }
+        if (msg.startsWith("next_meeting:")) {
+            window.location.href = `meeting1.html?code=${partyCode}`;
+            return;
+        }
+    }
+
+    // ── AFFICHER LE DÉFI ──
+    function renderCard(card) {
+        localStorage.setItem("currentDefi", card.text || "");
+        document.getElementById("defiText").textContent = card.text;
+
+        const badge = document.getElementById("typeBadge");
+        if (card.type === "collectif") {
+            badge.textContent = "👥 Défi Collectif";
+            badge.className   = "type-badge badge-collectif";
+            document.getElementById("headerSub").textContent = "Défi collectif — tout le monde joue !";
+        } else {
+            badge.textContent = card.duo ? "👥 Défi Duo" : "🎯 Défi Solo";
+            badge.className   = "type-badge badge-solo";
+        }
+
+        if (iAmVictime) renderVictime(card);
+        else             renderOthers(card);
+    }
+
+    function renderVictime(card) {
+        document.getElementById("zoneVictime").classList.add("show");
+
+        if (card.type === "collectif") {
+            document.getElementById("collectifZoneVictime").style.display = "block";
+            if (card.timer) startTimer(card.timer);
+        } else {
+            document.getElementById("soloZone").style.display = "block";
+            document.getElementById("soloInstructions").textContent =
+                card.instructions || "Réalise ton défi devant tout le monde !";
+            if (card.timer) startTimer(card.timer);
+        }
+    }
+
+    function renderOthers(card) {
+        document.getElementById("zoneOthers").classList.add("show");
+
+        if (card.type === "collectif") {
+            document.getElementById("soloWatchZone").style.display    = "none";
+            document.getElementById("collectifZoneOthers").style.display = "block";
+
+            if (isHost) {
+                document.getElementById("hostSection").style.display = "block";
+                buildLoserGrid();
+            }
+            if (card.timer) startTimer(card.timer);
+        }
+        // Solo : les observateurs voient juste le message d'attente
+    }
+
+    // ── TIMER ──
+    function startTimer(seconds) {
+        document.getElementById("timerWrap").style.display = "block";
+        const circle = document.getElementById("timerCircle");
+        let left = seconds;
+        circle.textContent = left;
+        timerIntvl = setInterval(() => {
+            left--;
+            circle.textContent = left;
+            if (left <= 8) circle.classList.add("urgent");
+            if (left <= 0) {
+                clearInterval(timerIntvl);
+                circle.textContent = "⌛";
+                circle.classList.remove("urgent");
+                // Timer terminé → auto-terminer si victime
+                if (iAmVictime && !perfDone) performanceDone();
+            }
+        }, 1000);
+    }
+
+    // ── GRILLE PERDANT ──
+    function buildLoserGrid() {
+        const grid = document.getElementById("loserGrid");
+        allPlayers.filter(p => p.is_alive).forEach(p => {
+            const c = document.createElement("div");
+            c.classList.add("pcard");
+            c.innerHTML = `<img src="../assets/images/joueur1.png"><span>${p.pseudo}</span>`;
+            c.onclick = () => {
+                grid.querySelectorAll(".pcard").forEach(x => x.classList.remove("sel"));
+                c.classList.add("sel");
+                loserSelected = p.id;
+            };
+            grid.appendChild(c);
+        });
+    }
+
+    // ── ACTIONS ──
+    async function performanceDone() {
+        if (perfDone) return;
+        perfDone = true;
+        clearInterval(timerIntvl);
+
+        const doneBtn = document.getElementById("doneBtn") || document.getElementById("doneBtnCollectif");
+        if (doneBtn) { doneBtn.disabled = true; doneBtn.textContent = "⏳ Attente du jury…"; }
+
+        const waitingJury = document.getElementById("waitingJury");
+        if (waitingJury) waitingJury.style.display = "block";
+
+        try {
+            await fetch(`${API_URL}/party/defi_performance_done/${partyCode}`, { method: "POST" });
+        } catch(e) { console.error(e); }
+    }
+
+    async function submitVote(success) {
+        document.getElementById("btnYes").disabled = true;
+        document.getElementById("btnNo").disabled  = true;
+        try {
+            await fetch(`${API_URL}/party/defi_vote`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ voter_id: playerId, party_code: partyCode, success })
+            });
+            document.getElementById("voteBox").classList.remove("show");
+            document.getElementById("voteDone").style.display = "block";
+        } catch(e) { console.error(e); }
+    }
+
+    async function declareLoser() {
+        if (!loserSelected) { alert("Sélectionne le perdant !"); return; }
+        try {
+            await fetch(`${API_URL}/party/collectif_loser`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ party_code: partyCode, loser_id: loserSelected })
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    function sendChat(who) {
+        const inputId = who === "V" ? "chatInputV" : "chatInputO";
+        const input   = document.getElementById(inputId);
+        const text    = input.value.trim();
+        if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(JSON.stringify({ type: "chat", pseudo, message: `[DÉFI] ${text}` }));
+        input.value = "";
+    }
+
+    function addChat(chatId, text) {
+        const box = document.getElementById(chatId);
+        if (!box) return;
+        const p = document.createElement("p");
+        p.classList.add("chat-msg");
+        p.textContent = text;
+        box.appendChild(p);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    init();
+</script>
+</body>
+</html>
