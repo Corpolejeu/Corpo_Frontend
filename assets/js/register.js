@@ -3,7 +3,6 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
     const pseudo = document.getElementById("pseudo").value;
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
 
     const message = document.getElementById("message");
     message.textContent = "Création du compte...";
@@ -17,15 +16,14 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
             },
             body: JSON.stringify({
                 pseudo: pseudo,
-                email: email,
-                password: password
+                email: email
             })
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            message.textContent = "Compte créé avec succès ! 🎉 Vérifie ton email.";
+            message.textContent = "Compte créé avec succès ! 🎉";
             message.style.color = "green";
 
             document.getElementById("registerForm").reset();

@@ -28,11 +28,9 @@
             <h1>Connexion</h1>
             <p>Entrez vos identifiants pour accéder à Corpo!</p>
 
-            <!-- Champ pseudo -->
-            <input type="text" id="pseudo" placeholder="Votre pseudo">
+            <!-- Champ email -->
+            <input type="email" id="email" placeholder="Votre email">
 
-            <!-- Champ mot de passe -->
-            <input type="password" id="password" placeholder="Votre mot de passe">
 
             <!-- Bouton connexion -->
             <button class="btn" id="loginBtn">Se connecter</button>
@@ -59,13 +57,12 @@
             if (el) el.textContent = savedPseudo;
         }
 
-        // 🔥 Connexion
+        // 🔥 Connexion avec EMAIL uniquement
         document.getElementById("loginBtn").addEventListener("click", async () => {
-            const pseudo = document.getElementById("pseudo").value;
-            const password = document.getElementById("password").value;
+            const email = document.getElementById("email").value;
 
-            if (!pseudo || !password) {
-                alert("Veuillez remplir tous les champs !");
+            if (!email) {
+                alert("Veuillez entrer votre email !");
                 return;
             }
 
@@ -73,19 +70,20 @@
                 const response = await fetch("https://corpo-backend.onrender.com/account/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ pseudo, password })
+                    body: JSON.stringify({ email })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
                     // 🔥 Stocker le pseudo pour toutes les pages
-                    localStorage.setItem("pseudo", pseudo);
+                    localStorage.setItem("pseudo", data.pseudo);
+                    localStorage.setItem("email", data.email);
 
                     alert("Connexion réussie !");
                     window.location.href = "accueil.html";
                 } else {
-                    alert(data.detail || "Identifiants incorrects !");
+                    alert(data.detail || "Email incorrect !");
                 }
             } catch (error) {
                 alert("Erreur de connexion au serveur !");
@@ -93,6 +91,7 @@
             }
         });
     </script>
+
 
 </body>
 
