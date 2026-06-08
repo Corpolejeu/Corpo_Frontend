@@ -86,9 +86,8 @@
         document.getElementById("registerBtn").addEventListener("click", async () => {
             const pseudo = document.getElementById("pseudo").value;
             const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
 
-            if (!pseudo || !email || !password) {
+            if (!pseudo || !email) {
                 alert("Veuillez remplir tous les champs !");
                 return;
             }
