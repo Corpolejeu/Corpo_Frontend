@@ -89,7 +89,7 @@
         // -------------------------------------------------------------------------
         // 🔥 FIX : Ajout du paramètre obligatoire ?player_id= pour ouvrir la room
         // -------------------------------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${code}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`);
 
         ws.onopen = () => {
             console.log("✅ Connexion WebSocket établie avec succès dans la room :", code);

@@ -1,7 +1,7 @@
 let ws = null;
 
 function connectWS(code) {
-    ws = new WebSocket(`ws://127.0.0.1:8000/ws/${code}`);
+    ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}`);
 
     ws.onopen = () => {
         console.log("WS connecté");
