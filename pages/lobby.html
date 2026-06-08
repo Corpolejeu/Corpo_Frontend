@@ -13,13 +13,16 @@
             background: #ffffffaa;
             border-radius: 10px;
         }
+
         .player-item {
             padding: 8px;
             border-bottom: 1px solid #ddd;
         }
+
         .player-item:last-child {
             border-bottom: none;
         }
+
         #startBtn {
             margin-top: 20px;
             display: none;
@@ -68,7 +71,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
 
@@ -173,7 +176,7 @@
                     const data = await res.json();
 
                     if (!res.ok) {
-                        partyLaunched = false; 
+                        partyLaunched = false;
                         alert(data.detail || "Impossible de lancer la partie.");
                     }
                 } catch (e) {
@@ -188,7 +191,7 @@
         // Heartbeat pour maintenir la session active
         function sendHeartbeat() {
             if (playerId) {
-                fetch(`${API_URL}/party/heartbeat/${playerId}`, { method: "POST" }).catch(() => {});
+                fetch(`${API_URL}/party/heartbeat/${playerId}`, { method: "POST" }).catch(() => { });
             }
         }
         sendHeartbeat();

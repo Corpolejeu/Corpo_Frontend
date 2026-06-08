@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Découverte du rôle - Corpo!</title>
@@ -14,7 +15,7 @@
         .role-card {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
             overflow: hidden;
         }
 
@@ -43,16 +44,25 @@
         }
 
         .wheel-img {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             border: 4px solid white;
             object-fit: cover;
         }
 
-        .spin { animation: spinWheel 3s ease-out forwards; }
+        .spin {
+            animation: spinWheel 3s ease-out forwards;
+        }
+
         @keyframes spinWheel {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(1440deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(1440deg);
+            }
         }
 
         .role-header h2 {
@@ -63,8 +73,8 @@
 
         .role-title-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 20px;
             padding: 4px 14px;
             font-size: 13px;
@@ -127,7 +137,10 @@
             font-style: italic;
             margin-bottom: 20px;
         }
-        .role-cliche::before { content: "💬 "; }
+
+        .role-cliche::before {
+            content: "💬 ";
+        }
 
         /* Timer */
         #timerBar {
@@ -137,6 +150,7 @@
             overflow: hidden;
             margin-bottom: 10px;
         }
+
         #timerFill {
             height: 100%;
             background: #c0392b;
@@ -144,6 +158,7 @@
             transition: width 1s linear;
             width: 100%;
         }
+
         #timerText {
             font-size: 13px;
             color: #999;
@@ -151,141 +166,151 @@
         }
 
         /* Final role caché au début */
-        #finalRole { display: none; }
-        #finalRole.show { display: block; }
+        #finalRole {
+            display: none;
+        }
+
+        #finalRole.show {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="navbar">
-    <a href="accueil.html" class="logo">Corpo! Le jeu</a>
-    <div class="nav-user"><span id="userPseudo"></span></div>
-</div>
-
-<div class="role-page">
-    <div class="role-card">
-
-        <div class="role-header">
-            <h1>Découverte du rôle</h1>
-
-            <!-- Roue -->
-            <div class="role-wheel" id="wheelZone">
-                <img id="wheelImg" class="wheel-img" src="../assets/images/joueur1.png">
-            </div>
-
-            <div id="finalRole">
-                <img id="roleImg" class="wheel-img" src="" style="width:130px;height:130px;margin:0 auto 12px;display:block;">
-                <h2 id="roleName"></h2>
-                <div class="role-title-badge" id="roleTitle"></div>
-                <div class="role-team" id="roleTeam"></div>
-            </div>
-        </div>
-
-        <div class="role-body" id="roleBody" style="display:none;">
-
-            <!-- Description courte -->
-            <div class="role-description" id="roleDesc"></div>
-
-            <!-- Rôle pendant le meeting -->
-            <div class="role-meeting-box">
-                <h3>🏢 Ton rôle pendant le meeting</h3>
-                <p id="roleMeeting"></p>
-            </div>
-
-            <!-- Phrase cliché -->
-            <div class="role-cliche" id="roleCliche"></div>
-
-            <!-- Timer -->
-            <div id="timerBar"><div id="timerFill"></div></div>
-            <div id="timerText">Meeting dans 15s…</div>
-
-        </div>
-
+    <div class="navbar">
+        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
+        <div class="nav-user"><span id="userPseudo"></span></div>
     </div>
-</div>
 
-<audio id="wheelSound" src="../assets/sounds/roulette.mp3"></audio>
+    <div class="role-page">
+        <div class="role-card">
 
-<script>
-    const API_URL    = "http://127.0.0.1:8000";
-    const pseudo     = localStorage.getItem("pseudo");
-    const playerId   = localStorage.getItem("playerId");
-    const partyCode  = localStorage.getItem("partyCode");
+            <div class="role-header">
+                <h1>Découverte du rôle</h1>
 
-    document.getElementById("userPseudo").textContent = pseudo;
+                <!-- Roue -->
+                <div class="role-wheel" id="wheelZone">
+                    <img id="wheelImg" class="wheel-img" src="../assets/images/joueur1.png">
+                </div>
 
-    const DURATION = 15; // secondes avant redirection
+                <div id="finalRole">
+                    <img id="roleImg" class="wheel-img" src=""
+                        style="width:130px;height:130px;margin:0 auto 12px;display:block;">
+                    <h2 id="roleName"></h2>
+                    <div class="role-title-badge" id="roleTitle"></div>
+                    <div class="role-team" id="roleTeam"></div>
+                </div>
+            </div>
 
-    function startWheel() {
-        const wheel = document.getElementById("wheelImg");
-        const sound = document.getElementById("wheelSound");
-        wheel.classList.add("spin");
-        sound.currentTime = 0;
-        sound.loop = true;
-        sound.play().catch(() => {});
-        setTimeout(() => { sound.pause(); sound.currentTime = 0; }, 3000);
-    }
+            <div class="role-body" id="roleBody" style="display:none;">
 
-    async function loadRole() {
-        try {
-            const res  = await fetch(`${API_URL}/party/role/${playerId}`);
-            const data = await res.json();
+                <!-- Description courte -->
+                <div class="role-description" id="roleDesc"></div>
 
-            // Charger les infos complètes du rôle
-            const roleRes  = await fetch(`${API_URL}/party/role_info/${encodeURIComponent(data.role_name)}`);
-            const roleInfo = await roleRes.json();
+                <!-- Rôle pendant le meeting -->
+                <div class="role-meeting-box">
+                    <h3>🏢 Ton rôle pendant le meeting</h3>
+                    <p id="roleMeeting"></p>
+                </div>
 
-            startWheel();
+                <!-- Phrase cliché -->
+                <div class="role-cliche" id="roleCliche"></div>
 
-            setTimeout(() => {
-                localStorage.setItem("lastRole", data.role_name);
+                <!-- Timer -->
+                <div id="timerBar">
+                    <div id="timerFill"></div>
+                </div>
+                <div id="timerText">Meeting dans 15s…</div>
 
-                // Cacher la roue, afficher le rôle
-                document.getElementById("wheelZone").style.display = "none";
-                document.getElementById("finalRole").classList.add("show");
+            </div>
 
-                document.getElementById("roleImg").src   = "../assets/images/" + data.image;
-                document.getElementById("roleName").textContent  = data.pseudo || data.role_name;
-                document.getElementById("roleTitle").textContent = roleInfo.title || data.role;
-                document.getElementById("roleTeam").textContent  = "Équipe : " + data.team;
+        </div>
+    </div>
 
-                // Description
-                document.getElementById("roleDesc").textContent    = roleInfo.description || "";
-                document.getElementById("roleMeeting").textContent = roleInfo.role_meeting || "";
+    <audio id="wheelSound" src="../assets/sounds/roulette.mp3"></audio>
 
-                // Phrase cliché aléatoire
-                const cliches = roleInfo.cliches || [];
-                document.getElementById("roleCliche").textContent =
-                    cliches.length > 0 ? cliches[Math.floor(Math.random() * cliches.length)] : "";
+    <script>
+        const API_URL = "https://corpo-backend.onrender.com";
+        const pseudo = localStorage.getItem("pseudo");
+        const playerId = localStorage.getItem("playerId");
+        const partyCode = localStorage.getItem("partyCode");
 
-                document.getElementById("roleBody").style.display = "block";
+        document.getElementById("userPseudo").textContent = pseudo;
 
-                startCountdown();
-            }, 3000);
+        const DURATION = 15; // secondes avant redirection
 
-        } catch(e) {
-            console.error("Erreur chargement rôle :", e);
+        function startWheel() {
+            const wheel = document.getElementById("wheelImg");
+            const sound = document.getElementById("wheelSound");
+            wheel.classList.add("spin");
+            sound.currentTime = 0;
+            sound.loop = true;
+            sound.play().catch(() => { });
+            setTimeout(() => { sound.pause(); sound.currentTime = 0; }, 3000);
         }
-    }
 
-    function startCountdown() {
-        let timeLeft = DURATION;
-        const fill   = document.getElementById("timerFill");
-        const text   = document.getElementById("timerText");
+        async function loadRole() {
+            try {
+                const res = await fetch(`${API_URL}/party/role/${playerId}`);
+                const data = await res.json();
 
-        const interval = setInterval(() => {
-            timeLeft--;
-            fill.style.width = `${(timeLeft / DURATION) * 100}%`;
-            text.textContent = `Meeting dans ${timeLeft}s…`;
+                // Charger les infos complètes du rôle
+                const roleRes = await fetch(`${API_URL}/party/role_info/${encodeURIComponent(data.role_name)}`);
+                const roleInfo = await roleRes.json();
 
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                window.location.href = `meeting1.html?code=${partyCode}`;
+                startWheel();
+
+                setTimeout(() => {
+                    localStorage.setItem("lastRole", data.role_name);
+
+                    // Cacher la roue, afficher le rôle
+                    document.getElementById("wheelZone").style.display = "none";
+                    document.getElementById("finalRole").classList.add("show");
+
+                    document.getElementById("roleImg").src = "../assets/images/" + data.image;
+                    document.getElementById("roleName").textContent = data.pseudo || data.role_name;
+                    document.getElementById("roleTitle").textContent = roleInfo.title || data.role;
+                    document.getElementById("roleTeam").textContent = "Équipe : " + data.team;
+
+                    // Description
+                    document.getElementById("roleDesc").textContent = roleInfo.description || "";
+                    document.getElementById("roleMeeting").textContent = roleInfo.role_meeting || "";
+
+                    // Phrase cliché aléatoire
+                    const cliches = roleInfo.cliches || [];
+                    document.getElementById("roleCliche").textContent =
+                        cliches.length > 0 ? cliches[Math.floor(Math.random() * cliches.length)] : "";
+
+                    document.getElementById("roleBody").style.display = "block";
+
+                    startCountdown();
+                }, 3000);
+
+            } catch (e) {
+                console.error("Erreur chargement rôle :", e);
             }
-        }, 1000);
-    }
+        }
 
-    loadRole();
-</script>
+        function startCountdown() {
+            let timeLeft = DURATION;
+            const fill = document.getElementById("timerFill");
+            const text = document.getElementById("timerText");
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                fill.style.width = `${(timeLeft / DURATION) * 100}%`;
+                text.textContent = `Meeting dans ${timeLeft}s…`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    window.location.href = `meeting1.html?code=${partyCode}`;
+                }
+            }, 1000);
+        }
+
+        loadRole();
+    </script>
 </body>
+
 </html>

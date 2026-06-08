@@ -71,10 +71,10 @@
     </div>
 
     <script>
-        const API_URL   = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
-        const pseudo    = localStorage.getItem("pseudo");
-        const playerId  = localStorage.getItem("playerId");
+        const pseudo = localStorage.getItem("pseudo");
+        const playerId = localStorage.getItem("playerId");
 
         document.getElementById("userPseudo").textContent = pseudo;
 
@@ -85,23 +85,23 @@
 
         // Configurer l'UI selon le mode
         function setupUI() {
-            const badge  = document.getElementById("contextBadge");
-            const cho    = document.getElementById("choText");
-            const btn    = document.getElementById("actionBtn");
+            const badge = document.getElementById("contextBadge");
+            const cho = document.getElementById("choText");
+            const btn = document.getElementById("actionBtn");
 
             if (feedbackMode === "pre_vote") {
-                badge.textContent      = "🗣 Débat avant le vote";
+                badge.textContent = "🗣 Débat avant le vote";
                 badge.style.background = "#c0392b";
-                cho.textContent        = "Débattez et désignez vos suspects. Le vote arrive !";
-                btn.textContent        = "🗳 Passer au vote";
-                btn.onclick            = triggerVote;
+                cho.textContent = "Débattez et désignez vos suspects. Le vote arrive !";
+                btn.textContent = "🗳 Passer au vote";
+                btn.onclick = triggerVote;
             } else {
                 // post_vote → après le défi du vote, prochain meeting
-                badge.textContent      = "🏁 Débat final du tour";
+                badge.textContent = "🏁 Débat final du tour";
                 badge.style.background = "#2c3e50";
-                cho.textContent        = "Dernier débat avant le prochain meeting !";
-                btn.textContent        = "▶ Lancer le meeting suivant";
-                btn.onclick            = triggerNextMeeting;
+                cho.textContent = "Dernier débat avant le prochain meeting !";
+                btn.textContent = "▶ Lancer le meeting suivant";
+                btn.onclick = triggerNextMeeting;
             }
         }
 
@@ -124,7 +124,7 @@
         // ---------------------------------------------------
         async function checkHost() {
             try {
-                const res  = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
                 if (data.host_id === parseInt(playerId)) {
                     document.getElementById("actionContainer").style.display = "block";
@@ -168,7 +168,7 @@
             const msg = event.data;
 
             if (msg.startsWith("chat:")) {
-                const text   = msg.substring(5);
+                const text = msg.substring(5);
                 const isMine = text.startsWith(pseudo + " : ");
                 addMessage(text, false, isMine);
                 return;
@@ -181,7 +181,7 @@
                 try {
                     window._motsInterdits = JSON.parse(msg.substring(10));
                     addMessage(`🚫 Nouveaux mots interdits : ${window._motsInterdits.join(", ")}`, true, false);
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
             if (msg.startsWith("player_eliminated_direct:")) {
@@ -211,8 +211,8 @@
                 localStorage.removeItem("feedbackMode");
                 const result = msg.split(":")[1];
                 window.location.href = result === "victoire_collabs" ? "victoire.html"
-                                     : result === "match_nul"        ? "match_nul.html"
-                                     : "defaite.html";
+                    : result === "match_nul" ? "match_nul.html"
+                        : "defaite.html";
                 return;
             }
         };
@@ -234,18 +234,18 @@
             `;
             if (isWarning) {
                 p.style.background = "#fff3cd";
-                p.style.color      = "#856404";
-                p.style.border     = "1px solid #ffc107";
-                p.style.alignSelf  = "center";
-                p.style.textAlign  = "center";
-                p.style.maxWidth   = "100%";
+                p.style.color = "#856404";
+                p.style.border = "1px solid #ffc107";
+                p.style.alignSelf = "center";
+                p.style.textAlign = "center";
+                p.style.maxWidth = "100%";
             } else if (isMine) {
                 p.style.background = "#c0392b";
-                p.style.color      = "white";
+                p.style.color = "white";
                 p.style.marginLeft = "auto";
             } else {
                 p.style.background = "#f0f0f0";
-                p.style.color      = "#2c3e50";
+                p.style.color = "#2c3e50";
             }
             msgs.appendChild(p);
             msgs.scrollTop = msgs.scrollHeight;
@@ -258,22 +258,22 @@
 
         function sendChat() {
             const input = document.getElementById("chatInput");
-            const text  = input.value.trim();
+            const text = input.value.trim();
             if (!text || ws.readyState !== WebSocket.OPEN) return;
             ws.send(JSON.stringify({ type: "chat", pseudo, message: text }));
             input.value = "";
         }
 
-        
+
         // 🔥 Vérifier si le joueur est vivant
         (async function checkAlive() {
             try {
-                const res  = await fetch(`${API_URL}/party/is_alive/${playerId}`);
+                const res = await fetch(`${API_URL}/party/is_alive/${playerId}`);
                 const data = await res.json();
                 if (!data.is_alive) {
                     window.location.href = "salle_morts.html";
                 }
-            } catch(e) {}
+            } catch (e) { }
         })();
 
         setupUI();
@@ -283,15 +283,16 @@
         // Charger les mots interdits actifs
         async function loadMotsInterdits() {
             try {
-                const res  = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
+                const res = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
                 const data = await res.json();
                 window._motsInterdits = data.mots_actifs || [];
                 if (window._motsInterdits.length > 0) {
                     addMessage(`🚫 Mots interdits actifs : ${window._motsInterdits.join(", ")}`, true, false);
                 }
-            } catch(e) { window._motsInterdits = []; }
+            } catch (e) { window._motsInterdits = []; }
         }
     </script>
 
 </body>
+
 </html>

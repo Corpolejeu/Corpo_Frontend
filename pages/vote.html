@@ -13,10 +13,12 @@
             gap: 20px;
             margin-top: 20px;
         }
+
         .vote-player {
             text-align: center;
             cursor: pointer;
         }
+
         .vote-player img {
             width: 100px;
             height: 100px;
@@ -25,19 +27,35 @@
             border: 3px solid #ccc;
             transition: border 0.2s;
         }
+
         .vote-player.selected img {
             border: 4px solid #c0392b;
             box-shadow: 0 0 12px #c0392b;
         }
-        .vote-player p { margin-top: 8px; font-weight: bold; }
+
+        .vote-player p {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
         #voteTimer {
             font-size: 22px;
             color: #d9534f;
             font-weight: bold;
             margin: 15px 0;
         }
-        #validateBtn { margin-top: 20px; display: none; }
-        #resultMsg   { margin-top: 20px; font-size: 20px; font-weight: bold; color: #c0392b; }
+
+        #validateBtn {
+            margin-top: 20px;
+            display: none;
+        }
+
+        #resultMsg {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #c0392b;
+        }
     </style>
 </head>
 
@@ -70,10 +88,10 @@
     </div>
 
     <script>
-        const API_URL   = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
-        const playerId  = localStorage.getItem("playerId");
-        const pseudo    = localStorage.getItem("pseudo");
+        const playerId = localStorage.getItem("playerId");
+        const pseudo = localStorage.getItem("pseudo");
 
         document.getElementById("userPseudo").textContent = pseudo;
 
@@ -106,9 +124,9 @@
         async function loadPlayers() {
             try {
                 const verifyRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
-                const party     = await verifyRes.json();
-                const res       = await fetch(`${API_URL}/party/players/${party.party_id}`);
-                const players   = await res.json();
+                const party = await verifyRes.json();
+                const res = await fetch(`${API_URL}/party/players/${party.party_id}`);
+                const players = await res.json();
 
                 const grid = document.getElementById("voteGrid");
                 grid.innerHTML = "";
@@ -163,8 +181,8 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        voter_id:   parseInt(playerId),
-                        target_id:  selectedPlayerId,
+                        voter_id: parseInt(playerId),
+                        target_id: selectedPlayerId,
                         party_code: partyCode
                     })
                 });
@@ -228,7 +246,7 @@
                 clearInterval(timerInterval);
                 const parts = msg.split(":");
                 const ePseudo = parts[1];
-                const eRole   = parts[2];
+                const eRole = parts[2];
                 document.getElementById("voteTimer").textContent = "Licenciement immédiat !";
                 document.getElementById("resultMsg").innerHTML =
                     `❌ <strong>${ePseudo}</strong> est licencié(e) directement (joker déjà utilisé).<br>
@@ -256,7 +274,7 @@
 
                 if (data.eliminated) {
                     localStorage.setItem("eliminatedPlayerId", data.eliminated.player_id);
-                    localStorage.setItem("eliminatedPseudo",   data.eliminated.pseudo);
+                    localStorage.setItem("eliminatedPseudo", data.eliminated.pseudo);
                     localStorage.setItem("eliminatedImg",
                         roleImages[data.eliminated.role] || "joueur1.png");
                 }
@@ -265,20 +283,21 @@
             }
         }
 
-        
+
         // 🔥 Vérifier si le joueur est vivant
         (async function checkAlive() {
             try {
-                const res  = await fetch(`${API_URL}/party/is_alive/${playerId}`);
+                const res = await fetch(`${API_URL}/party/is_alive/${playerId}`);
                 const data = await res.json();
                 if (!data.is_alive) {
                     window.location.href = "salle_morts.html";
                 }
-            } catch(e) {}
+            } catch (e) { }
         })();
 
         loadPlayers();
     </script>
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Salle des morts - Corpo!</title>
@@ -14,6 +15,7 @@
             font-size: 16px;
             color: #555;
         }
+
         .phase-badge {
             display: inline-block;
             padding: 6px 16px;
@@ -23,6 +25,7 @@
             background: #c0392b;
             color: white;
         }
+
         .eliminated-reveal {
             background: #fdecea;
             border: 2px solid #c0392b;
@@ -32,6 +35,7 @@
             max-width: 400px;
             text-align: center;
         }
+
         .eliminated-reveal img {
             width: 100px;
             height: 100px;
@@ -43,6 +47,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="navbar">
@@ -91,10 +96,10 @@
     </div>
 
     <script>
-        const API_URL   = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
-        const pseudo    = localStorage.getItem("pseudo");
-        const playerId  = localStorage.getItem("playerId");
+        const pseudo = localStorage.getItem("pseudo");
+        const playerId = localStorage.getItem("playerId");
 
         document.getElementById("userPseudo").textContent = pseudo;
 
@@ -106,13 +111,13 @@
             "Denis": "denis.png", "Corentin": "corentin.png", "Abdel": "abdel.png",
         };
 
-        const phaseEl  = document.getElementById("currentPhase");
+        const phaseEl = document.getElementById("currentPhase");
         const detailEl = document.getElementById("phaseDetail");
 
         // Charger le vrai rôle du joueur éliminé (révélé maintenant)
         async function loadMyRole() {
             try {
-                const res  = await fetch(`${API_URL}/party/role/${playerId}`);
+                const res = await fetch(`${API_URL}/party/role/${playerId}`);
                 const data = await res.json();
                 if (data.role_name) {
                     const img = roleImages[data.role_name] || "joueur1.png";
@@ -128,7 +133,7 @@
         // Afficher une annonce d'élimination
         function showElimination(pseudo, role) {
             const feed = document.getElementById("eliminationFeed");
-            const div  = document.createElement("div");
+            const div = document.createElement("div");
             div.classList.add("eliminated-reveal");
             const img = roleImages[role] || "joueur1.png";
             div.innerHTML = `
@@ -146,27 +151,27 @@
             const msg = event.data;
 
             if (msg === "phase:meeting_start") {
-                phaseEl.textContent  = "Meeting en cours";
+                phaseEl.textContent = "Meeting en cours";
                 detailEl.textContent = "Les joueurs font leurs actions secrètes…";
             }
             else if (msg.startsWith("role:")) {
-                phaseEl.textContent  = "Meeting en cours";
+                phaseEl.textContent = "Meeting en cours";
                 detailEl.textContent = `Tour de : ${msg.substring(5)}`;
             }
             else if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
-                phaseEl.textContent  = "Feedback / Débat";
+                phaseEl.textContent = "Feedback / Débat";
                 detailEl.textContent = "Les joueurs débattent des suspects…";
             }
             else if (msg === "phase:vote") {
-                phaseEl.textContent  = "Vote";
+                phaseEl.textContent = "Vote";
                 detailEl.textContent = "Les joueurs votent pour licencier quelqu'un…";
             }
             else if (msg === "phase:defi_decision") {
-                phaseEl.textContent  = "Défi Corpo";
+                phaseEl.textContent = "Défi Corpo";
                 detailEl.textContent = "Un joueur doit décider s'il relève le défi…";
             }
             else if (msg === "phase:defi_corpo") {
-                phaseEl.textContent  = "Défi Corpo en cours";
+                phaseEl.textContent = "Défi Corpo en cours";
                 detailEl.textContent = "Un joueur réalise son défi !";
             }
             // 🔥 Annonce immédiate d'élimination directe
@@ -176,20 +181,20 @@
                 detailEl.textContent = `${parts[1]} a été licencié(e) directement !`;
             }
             else if (msg.startsWith("egalite_defis:")) {
-                phaseEl.textContent  = "Égalité !";
+                phaseEl.textContent = "Égalité !";
                 detailEl.textContent = `Égalité ! ${msg.substring(14)} vont faire leur défi.`;
             }
             else if (msg.startsWith("next_meeting:")) {
                 // 🔥 Les morts restent ici — juste mettre à jour l'affichage
-                phaseEl.textContent  = "Nouveau meeting";
+                phaseEl.textContent = "Nouveau meeting";
                 detailEl.textContent = `Meeting ${msg.split(":")[1]} en cours… Vous observez.`;
                 // PAS de redirection — les éliminés restent dans la salle des morts
             }
             else if (msg.startsWith("game_over:")) {
                 const result = msg.split(":")[1];
                 window.location.href = result === "victoire_collabs" ? "victoire.html"
-                                     : result === "match_nul"        ? "match_nul.html"
-                                     : "defaite.html";
+                    : result === "match_nul" ? "match_nul.html"
+                        : "defaite.html";
             }
         };
 
@@ -199,4 +204,5 @@
     </script>
 
 </body>
+
 </html>

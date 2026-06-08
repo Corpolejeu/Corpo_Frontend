@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Victoire - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        .result-emoji { font-size: 80px; margin: 10px 0; }
-        .victoire-box { text-align: center; padding: 30px; }
-        .victoire-img { width: 220px; border-radius: 12px; margin: 15px auto; display: block; }
+        .result-emoji {
+            font-size: 80px;
+            margin: 10px 0;
+        }
+
+        .victoire-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .victoire-img {
+            width: 220px;
+            border-radius: 12px;
+            margin: 15px auto;
+            display: block;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="navbar">
@@ -44,47 +59,48 @@
         // victoire.html = les COLLABORATEURS ont gagné (dernier manager éliminé)
         // Donc : Collaborateurs → gagnants 🎉 | Managers → perdants 😢
         const playerId = localStorage.getItem("playerId");
-        const API_URL  = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
 
         async function init() {
             let isManager = false;
             try {
-                const res  = await fetch(`${API_URL}/party/role/${playerId}`);
+                const res = await fetch(`${API_URL}/party/role/${playerId}`);
                 const data = await res.json();
-                isManager  = data.team === "Managers";
+                isManager = data.team === "Managers";
             } catch (e) {
                 const role = localStorage.getItem("lastRole") || "";
-                isManager  = ["Fabien"].includes(role);
+                isManager = ["Fabien"].includes(role);
             }
             render(isManager);
         }
 
         function render(isManager) {
-        const title   = document.getElementById("mainTitle");
-        const emoji   = document.getElementById("emoji");
-        const choMsg  = document.getElementById("choMsg");
-        const img     = document.getElementById("resultImg");
-        const text    = document.getElementById("resultText");
+            const title = document.getElementById("mainTitle");
+            const emoji = document.getElementById("emoji");
+            const choMsg = document.getElementById("choMsg");
+            const img = document.getElementById("resultImg");
+            const text = document.getElementById("resultText");
 
-        if (isManager) {
-            // Le manager a perdu
-            title.textContent          = "Défaite...";
-            title.style.color          = "#c0392b";
-            emoji.textContent          = "😢";
-            choMsg.innerHTML           = "<strong>CHO :</strong> Les collaborateurs ont démasqué tous les managers. Game over !";
-            img.src                    = "../assets/images/defaite.png";
-            text.textContent           = "Tu as été démasqué. Les collaborateurs ont sauvé l'entreprise… sans toi.";
-        } else {
-            // Le collaborateur a gagné
-            title.textContent          = "Victoire !";
-            title.style.color          = "#27ae60";
-            emoji.textContent          = "🎉";
-            choMsg.innerHTML           = "<strong>CHO :</strong> Félicitations ! Votre équipe a remporté la partie.";
-            img.src                    = "../assets/images/victoire.png";
-            text.textContent           = "Vous avez su déjouer les pièges et survivre aux meetings. L'entreprise est sauvée !";
-        }
+            if (isManager) {
+                // Le manager a perdu
+                title.textContent = "Défaite...";
+                title.style.color = "#c0392b";
+                emoji.textContent = "😢";
+                choMsg.innerHTML = "<strong>CHO :</strong> Les collaborateurs ont démasqué tous les managers. Game over !";
+                img.src = "../assets/images/defaite.png";
+                text.textContent = "Tu as été démasqué. Les collaborateurs ont sauvé l'entreprise… sans toi.";
+            } else {
+                // Le collaborateur a gagné
+                title.textContent = "Victoire !";
+                title.style.color = "#27ae60";
+                emoji.textContent = "🎉";
+                choMsg.innerHTML = "<strong>CHO :</strong> Félicitations ! Votre équipe a remporté la partie.";
+                img.src = "../assets/images/victoire.png";
+                text.textContent = "Vous avez su déjouer les pièges et survivre aux meetings. L'entreprise est sauvée !";
+            }
         }
         init();
     </script>
 </body>
+
 </html>
