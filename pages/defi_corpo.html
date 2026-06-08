@@ -465,7 +465,7 @@
 
         // ── WEBSOCKET ──
         function connectWS() {
-            ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+            ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
             ws.onopen = () => {
                 // Demander le défi actuel au serveur
                 ws.send(JSON.stringify({ type: "ready", player_id: playerId }));

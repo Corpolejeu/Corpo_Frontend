@@ -114,7 +114,7 @@
             const pid = localStorage.getItem("playerId");
             if (!pid) return;
             try {
-                const r = await fetch(`http://127.0.0.1:8000/party/is_alive/${pid}`);
+                const r = await fetch(`https://corpo-backend.onrender.com/party/is_alive/${pid}`);
                 const d = await r.json();
                 if (!d.is_alive) {
                     // Désactiver tous les boutons et inputs
@@ -140,7 +140,7 @@
         document.getElementById("userPseudo").textContent = pseudo;
 
         // 🔥 WebSocket — écouter le signal go_defi pour rediriger tout le monde
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}`);
         ws.onmessage = (event) => {
             if (event.data === "go_defi") {
                 window.location.href = `defi_corpo.html?code=${partyCode}`;

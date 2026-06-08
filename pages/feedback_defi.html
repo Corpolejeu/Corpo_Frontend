@@ -77,7 +77,7 @@
         })();
 
         // WebSocket
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onopen = async () => {
             // Récupérer la victime

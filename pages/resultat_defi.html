@@ -6,8 +6,18 @@
     <title>Résultat du défi - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        .result-success { color: #27ae60; font-size: 24px; font-weight: bold; }
-        .result-fail    { color: #c0392b; font-size: 24px; font-weight: bold; }
+        .result-success {
+            color: #27ae60;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .result-fail {
+            color: #c0392b;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
         .defi-rappel {
             background: #f8f9fa;
             border-left: 4px solid #ffc107;
@@ -74,19 +84,19 @@
     </div>
 
     <script>
-        const API_URL          = "https://corpo-backend.onrender.com";
-        const partyCode        = localStorage.getItem("partyCode");
-        const playerId         = localStorage.getItem("playerId");
-        const pseudo           = localStorage.getItem("pseudo");
+        const API_URL = "https://corpo-backend.onrender.com";
+        const partyCode = localStorage.getItem("partyCode");
+        const playerId = localStorage.getItem("playerId");
+        const pseudo = localStorage.getItem("pseudo");
         const eliminatedPseudo = localStorage.getItem("eliminatedPseudo") || "Le collaborateur";
         const eliminatedPlayerId = localStorage.getItem("eliminatedPlayerId");
-        const eliminatedImg    = localStorage.getItem("eliminatedImg") || "joueur1.png";
-        const defiText         = localStorage.getItem("currentDefi") || "Défi corpo";
+        const eliminatedImg = localStorage.getItem("eliminatedImg") || "joueur1.png";
+        const defiText = localStorage.getItem("currentDefi") || "Défi corpo";
 
-        document.getElementById("userPseudo").textContent    = pseudo;
+        document.getElementById("userPseudo").textContent = pseudo;
         document.getElementById("eliminatedName").textContent = eliminatedPseudo;
-        document.getElementById("eliminatedImg").src          = "../assets/images/joueur1.png"; // Image neutre — rôle révélé seulement si échec
-        document.getElementById("defiRappel").textContent     = "Défi évalué : " + defiText;
+        document.getElementById("eliminatedImg").src = "../assets/images/joueur1.png"; // Image neutre — rôle révélé seulement si échec
+        document.getElementById("defiRappel").textContent = "Défi évalué : " + defiText;
 
         let resultShown = false;
 
@@ -103,7 +113,7 @@
         // ---------------------------------------------------
         // WebSocket — fallback si localStorage vide (reconnexion tardive)
         // ---------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = async (event) => {
             const msg = event.data;
@@ -164,7 +174,7 @@
         // ---------------------------------------------------
         async function checkHost() {
             try {
-                const res  = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
                 return data.host_id === parseInt(playerId);
             } catch (e) {
@@ -180,19 +190,19 @@
             resultShown = true;
 
             document.getElementById("zoneWaiting").style.display = "none";
-            document.getElementById("zoneResult").style.display  = "block";
+            document.getElementById("zoneResult").style.display = "block";
 
-            const choMsg    = document.getElementById("choMsg");
+            const choMsg = document.getElementById("choMsg");
             const resultText = document.getElementById("resultText");
-            const roleZone  = document.getElementById("roleRevelationZone");
+            const roleZone = document.getElementById("roleRevelationZone");
             roleZone.innerHTML = "";
 
             if (outcome === "success") {
-                choMsg.innerHTML    = "<strong>CHO :</strong> Performance validée par l'équipe !";
+                choMsg.innerHTML = "<strong>CHO :</strong> Performance validée par l'équipe !";
                 resultText.textContent = `✅ Défi réussi ! ${eliminatedPseudo} sauve sa place et reste anonyme.`;
                 resultText.className = "result-success";
             } else {
-                choMsg.innerHTML    = "<strong>CHO :</strong> Performance insuffisante. Licenciement acté.";
+                choMsg.innerHTML = "<strong>CHO :</strong> Performance insuffisante. Licenciement acté.";
                 resultText.textContent = `❌ Défi échoué ! ${eliminatedPseudo} est définitivement licencié(e).`;
                 resultText.className = "result-fail";
 
@@ -204,7 +214,7 @@
                         if (data.victim && data.victim.role) {
                             const roleInfo = document.createElement("p");
                             roleInfo.style.cssText = "font-size:20px; font-weight:bold; margin-top:12px; color:#c0392b;";
-                            roleInfo.textContent   = `Rôle révélé : ${data.victim.role}`;
+                            roleInfo.textContent = `Rôle révélé : ${data.victim.role}`;
                             roleZone.appendChild(roleInfo);
                         }
                     }
@@ -224,7 +234,7 @@
         // Le host déclenche la phase feedback pour tout le monde
         // ---------------------------------------------------
         document.getElementById("btnNextStep").addEventListener("click", async () => {
-            document.getElementById("btnNextStep").disabled    = true;
+            document.getElementById("btnNextStep").disabled = true;
             document.getElementById("btnNextStep").textContent = "Synchronisation…";
 
             try {
@@ -238,4 +248,5 @@
     </script>
 
 </body>
+
 </html>
