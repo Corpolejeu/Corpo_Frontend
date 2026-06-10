@@ -939,7 +939,7 @@
                 desc.textContent = "Tes voisins sont mis en évidence. Attends l'info du CHO.";
                 addBtn(btns, "✅ J'ai reçu l'info du CHO", "btn-ok", () => { highlightNeighbors(false); sendAction("done"); });
             } else if (role === "Tiff") {
-                desc.textContent = "Choisis 3 mots secrets. Si quelqu'un les dit dans le chat, il est licencié !";
+                desc.textContent = "Choisis 3 mots secrets parmi les 5 proposés :";
                 loadTiffMots(desc, btns);
             } else if (role === "Fabien") {
                 desc.textContent = "Désigne secrètement un collaborateur à licencier :";
