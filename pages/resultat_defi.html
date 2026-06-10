@@ -145,7 +145,7 @@
             const pid = localStorage.getItem("playerId");
             if (!pid) return;
             try {
-                const r = await fetch(`http://127.0.0.1:8000/party/is_alive/${pid}`);
+                const r = await fetch(`https://corpo-backend.onrender.com/party/is_alive/${pid}`);
                 const d = await r.json();
                 if (!d.is_alive && !window.location.href.includes("salle_morts")) {
                     window.location.href = "salle_morts.html";
@@ -153,7 +153,7 @@
             } catch (e) { }
         })();
 
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const playerId = parseInt(localStorage.getItem("playerId"));
         const pseudo = localStorage.getItem("pseudo");
@@ -229,7 +229,7 @@
         }, 1000);
 
         // WebSocket : recevoir le résultat du vote
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
         ws.onmessage = (event) => {
             const msg = event.data;
 
