@@ -278,7 +278,13 @@
                 }
                 return;
             }
-            if (msg.startsWith("defi_result:") || msg === "go_feedback" || msg === "go_salle_morts") {
+            if (msg.startsWith("defi_result:")) {
+                const outcome = msg.split(":")[1];
+                localStorage.setItem("defiOutcome", outcome);
+                window.location.href = `resultat_defi.html?code=${partyCode}`;
+                return;
+            }
+            if (msg === "go_feedback" || msg === "go_salle_morts") {
                 window.location.href = `resultat_defi.html?code=${partyCode}`;
                 return;
             }
