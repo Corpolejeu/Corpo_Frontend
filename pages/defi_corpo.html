@@ -18,6 +18,7 @@
             color: #856404;
             text-align: center;
         }
+
         .defi-type-badge {
             display: inline-block;
             padding: 4px 14px;
@@ -28,6 +29,7 @@
             background: #c0392b;
             color: white;
         }
+
         .qcm-options {
             display: flex;
             flex-direction: column;
@@ -35,6 +37,7 @@
             margin-top: 15px;
             text-align: left;
         }
+
         .qcm-option {
             background: white;
             border: 2px solid #ffc107;
@@ -44,13 +47,22 @@
             font-size: 15px;
             transition: background 0.2s;
         }
-        .qcm-option:hover { background: #fff3cd; }
+
+        .qcm-option:hover {
+            background: #fff3cd;
+        }
+
         .qcm-option.selected {
             background: #ffc107;
             color: #333;
             font-weight: bold;
         }
-        .chat-box { max-width: 500px; margin: 20px auto; }
+
+        .chat-box {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
         .chat-messages {
             background: #f8f9fa;
             border: 1px solid #ddd;
@@ -59,36 +71,95 @@
             height: 180px;
             overflow-y: auto;
         }
-        .chat-messages p { margin: 4px 0; font-size: 14px; }
-        .chat-input-area { display: flex; gap: 8px; margin-top: 10px; }
+
+        .chat-messages p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
         .chat-input-area input {
-            flex: 1; padding: 10px;
+            flex: 1;
+            padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 8px; font-size: 14px;
+            border-radius: 8px;
+            font-size: 14px;
         }
+
         .chat-send-btn {
-            background: #c0392b; color: white;
-            border: none; padding: 10px 18px;
-            border-radius: 8px; cursor: pointer; font-weight: bold;
+            background: #c0392b;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
         }
+
         .vote-btns {
-            display: flex; gap: 20px;
-            justify-content: center; margin-top: 20px; flex-wrap: wrap;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
+
         .btn-reste {
-            background: #27ae60; color: white;
-            font-size: 20px; padding: 14px 30px;
-            border-radius: 12px; border: none; cursor: pointer; font-weight: bold;
+            background: #27ae60;
+            color: white;
+            font-size: 20px;
+            padding: 14px 30px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
         }
+
         .btn-elimine {
-            background: #c0392b; color: white;
-            font-size: 20px; padding: 14px 30px;
-            border-radius: 12px; border: none; cursor: pointer; font-weight: bold;
+            background: #c0392b;
+            color: white;
+            font-size: 20px;
+            padding: 14px 30px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .btn-reste:disabled, .btn-elimine:disabled { opacity: 0.5; cursor: default; }
-        .waiting-msg { font-size: 16px; color: #888; font-style: italic; margin-top: 15px; text-align: center; }
-        .timer-defi { font-size: 20px; font-weight: bold; color: #c0392b; text-align: center; margin-top: 10px; }
-        .vote-confirm { color: #27ae60; font-weight: bold; text-align: center; margin-top: 10px; display: none; }
+
+        .btn-reste:disabled,
+        .btn-elimine:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .waiting-msg {
+            font-size: 16px;
+            color: #888;
+            font-style: italic;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .timer-defi {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c0392b;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .vote-confirm {
+            color: #27ae60;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 
@@ -103,7 +174,8 @@
         <div class="defi-box">
             <h1>Défi Corpo!</h1>
             <div class="cho-message">
-                <p><strong>CHO :</strong> <span id="playerNameDisplay">Joueur</span>, réponds au défi dans le chat ! Les autres voteront ensuite.</p>
+                <p><strong>CHO :</strong> <span id="playerNameDisplay">Joueur</span>, réponds au défi dans le chat ! Les
+                    autres voteront ensuite.</p>
             </div>
 
             <div class="defi-center">
@@ -137,7 +209,8 @@
                 <div id="zoneOthers" style="display:none;">
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessagesOthers">
-                            <p style="color:#888; font-style:italic;">En attente de la réponse de <span id="eliminatedNameOthers"></span>…</p>
+                            <p style="color:#888; font-style:italic;">En attente de la réponse de <span
+                                    id="eliminatedNameOthers"></span>…</p>
                         </div>
                     </div>
 
@@ -150,10 +223,12 @@
                             <button class="btn-elimine" id="btnElimine">❌ Éliminé</button>
                         </div>
                         <p class="vote-confirm" id="voteConfirm">✅ Vote enregistré !</p>
-                        <p class="waiting-msg" id="waitingOthers" style="display:none;">⏳ En attente des autres votes…</p>
+                        <p class="waiting-msg" id="waitingOthers" style="display:none;">⏳ En attente des autres votes…
+                        </p>
                     </div>
 
-                    <p class="waiting-msg" id="waitingAnswer">⏳ <span id="eliminatedNameWait"></span> est en train de répondre…</p>
+                    <p class="waiting-msg" id="waitingAnswer">⏳ <span id="eliminatedNameWait"></span> est en train de
+                        répondre…</p>
                 </div>
             </div>
         </div>
@@ -164,7 +239,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "http://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const playerId = parseInt(localStorage.getItem("playerId"));
         const pseudo = localStorage.getItem("pseudo");
@@ -251,7 +326,7 @@
         // --------------------------------------------------
         // WebSocket
         // --------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;
@@ -352,7 +427,7 @@
         // Timer 90s pour le joueur éliminé
         // --------------------------------------------------
         if (iAmEliminated) {
-            let timeLeft = 90;
+            let timeLeft = 15;
             const timerEl = document.getElementById("defiTimer");
             timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
 
@@ -371,4 +446,5 @@
     </script>
 
 </body>
+
 </html>
