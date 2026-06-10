@@ -129,8 +129,9 @@
                         </div>
                     </div>
                     <p style="font-size:13px; color:#888; margin-top:8px; text-align:center;">
-                        Envoie ta réponse, puis attends le vote des autres joueurs.
+                        Envoie ta réponse dans le chat, puis clique sur "J'ai terminé".
                     </p>
+                    <button class="chat-send-btn" id="doneBtn" style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;" disabled>✅ J'ai terminé mon défi !</button>
                 </div>
 
                 <!-- Zone autres joueurs -->
@@ -252,7 +253,7 @@
         // WebSocket
         // --------------------------------------------------
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
-        
+
         ws.onmessage = (event) => {
             const msg = event.data;
 
@@ -268,6 +269,15 @@
                 return;
             }
 
+            if (msg === "phase:resultat_defi") {
+                if (!iAmEliminated) {
+                    document.getElementById("waitingAnswer").style.display = "none";
+                    document.getElementById("voteSection").style.display = "block";
+                    document.getElementById("btnReste").textContent = defi.labelOui;
+                    document.getElementById("btnElimine").textContent = defi.labelNon;
+                }
+                return;
+            }
             if (msg.startsWith("defi_result:") || msg === "go_feedback" || msg === "go_salle_morts") {
                 window.location.href = `resultat_defi.html?code=${partyCode}`;
                 return;
@@ -316,9 +326,25 @@
             if (ws.readyState === WebSocket.OPEN) {
                 doSend();
             } else {
-                // Attendre que la connexion soit établie
                 ws.addEventListener("open", doSend, { once: true });
             }
+            // Activer le bouton "J'ai terminé"
+            setTimeout(() => {
+                const doneBtn = document.getElementById("doneBtn");
+                if (doneBtn) doneBtn.disabled = false;
+            }, 1000);
+        }
+
+        // Bouton "J'ai terminé" → déclenche le vote chez les autres
+        const doneBtnEl = document.getElementById("doneBtn");
+        if (doneBtnEl) {
+            doneBtnEl.addEventListener("click", async () => {
+                doneBtnEl.disabled = true;
+                doneBtnEl.textContent = "⏳ En attente du jury…";
+                try {
+                    await fetch(`${API_URL}/party/defi_performance_done/${partyCode}`, { method: "POST" });
+                } catch(e) { console.error(e); }
+            });
         }
 
         // --------------------------------------------------
@@ -341,7 +367,7 @@
                 await fetch(`${API_URL}/party/defi_vote`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ voter_id: playerId, party_code: partyCode, vote: vote })
+                    body: JSON.stringify({ voter_id: playerId, party_code: partyCode, success: vote })
                 });
             } catch (e) {
                 console.error("Erreur vote défi :", e);
