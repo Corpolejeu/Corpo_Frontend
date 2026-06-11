@@ -342,9 +342,11 @@
             }
 
             if (msg === "phase:resultat_defi") {
-
+                document.getElementById("waitingAnswer").style.display = "none";
+                document.getElementById("voteSection").style.display = "flex";
                 return;
             }
+
             if (msg.startsWith("defi_result:")) {
                 const outcome = msg.split(":")[1];
                 localStorage.setItem("defiOutcome", outcome);
@@ -361,6 +363,8 @@
                 window.location.href = result === "victoire_collabs" ? "victoire.html" : "defaite.html";
                 return;
             }
+
+
         };
 
         // --------------------------------------------------
