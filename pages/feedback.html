@@ -71,7 +71,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const pseudo = localStorage.getItem("pseudo");
         const playerId = localStorage.getItem("playerId");
@@ -162,7 +162,7 @@
         // ---------------------------------------------------
         // WebSocket
         // ---------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;
@@ -180,7 +180,7 @@
             if (msg.startsWith("tiff_mots:")) {
                 try {
                     window._motsInterdits = JSON.parse(msg.substring(10));
-                    // 🔒 Mots secrets — pas d'affichage
+                    addMessage(`🚫 Nouveaux mots interdits : ${window._motsInterdits.join(", ")}`, true, false);
                 } catch (e) { }
                 return;
             }
@@ -286,7 +286,9 @@
                 const res = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
                 const data = await res.json();
                 window._motsInterdits = data.mots_actifs || [];
-                // 🔒 Mots secrets — pas d'affichage
+                if (window._motsInterdits.length > 0) {
+                    addMessage(`🚫 Mots interdits actifs : ${window._motsInterdits.join(", ")}`, true, false);
+                }
             } catch (e) { window._motsInterdits = []; }
         }
     </script>

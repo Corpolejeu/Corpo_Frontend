@@ -101,22 +101,6 @@
             font-weight: bold;
         }
 
-        .timer-defi {
-            font-size: 20px;
-            font-weight: bold;
-            color: #c0392b;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .waiting-msg {
-            font-size: 16px;
-            color: #888;
-            font-style: italic;
-            margin-top: 15px;
-            text-align: center;
-        }
-
         .vote-btns {
             display: flex;
             gap: 20px;
@@ -128,8 +112,8 @@
         .btn-reste {
             background: #27ae60;
             color: white;
-            font-size: 18px;
-            padding: 13px 28px;
+            font-size: 20px;
+            padding: 14px 30px;
             border-radius: 12px;
             border: none;
             cursor: pointer;
@@ -139,8 +123,8 @@
         .btn-elimine {
             background: #c0392b;
             color: white;
-            font-size: 18px;
-            padding: 13px 28px;
+            font-size: 20px;
+            padding: 14px 30px;
             border-radius: 12px;
             border: none;
             cursor: pointer;
@@ -151,6 +135,22 @@
         .btn-elimine:disabled {
             opacity: 0.5;
             cursor: default;
+        }
+
+        .waiting-msg {
+            font-size: 16px;
+            color: #888;
+            font-style: italic;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .timer-defi {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c0392b;
+            text-align: center;
+            margin-top: 10px;
         }
 
         .vote-confirm {
@@ -174,12 +174,12 @@
         <div class="defi-box">
             <h1>Défi Corpo!</h1>
             <div class="cho-message">
-                <p><strong>CHO :</strong> <span id="playerNameDisplay">Joueur</span>, réalise ton défi ! Les autres
-                    voteront ensuite.</p>
+                <p><strong>CHO :</strong> <span id="playerNameDisplay">Joueur</span>, réponds au défi dans le chat ! Les
+                    autres voteront ensuite.</p>
             </div>
 
             <div class="defi-center">
-                <img src="../assets/images/joueur1.png" class="defi-img" alt="Joueur">
+                <img id="defiImg" src="../assets/images/joueur1.png" class="defi-img" alt="Joueur">
 
                 <div class="defi-question">
                     <div class="defi-type-badge" id="defiTypeBadge">Défi</div>
@@ -193,33 +193,32 @@
                 <div id="zoneEliminated" style="display:none;">
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessages">
-                            <p style="color:#888;font-style:italic;">Tape ta réponse ici…</p>
+                            <p style="color:#888; font-style:italic;">Tape ta réponse ici…</p>
                         </div>
                         <div class="chat-input-area">
                             <input type="text" id="chatInput" placeholder="Ta réponse…" maxlength="300">
                             <button class="chat-send-btn" id="sendBtn">Envoyer</button>
                         </div>
                     </div>
-                    <p style="font-size:13px;color:#888;margin-top:8px;text-align:center;">
+                    <p style="font-size:13px; color:#888; margin-top:8px; text-align:center;">
                         Envoie ta réponse dans le chat, puis clique sur "J'ai terminé".
                     </p>
                     <button class="chat-send-btn" id="doneBtn"
-                        style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;" disabled>
-                        ✅ J'ai terminé mon défi !
-                    </button>
+                        style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;" disabled>✅
+                        J'ai terminé mon défi !</button>
                 </div>
 
-                <!-- Zone observateurs -->
+                <!-- Zone autres joueurs -->
                 <div id="zoneOthers" style="display:none;">
                     <div class="chat-box">
                         <div class="chat-messages" id="chatMessagesOthers">
-                            <p style="color:#888;font-style:italic;">En attente de la réponse de <span
+                            <p style="color:#888; font-style:italic;">En attente de la réponse de <span
                                     id="eliminatedNameOthers"></span>…</p>
                         </div>
                     </div>
 
                     <div id="voteSection" style="display:none; margin-top:15px;">
-                        <p style="text-align:center;font-size:16px;font-weight:bold;">
+                        <p style="text-align:center; font-size:16px; font-weight:bold;">
                             <span id="eliminatedNameVote"></span> a répondu. Votez !
                         </p>
                         <div class="vote-btns">
@@ -259,47 +258,68 @@
         const iAmEliminated = playerId === eliminatedPlayerId;
 
         // --------------------------------------------------
-        // Charger le défi depuis l'API (même défi pour tout le monde)
+        // BANQUE DE DÉFIS
         // --------------------------------------------------
-        async function loadDefi() {
-            try {
-                const res = await fetch(`${API_URL}/party/current_corpocard/${partyCode}`);
-                const card = await res.json();
+        const defis = [
+            { type: "libre", question: "Tu as 30 secondes. Convaincs l'entreprise de t'accorder une augmentation en 3 arguments maximum.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Invente la pire excuse de retard à une réunion. Elle doit sembler crédible.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Écris un post LinkedIn insupportable. Maximum 280 caractères et au moins 3 hashtags.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Invente une startup absurde. Décris son concept en une phrase.", labelOui: "💰 Investissement accepté", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Cite 10 mots franglais utilisés au bureau.", labelOui: "✅ Valide", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Tu dois supprimer une réunion récurrente. Explique laquelle et pourquoi.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Écris le message Teams le plus passif-agressif possible tout en restant professionnel.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Décris ton métier sans utiliser les mots liés à ton métier.", labelOui: "💡 Ils ont compris", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Invente un KPI totalement inutile.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Cite 5 choses que tu fais quand tu devrais travailler.", labelOui: "😂 Honnête", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Invente un nouveau mot corporate et donne sa définition.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Écris un mail de démission en une seule phrase.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Quel est le pire conseil professionnel que tu pourrais donner à un stagiaire ?", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Invente une nouvelle règle RH complètement absurde.", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "libre", question: "Tu es CEO pendant 24 heures. Quelle est ta première décision ?", labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel budget supprimes-tu en premier ?", options: ["Formation", "Afterwork", "Machine à café", "RH", "Marketing"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quelle réunion est la moins utile ?", options: ["Point hebdo", "Daily meeting", "Rétrospective", "Kick-off projet", "Réunion de réunion"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quelle compétence est la plus survendue sur un CV ?", options: ["Excel", "PowerPoint", "Anglais courant", "Leadership", "Gestion du stress"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel comportement t'agace le plus au travail ?", options: ["Répondre à tous", "Arriver en retard", "Couper la parole", "Caméra éteinte", "Messages 'Salut' sans question"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel outil pourrait disparaître demain ?", options: ["Excel", "PowerPoint", "Teams", "Outlook", "Imprimante"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel est le pire jargon corporate ?", options: ["Synergie", "Quick win", "Brainstorming", "Alignement", "Disruptif"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Que fais-tu en premier en arrivant au bureau ?", options: ["Café", "Mail", "Teams", "Discussion avec un collègue", "Toilettes"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel département survivrait le moins longtemps sur une île déserte ?", options: ["RH", "Finance", "Marketing", "IT", "Direction"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Quel est le plus gros mensonge de bureau ?", options: ["Je regarde ça tout de suite", "Je suis en route", "J'ai lu le document", "Le mail est parti", "Je finis ça aujourd'hui"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+            { type: "qcm", question: "Tu dois recruter quelqu'un. Quel défaut acceptes-tu le plus facilement ?", options: ["Toujours en retard", "Trop bavard", "Mauvais en orthographe", "N'aime pas les réunions", "N'aime pas LinkedIn"], labelOui: "✅ Reste", labelNon: "❌ Éliminé" },
+        ];
 
-                document.getElementById("defiTypeBadge").textContent = card.duo ? "Défi en duo" : (card.type === "collectif" ? "Défi collectif" : "Défi");
-                document.getElementById("defiText").textContent = card.text;
-                localStorage.setItem("currentDefi", card.text);
+        const seed = (partyCode ? partyCode.charCodeAt(0) + partyCode.charCodeAt(1) : 0) + Math.floor(Date.now() / 60000) % 25;
+        const defi = defis[seed % defis.length];
 
-                // QCM si options présentes
-                if (card.options && card.options.length > 0) {
-                    const qcmDiv = document.getElementById("qcmOptions");
-                    qcmDiv.style.display = "flex";
-                    card.options.forEach(opt => {
-                        const btn = document.createElement("button");
-                        btn.classList.add("qcm-option");
-                        btn.textContent = opt;
-                        if (iAmEliminated) {
-                            btn.onclick = () => {
-                                document.querySelectorAll(".qcm-option").forEach(b => b.classList.remove("selected"));
-                                btn.classList.add("selected");
-                                document.getElementById("chatInput").value = opt;
-                            };
-                        } else {
-                            btn.disabled = true;
-                            btn.style.cursor = "default";
-                        }
-                        qcmDiv.appendChild(btn);
-                    });
+        document.getElementById("defiTypeBadge").textContent = defi.type === "qcm" ? "QCM" : "Défi libre";
+        document.getElementById("defiText").textContent = defi.question;
+        localStorage.setItem("currentDefi", defi.question);
+        localStorage.setItem("defiLabelOui", defi.labelOui);
+        localStorage.setItem("defiLabelNon", defi.labelNon);
+
+        // Options QCM
+        if (defi.type === "qcm") {
+            const qcmDiv = document.getElementById("qcmOptions");
+            qcmDiv.style.display = "flex";
+            defi.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.classList.add("qcm-option");
+                btn.textContent = opt;
+                if (iAmEliminated) {
+                    btn.onclick = () => {
+                        document.querySelectorAll(".qcm-option").forEach(b => b.classList.remove("selected"));
+                        btn.classList.add("selected");
+                        document.getElementById("chatInput").value = opt;
+                    };
+                } else {
+                    btn.disabled = true;
+                    btn.style.cursor = "default";
                 }
-            } catch (e) {
-                document.getElementById("defiText").textContent = "Fais un pitch de 30 secondes pour sauver ta place !";
-                localStorage.setItem("currentDefi", "Pitch de 30 secondes");
-            }
+                qcmDiv.appendChild(btn);
+            });
         }
 
-        // --------------------------------------------------
-        // Affichage selon le rôle
-        // --------------------------------------------------
+        // Afficher bonne zone
         if (iAmEliminated) {
             document.getElementById("zoneEliminated").style.display = "block";
         } else {
@@ -314,50 +334,37 @@
         ws.onmessage = (event) => {
             const msg = event.data;
 
-            // Message de chat reçu par les observateurs
             if (msg.startsWith("chat:")) {
-                addMessage(msg.substring(5), "chatMessagesOthers");
+                const text = msg.substring(5);
+                addMessage(text, "chatMessagesOthers");
+
                 return;
             }
 
-            // La victime a terminé → montrer les boutons de vote aux observateurs
-            if (msg === "defi_done") {
-                if (!iAmEliminated) {
-                    document.getElementById("waitingAnswer").style.display = "none";
-                    document.getElementById("voteSection").style.display = "block";
-                }
+            if (msg === "phase:resultat_defi") {
+
                 return;
             }
-
-            // Résultat du vote → aller sur resultat_defi
             if (msg.startsWith("defi_result:")) {
                 const outcome = msg.split(":")[1];
                 localStorage.setItem("defiOutcome", outcome);
                 window.location.href = `resultat_defi.html?code=${partyCode}`;
                 return;
             }
+            if (msg === "go_feedback" || msg === "go_salle_morts") {
+                window.location.href = `resultat_defi.html?code=${partyCode}`;
+                return;
+            }
 
             if (msg.startsWith("game_over:")) {
-                const r = msg.split(":")[1];
-                window.location.href = r === "victoire_collabs" ? "victoire.html"
-                    : r === "match_nul" ? "match_nul.html"
-                        : "defaite.html";
-                return;
-            }
-
-            // Redirections de phase
-            if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
-                window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
-                return;
-            }
-            if (msg.startsWith("next_meeting:")) {
-                window.location.href = `meeting1.html?code=${partyCode}`;
+                const result = msg.split(":")[1];
+                window.location.href = result === "victoire_collabs" ? "victoire.html" : "defaite.html";
                 return;
             }
         };
 
         // --------------------------------------------------
-        // Envoyer la réponse dans le chat
+        // Envoyer réponse — avec retry si WS pas encore prêt
         // --------------------------------------------------
         function addMessage(text, containerId) {
             const msgs = document.getElementById(containerId || "chatMessages");
@@ -368,8 +375,8 @@
             msgs.scrollTop = msgs.scrollHeight;
         }
 
-        document.getElementById("sendBtn")?.addEventListener("click", sendAnswer);
-        document.getElementById("chatInput")?.addEventListener("keydown", (e) => {
+        document.getElementById("sendBtn").addEventListener("click", sendAnswer);
+        document.getElementById("chatInput").addEventListener("keydown", (e) => {
             if (e.key === "Enter") sendAnswer();
         });
 
@@ -388,60 +395,37 @@
                 ws.send(JSON.stringify({ type: "chat", pseudo: eliminatedPseudo + " (réponse)", message: text }));
                 addMessage(`${eliminatedPseudo} : ${text}`, "chatMessages");
             };
-            if (ws.readyState === WebSocket.OPEN) doSend();
-            else ws.addEventListener("open", doSend, { once: true });
 
-            // Activer le bouton "J'ai terminé" après 1s
+            if (ws.readyState === WebSocket.OPEN) {
+                doSend();
+            } else {
+                ws.addEventListener("open", doSend, { once: true });
+            }
+            // Activer le bouton "J'ai terminé"
             setTimeout(() => {
                 const doneBtn = document.getElementById("doneBtn");
                 if (doneBtn) doneBtn.disabled = false;
             }, 1000);
         }
 
-        // --------------------------------------------------
-        // Bouton "J'ai terminé" → broadcaster defi_done
-        // --------------------------------------------------
-        document.getElementById("doneBtn")?.addEventListener("click", () => {
-            const doneBtn = document.getElementById("doneBtn");
-            doneBtn.disabled = true;
-            doneBtn.textContent = "⏳ En attente du jury…";
-
-            const doSend = () => {
-                ws.send(JSON.stringify({ type: "defi_done", player_id: playerId }));
-            };
-            if (ws.readyState === WebSocket.OPEN) doSend();
-            else ws.addEventListener("open", doSend, { once: true });
-        });
-
-        // --------------------------------------------------
-        // Vote des observateurs
-        // --------------------------------------------------
-        let hasVoted = false;
-
-        async function sendVote(success) {
-            if (hasVoted) return;
-            hasVoted = true;
-
-            document.getElementById("btnReste").disabled = true;
-            document.getElementById("btnElimine").disabled = true;
-            document.getElementById("voteConfirm").style.display = "block";
-            document.getElementById("waitingOthers").style.display = "block";
-
-            try {
-                await fetch(`${API_URL}/party/defi_vote`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        voter_id: playerId,
-                        party_code: partyCode,
-                        success: success   // ← champ attendu par le backend
-                    })
-                });
-            } catch (e) { console.error("Erreur vote défi :", e); }
+        // Bouton "J'ai terminé" → broadcast defi_done via WS → tout le monde vers resultat_defi
+        const doneBtnEl = document.getElementById("doneBtn");
+        if (doneBtnEl) {
+            doneBtnEl.addEventListener("click", () => {
+                doneBtnEl.disabled = true;
+                doneBtnEl.textContent = "⏳ En attente du jury…";
+                const doSend = () => {
+                    ws.send(JSON.stringify({ type: "defi_done" }));
+                };
+                if (ws.readyState === WebSocket.OPEN) {
+                    doSend();
+                } else {
+                    ws.addEventListener("open", doSend, { once: true });
+                }
+            });
         }
 
-        document.getElementById("btnReste")?.addEventListener("click", () => sendVote(true));
-        document.getElementById("btnElimine")?.addEventListener("click", () => sendVote(false));
+
 
         // --------------------------------------------------
         // Timer 90s pour le joueur éliminé
@@ -456,23 +440,15 @@
                 timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
-                    timerEl.textContent = "⌛ Temps écoulé !";
                     if (!hasSentAnswer) {
-                        document.getElementById("chatInput").value = "… (temps écoulé)";
+                        document.getElementById("chatInput").value = "… (temps écoulé, pas de réponse)";
                         sendAnswer();
                     }
-                    // Auto-valider si pas encore fait
-                    const doneBtn = document.getElementById("doneBtn");
-                    if (doneBtn && !doneBtn.disabled) doneBtn.click();
                 }
             }, 1000);
         }
-
-        // --------------------------------------------------
-        // Init
-        // --------------------------------------------------
-        loadDefi();
     </script>
+
 </body>
 
 </html>

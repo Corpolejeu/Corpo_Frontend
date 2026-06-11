@@ -6,20 +6,26 @@
     <title>Meeting - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        body {
-            background: #f5f5f5;
+        * {
+            box-sizing: border-box;
         }
 
+        body {
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        /* ── LAYOUT ── */
         .meeting-page {
             display: flex;
             gap: 20px;
             max-width: 1200px;
-            margin: 24px auto;
+            margin: 20px auto;
             padding: 0 20px;
             align-items: flex-start;
         }
 
-        /* ── TABLE OVALE ── */
+        /* ── TABLE ── */
         .table-col {
             flex: 1;
             min-width: 0;
@@ -27,17 +33,17 @@
 
         .box-table {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
-            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.09);
+            padding: 18px;
         }
 
         .box-table h2 {
             color: #c0392b;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -45,44 +51,45 @@
         .oval-wrap {
             position: relative;
             width: 100%;
-            padding-bottom: 62%;
+            padding-bottom: 60%;
         }
 
         .oval-surface {
             position: absolute;
-            top: 14%;
-            left: 14%;
-            right: 14%;
-            bottom: 14%;
-            background: linear-gradient(145deg, #fdecea, #fff5f5);
+            top: 13%;
+            left: 13%;
+            right: 13%;
+            bottom: 13%;
+            background: linear-gradient(145deg, #fdecea, #fff8f8);
             border-radius: 50%;
             border: 3px solid #c0392b;
-            box-shadow: 0 4px 20px rgba(192, 57, 43, 0.12);
+            box-shadow: 0 4px 20px rgba(192, 57, 43, 0.10);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 10px;
+            padding: 8px;
         }
 
         #tableTurnRole {
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 800;
             color: #c0392b;
+            line-height: 1.2;
         }
 
         #tableTurnLabel {
-            font-size: 11px;
-            color: #999;
+            font-size: 10px;
+            color: #aaa;
             margin-top: 2px;
         }
 
         #timerCenter {
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 800;
             color: #c0392b;
-            margin-top: 6px;
+            margin-top: 4px;
             font-family: monospace;
         }
 
@@ -112,8 +119,8 @@
         }
 
         .seat-avatar {
-            width: 54px;
-            height: 54px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             border: 3px solid #ddd;
             overflow: hidden;
@@ -130,12 +137,12 @@
 
         .seat-avatar.me {
             border-color: #c0392b;
-            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.18);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
         }
 
         .seat-avatar.active {
             border-color: #f39c12;
-            box-shadow: 0 0 14px rgba(243, 156, 18, 0.55);
+            box-shadow: 0 0 14px rgba(243, 156, 18, 0.6);
             animation: activePulse 1s infinite;
         }
 
@@ -145,7 +152,7 @@
         }
 
         .seat-avatar.dead {
-            opacity: .4;
+            opacity: .35;
             filter: grayscale(1);
         }
 
@@ -155,7 +162,7 @@
 
         .seat-avatar.clickable:hover {
             border-color: #c0392b;
-            transform: scale(1.1);
+            transform: scale(1.08);
         }
 
         @keyframes activePulse {
@@ -177,7 +184,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             border-radius: 50%;
         }
 
@@ -186,7 +193,7 @@
             font-weight: 600;
             color: #555;
             text-align: center;
-            max-width: 66px;
+            max-width: 64px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -211,7 +218,6 @@
             display: block;
         }
 
-        /* Sélection sur la table */
         .player-seat.selected .seat-avatar {
             border-color: #c0392b !important;
             box-shadow: 0 0 14px rgba(192, 57, 43, 0.5) !important;
@@ -219,29 +225,29 @@
 
         /* ── PANNEAU DROIT ── */
         .action-col {
-            width: 290px;
+            width: 280px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
         .box {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
-            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.09);
+            padding: 16px;
         }
 
         .box h3 {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #c0392b;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 10px;
             border-bottom: 2px solid #fdecea;
-            padding-bottom: 8px;
+            padding-bottom: 7px;
         }
 
         #turnStatusText {
@@ -254,11 +260,10 @@
             font-size: 12px;
             color: #999;
             font-style: italic;
-            margin-top: 6px;
+            margin-top: 5px;
             line-height: 1.5;
         }
 
-        /* Info secrète */
         .info-reveal {
             background: #fff3cd;
             border: 2px solid #ffc107;
@@ -269,18 +274,16 @@
             font-weight: 500;
         }
 
-        /* Mon rôle badge */
         #myRoleBadge {
             background: #c0392b;
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 10px 14px;
             font-size: 13px;
             font-weight: 700;
             text-align: center;
         }
 
-        /* Action desc */
         #actionDesc {
             font-size: 13px;
             color: #555;
@@ -288,11 +291,11 @@
             line-height: 1.5;
         }
 
-        /* Grille sélection joueurs */
+        /* Grille joueurs */
         #playerGrid {
             display: none;
             flex-wrap: wrap;
-            gap: 7px;
+            gap: 6px;
             margin-bottom: 10px;
         }
 
@@ -304,13 +307,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: pointer;
             padding: 6px;
             border-radius: 8px;
             border: 2px solid #eee;
             background: #fafafa;
-            width: 66px;
+            width: 64px;
             transition: all .15s;
         }
 
@@ -325,10 +328,9 @@
         }
 
         .player-select-card img {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            object-fit: cover;
             border: 2px solid #ddd;
         }
 
@@ -351,15 +353,15 @@
             margin-bottom: 8px;
         }
 
-        /* Boutons */
+        /* Boutons action */
         #actionButtons {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 7px;
         }
 
         #actionButtons .btn {
-            padding: 9px 14px;
+            padding: 9px 12px;
             border: none;
             border-radius: 8px;
             font-size: 13px;
@@ -390,7 +392,7 @@
 
         #actionButtons .btn-skip {
             background: #f0f0f0;
-            color: #555;
+            color: #666;
         }
 
         #actionButtons .btn-skip:hover {
@@ -402,12 +404,175 @@
             cursor: default;
         }
 
-        /* Attente */
         #waitingMsg {
             font-size: 13px;
-            color: #aaa;
+            color: #bbb;
             font-style: italic;
-            padding: 8px 0;
+            padding: 6px 0;
+        }
+
+        /* ══ RESPONSIVE ══ */
+
+        /* Tablette large */
+        @media (max-width: 1024px) {
+            .action-col {
+                width: 250px;
+            }
+
+            .seat-avatar {
+                width: 46px;
+                height: 46px;
+            }
+        }
+
+        /* Tablette */
+        @media (max-width: 768px) {
+            .meeting-page {
+                gap: 12px;
+                padding: 0 12px;
+                margin: 12px auto;
+            }
+
+            .action-col {
+                width: 220px;
+            }
+
+            .seat-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .seat-name {
+                font-size: 9px;
+                max-width: 52px;
+            }
+
+            .oval-wrap {
+                padding-bottom: 68%;
+            }
+
+            .box {
+                padding: 14px;
+            }
+
+            #turnStatusText {
+                font-size: 13px;
+            }
+        }
+
+        /* Mobile — layout vertical */
+        @media (max-width: 600px) {
+            .meeting-page {
+                flex-direction: column;
+                gap: 10px;
+                padding: 0 10px;
+                margin: 10px auto;
+            }
+
+            .table-col {
+                width: 100%;
+            }
+
+            .action-col {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .action-col .box {
+                flex: 1;
+                min-width: 140px;
+            }
+
+            .oval-wrap {
+                padding-bottom: 72%;
+            }
+
+            .seat-avatar {
+                width: 34px;
+                height: 34px;
+                border-width: 2px;
+            }
+
+            .dead-icon {
+                font-size: 15px;
+            }
+
+            .seat-name {
+                font-size: 8px;
+                max-width: 42px;
+            }
+
+            .neighbor-badge {
+                display: none !important;
+            }
+
+            #tableTurnRole {
+                font-size: 13px;
+            }
+
+            #tableTurnLabel {
+                font-size: 9px;
+            }
+
+            #timerCenter {
+                font-size: 16px;
+            }
+
+            .box-table {
+                padding: 10px;
+            }
+
+            .box-table h2 {
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+
+            .box {
+                padding: 12px;
+            }
+
+            #myRoleBadge {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .player-select-card {
+                width: 56px;
+                padding: 5px;
+            }
+
+            .player-select-card img {
+                width: 32px;
+                height: 32px;
+            }
+
+            #actionButtons .btn {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+        }
+
+        /* Très petit mobile */
+        @media (max-width: 380px) {
+            .oval-wrap {
+                padding-bottom: 80%;
+            }
+
+            .seat-avatar {
+                width: 28px;
+                height: 28px;
+            }
+
+            .seat-name {
+                font-size: 7px;
+                max-width: 36px;
+            }
+
+            .action-col {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -475,7 +640,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code") || localStorage.getItem("partyCode");
         const playerId = localStorage.getItem("playerId");
@@ -774,7 +939,7 @@
                 desc.textContent = "Tes voisins sont mis en évidence. Attends l'info du CHO.";
                 addBtn(btns, "✅ J'ai reçu l'info du CHO", "btn-ok", () => { highlightNeighbors(false); sendAction("done"); });
             } else if (role === "Tiff") {
-                desc.textContent = "Choisis 3 mots parmi les 5 proposés. Ces mots seront interdits dans le chat !";
+                desc.textContent = "Choisis 3 mots secrets parmi les 5 proposés :";
                 loadTiffMots(desc, btns);
             } else if (role === "Fabien") {
                 desc.textContent = "Désigne secrètement un collaborateur à licencier :";
@@ -852,8 +1017,7 @@
                 return;
             }
             if (msg.startsWith("role:")) { showRoleTurn(msg.substring(5).trim()); return; }
-            if (msg === "phase:defi_decision") { clearInterval(displayTimerInterval); window.location.href = `defi_corpo.html?code=${partyCode}`; return; }
-            if (msg.startsWith("defi_card:")) { clearInterval(displayTimerInterval); window.location.href = `defi_corpo.html?code=${partyCode}`; return; }
+            if (msg === "phase:defi_decision") { clearInterval(displayTimerInterval); window.location.href = `feedback_defi.html?code=${partyCode}`; return; }
             if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") { clearInterval(displayTimerInterval); window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`; return; }
             if (msg === "phase:vote") { clearInterval(displayTimerInterval); window.location.href = `vote.html?code=${partyCode}`; return; }
             if (msg.startsWith("next_meeting:")) { clearInterval(displayTimerInterval); window.location.href = `meeting1.html?code=${partyCode}`; return; }
@@ -862,6 +1026,16 @@
                 window.location.href = r === "victoire_collabs" ? "victoire.html" : r === "match_nul" ? "match_nul.html" : "defaite.html";
                 return;
             }
+            if (msg.startsWith("cindy_voisin:")) {
+                // Signal privé pour Cindy — déjà géré via la route HTTP, mais fallback WS
+                const hasManager = msg.split(":")[1] === "oui";
+                document.getElementById("infoBox").style.display = "block";
+                document.getElementById("infoReveal").textContent = hasManager
+                    ? "👍 OUI — L'un de tes voisins est un Manager."
+                    : "👎 NON — Aucun voisin n'est Manager.";
+                return;
+            }
+
             if (msg.startsWith("pascal_result:")) {
                 const p = msg.split(":");
                 const isManager = p[1] === "true";
@@ -927,8 +1101,7 @@
         }
 
         function connectWS() {
-            ws = new WebSocket(`ws://127.0.0.1:8000/ws/${code}?player_id=${playerId}`);
-            ws.onopen = () => { sendReady(); if (!readyInterval) readyInterval = setInterval(sendReady, 2000); };
+            ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`); ws.onopen = () => { sendReady(); if (!readyInterval) readyInterval = setInterval(sendReady, 2000); };
             ws.onmessage = (e) => handleWSMessage(e.data);
             ws.onclose = () => setTimeout(connectWS, 1000);
             ws.onerror = () => ws.close();

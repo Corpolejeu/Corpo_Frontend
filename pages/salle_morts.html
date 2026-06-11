@@ -96,7 +96,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const pseudo = localStorage.getItem("pseudo");
         const playerId = localStorage.getItem("playerId");
@@ -145,7 +145,7 @@
         }
 
         // WebSocket
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;
@@ -166,9 +166,9 @@
                 phaseEl.textContent = "Vote";
                 detailEl.textContent = "Les joueurs votent pour licencier quelqu'un…";
             }
-            else if (msg === "phase:defi_decision" || msg.startsWith("defi_card:")) {
+            else if (msg === "phase:defi_decision") {
                 phaseEl.textContent = "Défi Corpo";
-                detailEl.textContent = "Un joueur réalise son défi !";
+                detailEl.textContent = "Un joueur doit décider s'il relève le défi…";
             }
             else if (msg === "phase:defi_corpo") {
                 phaseEl.textContent = "Défi Corpo en cours";
