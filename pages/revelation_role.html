@@ -159,10 +159,10 @@
                     localStorage.setItem("eliminatedPlayerId", data.victim.player_id);
                     localStorage.setItem("eliminatedPseudo", data.victim.pseudo);
                     const imgs = {
-                        "Fabien": "fabien.png", "Claire": "claire.png", "La Plante": "plante.png",
-                        "Benjamin": "benjamin.png", "Pascal": "pascal.png", "Tiff": "tiff.png",
+                        "Fabien": "fabien.png", "Claire": "claire.png",
+                        "Pascal": "pascal.png", "Tiff": "tiff.png",
                         "Stéphane": "stephane.png", "Cindy": "cindy.png", "Denis": "denis.png",
-                        "Corentin": "corentin.png", "Abdel": "abdel.png"
+                        "Abdel": "abdel.png"
                     };
                     localStorage.setItem("eliminatedImg", imgs[data.victim.role] || "joueur1.png");
                 }
@@ -172,14 +172,11 @@
         const roleImages = {
             "Fabien": "fabien.png",
             "Claire": "claire.png",
-            "La Plante": "plante.png",
-            "Benjamin": "benjamin.png",
             "Pascal": "pascal.png",
             "Tiff": "tiff.png",
             "Stéphane": "stephane.png",
             "Cindy": "cindy.png",
             "Denis": "denis.png",
-            "Corentin": "corentin.png",
             "Abdel": "abdel.png",
         };
 

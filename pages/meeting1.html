@@ -658,28 +658,22 @@
 
         const roleInstructions = {
             "Cindy": "Tes voisins gauche/droite sont mis en évidence. Attends l'info du CHO.",
-            "La Plante": "Désigne ton arroseur sur la table ou dans la liste.",
-            "Benjamin": "Ronfle très fort ! Puis valide.",
             "Fabien": "Désigne secrètement un collaborateur à licencier.",
             "Claire": "Sauver la victime, désigner quelqu'un d'autre, ou passer (1 seule fois).",
             "Tiff": "Donne 3 mots interdits au CHO à voix haute, puis valide.",
             "Pascal": "Désigne un joueur pour savoir s'il est Manager.",
             "Stéphane": "Désigne un joueur pour révéler mutuellement vos identités.",
             "Denis": "Échange ton identité avec un autre joueur, ou passe.",
-            "Corentin": "Prends le rôle d'un joueur éliminé, ou passe.",
             "Abdel": "Désigne secrètement un joueur à contaminer.",
         };
         const roleInstructionsOthers = {
             "Cindy": "La secrétaire reçoit une info secrète sur ses voisins.",
-            "La Plante": "La Plante choisit son arroseur.",
-            "Benjamin": "Le consultant ronfle très fort !",
             "Fabien": "Les Managers se concertent secrètement.",
             "Claire": "La RH décide du sort de la victime.",
             "Tiff": "Tiff donne 3 mots interdits au CHO.",
             "Pascal": "Pascal inspecte secrètement un joueur.",
             "Stéphane": "Stéphane révèle son identité à quelqu'un.",
             "Denis": "Denis échange éventuellement son identité.",
-            "Corentin": "Corentin peut récupérer un rôle éliminé.",
             "Abdel": "Abdel contamine secrètement un joueur.",
         };
 
@@ -932,10 +926,7 @@
             const btns = document.getElementById("actionButtons");
             btns.innerHTML = "";
 
-            if (role === "Benjamin") {
-                desc.textContent = "Ronfle très fort ! (pour de vrai 😄)";
-                addBtn(btns, "😴 J'ai ronfle !", "btn-ok", () => sendAction("done"));
-            } else if (role === "Cindy") {
+            if (role === "Cindy") {
                 desc.textContent = "Tes voisins sont mis en évidence. Attends l'info du CHO.";
                 addBtn(btns, "✅ J'ai reçu l'info du CHO", "btn-ok", () => { highlightNeighbors(false); sendAction("done"); });
             } else if (role === "Tiff") {
@@ -972,13 +963,7 @@
                     if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
                     sendAction("stephane_reveal", selectedTargetId);
                 });
-            } else if (role === "La Plante") {
-                desc.textContent = "Désigne ton arroseur :";
-                buildPlayerGrid(false);
-                addBtn(btns, "🌱 Choisir cet arroseur", "btn-ok", () => {
-                    if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
-                    sendAction("plante_water", selectedTargetId);
-                });
+
             } else if (role === "Denis") {
                 desc.textContent = "Échange ton identité avec un autre joueur, ou passe :";
                 buildPlayerGrid(false);
@@ -987,14 +972,7 @@
                     sendAction("denis_swap", selectedTargetId);
                 });
                 addBtn(btns, "⏭ Passer", "btn-skip", () => sendAction("done"));
-            } else if (role === "Corentin") {
-                desc.textContent = "Prends le rôle d'un joueur éliminé, ou passe :";
-                buildPlayerGrid(true);
-                addBtn(btns, "🎓 Prendre ce rôle", "btn-main", () => {
-                    if (!selectedTargetId) { alert("Sélectionne un éliminé !"); return; }
-                    sendAction("corentin_swap", selectedTargetId);
-                });
-                addBtn(btns, "⏭ Passer", "btn-skip", () => sendAction("done"));
+
             } else if (role === "Abdel") {
                 desc.textContent = "Désigne secrètement un joueur à contaminer :";
                 buildPlayerGrid(false);
