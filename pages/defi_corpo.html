@@ -408,25 +408,30 @@
             }, 1000);
         }
 
-        // Bouton "J'ai terminé" → déclenche le vote chez les autres
+        // Bouton "J'ai terminé" → broadcast defi_done via WS → tout le monde vers resultat_defi
         const doneBtnEl = document.getElementById("doneBtn");
         if (doneBtnEl) {
-            doneBtnEl.addEventListener("click", async () => {
+            doneBtnEl.addEventListener("click", () => {
                 doneBtnEl.disabled = true;
                 doneBtnEl.textContent = "⏳ En attente du jury…";
-                try {
-                    await fetch(`${API_URL}/party/defi_performance_done/${partyCode}`, { method: "POST" });
-                } catch (e) { console.error(e); }
+                const doSend = () => {
+                    ws.send(JSON.stringify({ type: "defi_done" }));
+                };
+                if (ws.readyState === WebSocket.OPEN) {
+                    doSend();
+                } else {
+                    ws.addEventListener("open", doSend, { once: true });
+                }
             });
         }
 
 
 
         // --------------------------------------------------
-        // Timer 30s pour le joueur éliminé
+        // Timer 90s pour le joueur éliminé
         // --------------------------------------------------
         if (iAmEliminated) {
-            let timeLeft = 30;
+            let timeLeft = 90;
             const timerEl = document.getElementById("defiTimer");
             timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
 

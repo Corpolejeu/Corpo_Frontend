@@ -165,7 +165,7 @@
         document.getElementById("userPseudo").textContent = pseudo;
         document.getElementById("eliminatedNameDisplay").textContent = eliminatedPseudo;
         document.getElementById("eliminatedName").textContent = eliminatedPseudo;
-        document.getElementById("eliminatedImg").src = "../assets/images/" + eliminatedImg;
+        document.getElementById("eliminatedImg").src = "../assets/images/joueur1.png";
         document.getElementById("defiRappel").textContent = "Défi : " + defiText;
 
         const iAmEliminated = playerId === eliminatedPlayerId;
@@ -232,6 +232,13 @@
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
         ws.onmessage = (event) => {
             const msg = event.data;
+
+            // 🔥 defi_done = la victime a terminé son défi → afficher les boutons de vote
+            if (msg === "defi_done") {
+                document.getElementById("zoneVote") && (document.getElementById("zoneVote").style.display = "block");
+                document.getElementById("zoneWaiting") && (document.getElementById("zoneWaiting").style.display = "none");
+                return;
+            }
 
 
             // 🔥 Game over
