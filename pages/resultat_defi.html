@@ -6,64 +6,18 @@
     <title>Résultat du défi - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        .vote-defi-btns {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        .btn-yes {
-            background: #27ae60;
-            color: white;
-            font-size: 22px;
-            padding: 15px 35px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-yes:hover {
-            background: #219a52;
-        }
-
-        .btn-no {
-            background: #c0392b;
-            color: white;
-            font-size: 22px;
-            padding: 15px 35px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-no:hover {
-            background: #a93226;
-        }
-
-        .btn-yes:disabled,
-        .btn-no:disabled {
-            opacity: 0.5;
-            cursor: default;
-        }
-
         .result-success {
             color: #27ae60;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
+            margin: 15px 0;
         }
 
         .result-fail {
             color: #c0392b;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
-        }
-
-        .waiting-vote {
-            color: #888;
-            font-style: italic;
-            font-size: 16px;
+            margin: 15px 0;
         }
 
         .defi-rappel {
@@ -71,11 +25,33 @@
             border-left: 4px solid #ffc107;
             padding: 12px 18px;
             margin: 15px auto;
-            max-width: 400px;
+            max-width: 420px;
             font-style: italic;
             color: #555;
             font-size: 14px;
             text-align: left;
+        }
+
+        .role-revealed {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c0392b;
+            margin: 12px 0;
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        #waitingSpinner {
+            margin: 30px auto;
+            font-size: 16px;
+            color: #888;
+            font-style: italic;
         }
     </style>
 </head>
@@ -90,46 +66,25 @@
     <main class="main resultat-container">
         <div class="resultat-box" style="text-align:center; padding:20px;">
 
-            <h1>Vote du défi</h1>
+            <h1>Verdict du Défi</h1>
 
             <div class="cho-message">
-                <p id="choMsg"><strong>CHO :</strong> <span id="eliminatedNameDisplay"></span> a réalisé son défi. Votez
-                    !</p>
+                <p id="choMsg"><strong>CHO :</strong> Analyse du jury en cours…</p>
             </div>
 
-            <img id="eliminatedImg" src="../assets/images/joueur1.png" alt="Joueur" class="resultat-img">
+            <img src="../assets/images/joueur1.png" alt="Joueur" class="resultat-img">
             <h2 id="eliminatedName"></h2>
-
             <div class="defi-rappel" id="defiRappel"></div>
 
-            <!-- Zone de vote pour les autres joueurs -->
-            <div id="zoneVote" style="display:none;">
-                <p style="font-size:18px; margin-top:10px;">Le défi a-t-il été réussi ?</p>
-                <div class="vote-defi-btns">
-                    <button class="btn-yes" id="btnYes">👍 Oui, réussi !</button>
-                    <button class="btn-no" id="btnNo">👎 Non, échoué !</button>
-                </div>
-                <p id="voteConfirm" style="margin-top:15px; font-weight:bold; display:none;">✅ Vote enregistré !</p>
-                <p class="waiting-vote" id="waitingOthers" style="margin-top:10px; display:none;">En attente des autres
-                    votes…</p>
-            </div>
+            <!-- Attente du résultat -->
+            <div id="waitingSpinner">⏳ En attente du verdict du jury…</div>
 
-            <!-- Zone d'attente pour le joueur éliminé -->
-            <div id="zoneWaiting" style="display:none;">
-                <p class="waiting-vote" style="margin-top:20px;">⏳ Les autres joueurs sont en train de voter…</p>
-                <p class="waiting-vote">Patience !</p>
-            </div>
-
-            <!-- Résultat final (affiché pour tout le monde) -->
-            <div id="zoneResult" style="display:none; margin-top:30px;">
+            <!-- Résultat -->
+            <div id="zoneResult" style="display:none;">
                 <p id="resultText"></p>
-                <div style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-                    <a id="btnNextMeeting" class="btn" href="#" style="display:none;">▶ Meeting suivant</a>
-                    <a id="btnSalleMorts" class="btn" href="salle_morts.html" style="display:none;">💀 Salle des
-                        morts</a>
-                    <a id="btnVictoire" class="btn" href="victoire.html" style="display:none;">🏆 Victoire !</a>
-                    <a id="btnDefaite" class="btn" href="defaite.html" style="display:none;">💀 Défaite</a>
-                </div>
+                <p id="roleReveal" class="role-revealed" style="display:none;"></p>
+
+                <div class="nav-btns" id="navBtns"></div>
             </div>
 
         </div>
@@ -140,200 +95,119 @@
     </div>
 
     <script>
-        // 🔥 Vérification : joueur éliminé → salle_morts
-        (async function checkIfAlive() {
-            const pid = localStorage.getItem("playerId");
-            if (!pid) return;
-            try {
-                const r = await fetch(`https://corpo-backend.onrender.com/party/is_alive/${pid}`);
-                const d = await r.json();
-                if (!d.is_alive && !window.location.href.includes("salle_morts")) {
-                    window.location.href = "salle_morts.html";
-                }
-            } catch (e) { }
-        })();
-
         const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const playerId = parseInt(localStorage.getItem("playerId"));
         const pseudo = localStorage.getItem("pseudo");
-        const eliminatedPseudo = localStorage.getItem("eliminatedPseudo");
+        const eliminatedPseudo = localStorage.getItem("eliminatedPseudo") || "Le joueur";
         const eliminatedPlayerId = parseInt(localStorage.getItem("eliminatedPlayerId"));
-        const eliminatedImg = localStorage.getItem("eliminatedImg") || "joueur1.png";
-        const defiText = localStorage.getItem("currentDefi") || "";
+        const defiText = localStorage.getItem("currentDefi") || "Défi corpo";
 
         document.getElementById("userPseudo").textContent = pseudo;
-        document.getElementById("eliminatedNameDisplay").textContent = eliminatedPseudo;
         document.getElementById("eliminatedName").textContent = eliminatedPseudo;
-        document.getElementById("eliminatedImg").src = "../assets/images/joueur1.png";
         document.getElementById("defiRappel").textContent = "Défi : " + defiText;
 
         const iAmEliminated = playerId === eliminatedPlayerId;
+        let resultShown = false;
 
-        if (iAmEliminated) {
-            document.getElementById("zoneWaiting").style.display = "block";
-        } else {
-            document.getElementById("zoneVote").style.display = "block";
-        }
+        // --------------------------------------------------
+        // Afficher le résultat
+        // --------------------------------------------------
+        async function showResult(outcome) {
+            if (resultShown) return;
+            resultShown = true;
 
-        let hasVoted = false;
+            document.getElementById("waitingSpinner").style.display = "none";
+            document.getElementById("zoneResult").style.display = "block";
 
-        async function sendVote(vote) {
-            if (hasVoted) return;
-            hasVoted = true;
+            const choMsg = document.getElementById("choMsg");
+            const resultEl = document.getElementById("resultText");
+            const roleEl = document.getElementById("roleReveal");
+            const navBtns = document.getElementById("navBtns");
 
-            document.getElementById("btnYes").disabled = true;
-            document.getElementById("btnNo").disabled = true;
-            document.getElementById("voteConfirm").style.display = "block";
-            document.getElementById("waitingOthers").style.display = "block";
+            if (outcome === "success") {
+                choMsg.innerHTML = "<strong>CHO :</strong> Performance validée par l'équipe !";
+                resultEl.textContent = `✅ Défi réussi ! ${eliminatedPseudo} reste dans l'entreprise.`;
+                resultEl.className = "result-success";
+            } else {
+                choMsg.innerHTML = "<strong>CHO :</strong> Performance insuffisante. Licenciement acté.";
+                resultEl.textContent = `❌ Défi échoué ! ${eliminatedPseudo} est licencié(e).`;
+                resultEl.className = "result-fail";
 
-            try {
-                await fetch(`${API_URL}/party/defi_vote`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        voter_id: playerId,
-                        party_code: partyCode,
-                        vote: vote
-                    })
-                });
-            } catch (e) {
-                console.error("Erreur vote défi :", e);
-            }
-        }
-
-        document.getElementById("btnYes").addEventListener("click", () => {
-            clearInterval(voteTimerInterval);
-            sendVote(true);
-        });
-        document.getElementById("btnNo").addEventListener("click", () => {
-            clearInterval(voteTimerInterval);
-            sendVote(false);
-        });
-
-        // 🔥 Timer 11s — si pas voté → vote 👎 automatique
-        let voteTimeLeft = 11;
-        const voteTimerEl = document.getElementById("voteTimer");
-
-        const voteTimerInterval = setInterval(() => {
-            if (!iAmEliminated) {
-                voteTimerEl.textContent = `⏱ ${voteTimeLeft}s`;
-                voteTimeLeft--;
-                if (voteTimeLeft < 0) {
-                    clearInterval(voteTimerInterval);
-                    if (!hasVoted) {
-                        sendVote(false); // vote automatique 👎
+                // Révéler le rôle
+                try {
+                    const res = await fetch(`${API_URL}/party/meeting_victim/${partyCode}`);
+                    const data = await res.json();
+                    if (data.victim && data.victim.role) {
+                        roleEl.textContent = `Rôle révélé : ${data.victim.role}`;
+                        roleEl.style.display = "block";
                     }
-                }
+                } catch (e) { }
             }
-        }, 1000);
 
-        // WebSocket : recevoir le résultat du vote
+            // Bouton de continuation — tout le monde le voit
+            // C'est le WS qui synchronise la redirection
+            const btnNext = document.createElement("button");
+            btnNext.className = "btn";
+            btnNext.textContent = "Continuer ▶";
+            btnNext.onclick = () => {
+                btnNext.disabled = true;
+                btnNext.textContent = "Synchronisation…";
+                // Envoyer le signal de continuation via WS
+                // Seul le host effectue la requête API, mais tout le monde peut appuyer
+                fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" }).catch(() => { });
+            };
+            navBtns.appendChild(btnNext);
+
+            // Nettoyer
+            localStorage.removeItem("defiOutcome");
+            localStorage.removeItem("currentDefi");
+        }
+
+        // --------------------------------------------------
+        // Lire depuis localStorage d'abord (si déjà reçu dans defi_corpo)
+        // --------------------------------------------------
+        const storedOutcome = localStorage.getItem("defiOutcome");
+        if (storedOutcome) {
+            setTimeout(() => showResult(storedOutcome), 400);
+        }
+
+        // --------------------------------------------------
+        // WebSocket — fallback + redirections de phase
+        // --------------------------------------------------
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
+
         ws.onmessage = (event) => {
             const msg = event.data;
 
-            // 🔥 defi_done = la victime a terminé son défi → afficher les boutons de vote
-            if (msg === "defi_done") {
-                document.getElementById("zoneVote") && (document.getElementById("zoneVote").style.display = "block");
-                document.getElementById("zoneWaiting") && (document.getElementById("zoneWaiting").style.display = "none");
+            if (msg.startsWith("defi_result:") && !resultShown) {
+                const outcome = msg.split(":")[1];
+                showResult(outcome);
                 return;
             }
 
-
-            // 🔥 Game over
+            // Le backend a déclenché la suite → tout le monde redirigé
+            if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
+                localStorage.removeItem("defiOutcome");
+                localStorage.removeItem("currentDefi");
+                window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
+                return;
+            }
+            if (msg.startsWith("next_meeting:")) {
+                localStorage.removeItem("defiOutcome");
+                localStorage.removeItem("currentDefi");
+                window.location.href = `meeting1.html?code=${partyCode}`;
+                return;
+            }
             if (msg.startsWith("game_over:")) {
-                const result = msg.split(":")[1];
-                if (result === "victoire_collabs") {
-                    window.location.href = "victoire.html";
-                } else {
-                    window.location.href = "defaite.html";
-                }
+                const r = msg.split(":")[1];
+                window.location.href = r === "victoire_collabs" ? "victoire.html"
+                    : r === "match_nul" ? "match_nul.html"
+                        : "defaite.html";
                 return;
-            }
-            if (msg.startsWith("defi_result:")) {
-                const result = msg.split(":")[1];
-                showResult(result);
-            }
-
-            // 🔥 Tout le monde redirigé vers feedback en même temps
-            if (msg === "go_feedback") {
-                window.location.href = `feedback.html?code=${partyCode}`;
-            }
-
-            // 🔥 Joueur éliminé redirigé vers salle des morts
-            if (msg === "go_salle_morts") {
-                if (iAmEliminated) {
-                    window.location.href = `salle_morts.html`;
-                } else {
-                    window.location.href = `feedback.html?code=${partyCode}`;
-                }
             }
         };
-
-        async function showResult(result) {
-            document.getElementById("zoneVote").style.display = "none";
-            document.getElementById("zoneWaiting").style.display = "none";
-            document.getElementById("zoneResult").style.display = "block";
-
-            const resultText = document.getElementById("resultText");
-
-            if (result === "success") {
-                // ✅ Réussi → rôle NON révélé → direct feedback
-                resultText.textContent = "✅ Défi réussi ! " + eliminatedPseudo + " reste dans l'entreprise sans révéler son identité !";
-                resultText.className = "result-success";
-
-                document.getElementById("btnNextMeeting").style.display = "inline-block";
-                document.getElementById("btnNextMeeting").textContent = "▶ Passer au feedback";
-                document.getElementById("btnNextMeeting").onclick = (e) => {
-                    e.preventDefault();
-                    localStorage.setItem("fromDefi", "true");
-                    ws.send(JSON.stringify({ type: "go_feedback" }));
-                };
-
-            } else {
-                // ❌ Échoué → révélation du rôle → feedback
-                resultText.textContent = "❌ Défi échoué ! " + eliminatedPseudo + " est définitivement licencié(e) !";
-                resultText.className = "result-fail";
-
-                // 🔥 Récupérer le rôle depuis l'API vote_result
-                try {
-                    const res = await fetch(`${API_URL}/party/vote_result/${partyCode}`);
-                    const data = await res.json();
-                    if (data.eliminated) {
-                        const roleInfo = document.createElement("p");
-                        roleInfo.style.fontSize = "20px";
-                        roleInfo.style.fontWeight = "bold";
-                        roleInfo.style.marginTop = "10px";
-                        roleInfo.style.color = "#c0392b";
-                        roleInfo.textContent = `Son rôle était : ${data.eliminated.role} (${data.eliminated.team})`;
-                        resultText.parentNode.insertBefore(roleInfo, resultText.nextSibling);
-                    }
-                } catch (e) { console.error(e); }
-
-                if (iAmEliminated) {
-                    document.getElementById("btnSalleMorts").style.display = "inline-block";
-                    document.getElementById("btnSalleMorts").onclick = (e) => {
-                        e.preventDefault();
-                        ws.send(JSON.stringify({ type: "go_salle_morts" }));
-                    };
-                } else {
-                    document.getElementById("btnNextMeeting").style.display = "inline-block";
-                    document.getElementById("btnNextMeeting").textContent = "▶ Passer au feedback";
-                    document.getElementById("btnNextMeeting").onclick = (e) => {
-                        e.preventDefault();
-                        localStorage.setItem("fromDefi", "true");
-                        ws.send(JSON.stringify({ type: "go_feedback" }));
-                    };
-                }
-            }
-
-            // Nettoyer localStorage
-            localStorage.removeItem("defiResult");
-            localStorage.removeItem("currentDefi");
-        }
     </script>
-
 </body>
 
 </html>

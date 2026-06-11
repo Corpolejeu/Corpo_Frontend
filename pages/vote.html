@@ -88,7 +88,7 @@
     </div>
 
     <script>
-        const API_URL = "https://corpo-backend.onrender.com";
+        const API_URL = "http://127.0.0.1:8000";
         const partyCode = localStorage.getItem("partyCode");
         const playerId = localStorage.getItem("playerId");
         const pseudo = localStorage.getItem("pseudo");
@@ -220,7 +220,7 @@
         // ---------------------------------------------------
         // WebSocket
         // ---------------------------------------------------
-        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = async (event) => {
             const msg = event.data;
@@ -233,11 +233,11 @@
                 return;
             }
 
-            // Un éliminé a été désigné → stocker et aller sur feedback_defi
-            if (msg === "phase:defi_decision") {
+            // Un éliminé a été désigné → aller directement sur defi_corpo
+            if (msg === "phase:defi_decision" || msg.startsWith("defi_card:")) {
                 clearInterval(timerInterval);
                 await storeVoteResult();
-                window.location.href = `feedback_defi.html?code=${partyCode}`;
+                window.location.href = `defi_corpo.html?code=${partyCode}`;
                 return;
             }
 
