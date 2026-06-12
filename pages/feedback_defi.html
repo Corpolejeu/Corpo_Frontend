@@ -67,19 +67,18 @@
 
         document.getElementById("userPseudo").textContent = pseudo;
 
-        // Vérifier is_alive
-        (async function checkAlive() {
+        let ws = null;
+        let defiDrawn = false;
+
+        // ── INIT ──
+        async function init() {
+            // Vérifier is_alive
             try {
                 const res = await fetch(`${API_URL}/party/is_alive/${playerId}`);
                 const d = await res.json();
                 if (!d.is_alive) { window.location.href = "salle_morts.html"; return; }
             } catch (e) { }
-        })();
 
-        // WebSocket
-        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
-
-        ws.onopen = async () => {
             // Récupérer la victime
             try {
                 const res = await fetch(`${API_URL}/party/meeting_victim/${partyCode}`);
@@ -98,43 +97,59 @@
                         document.getElementById("statusTitle").textContent = `${data.victim.pseudo} est licencié(e)`;
                         document.getElementById("statusDesc").textContent = "Un défi Corpo va être tiré…";
                     }
-
-                    // Le HOST tire le défi et le broadcast à tout le monde
-                    const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
-                    const party = await vRes.json();
-                    if (party.host_id === parseInt(playerId)) {
-                        await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
-                    }
                 } else {
                     window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
+                    return;
                 }
-            } catch (e) {
-                console.error(e);
-            }
-        };
+            } catch (e) { console.error(e); }
 
-        ws.onmessage = (event) => {
-            const msg = event.data;
+            // Connecter WS puis tirer le défi
+            connectWS();
+        }
 
-            // Le défi a été tiré → tout le monde va sur defi_corpo
-            if (msg.startsWith("defi_card:")) {
-                window.location.href = `defi_corpo.html?code=${partyCode}`;
-                return;
-            }
-            if (msg.startsWith("game_over:")) {
-                const r = msg.split(":")[1];
-                window.location.href = r === "victoire_collabs" ? "victoire.html"
-                    : r === "match_nul" ? "match_nul.html"
-                        : "defaite.html";
-                return;
-            }
-            if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
-                window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
-                return;
-            }
-        };
+        function connectWS() {
+            ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
-        ws.onclose = () => setTimeout(() => location.reload(), 1000);
+            ws.onopen = async () => {
+                // Tout le monde tire le défi via HTTP
+                // Le serveur ne tire qu'une fois (idempotent) et le broadcast
+                if (!defiDrawn) {
+                    defiDrawn = true;
+                    try {
+                        const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                        const party = await vRes.json();
+                        // Seul le HOST appelle draw_defi pour broadcaster
+                        if (party.host_id === parseInt(playerId)) {
+                            await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
+                        }
+                    } catch (e) { console.error("draw_defi error:", e); }
+                }
+            };
+
+            ws.onmessage = (event) => {
+                const msg = event.data;
+
+                if (msg.startsWith("defi_card:")) {
+                    window.location.href = `defi_corpo.html?code=${partyCode}`;
+                    return;
+                }
+                if (msg.startsWith("game_over:")) {
+                    const r = msg.split(":")[1];
+                    window.location.href = r === "victoire_collabs" ? "victoire.html"
+                        : r === "match_nul" ? "match_nul.html"
+                            : "defaite.html";
+                    return;
+                }
+                if (msg === "phase:feedback:pre_vote" || msg === "phase:feedback") {
+                    window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
+                    return;
+                }
+            };
+
+            ws.onclose = () => setTimeout(connectWS, 1000);
+        }
+
+        init();
     </script>
 </body>
 
