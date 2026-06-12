@@ -62,69 +62,67 @@
     <script>
         const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
-        const playerId = localStorage.getItem("playerId");
+        const playerId = parseInt(localStorage.getItem("playerId"));
         const pseudo = localStorage.getItem("pseudo");
 
         document.getElementById("userPseudo").textContent = pseudo;
 
         let ws = null;
-        let defiDrawn = false;
 
-        // ── INIT ──
         async function init() {
-            // Vérifier is_alive
+            // 1. Vérifier is_alive
             try {
                 const res = await fetch(`${API_URL}/party/is_alive/${playerId}`);
                 const d = await res.json();
                 if (!d.is_alive) { window.location.href = "salle_morts.html"; return; }
             } catch (e) { }
 
-            // Récupérer la victime
+            // 2. Récupérer la victime
             try {
                 const res = await fetch(`${API_URL}/party/meeting_victim/${partyCode}`);
                 const data = await res.json();
 
-                if (data && data.victim) {
-                    localStorage.setItem("eliminatedPlayerId", data.victim.id);
-                    localStorage.setItem("eliminatedPseudo", data.victim.pseudo);
-
-                    const isMe = parseInt(playerId) === parseInt(data.victim.id);
-
-                    if (isMe) {
-                        document.getElementById("statusTitle").textContent = "⚠️ Tu as été licencié(e) !";
-                        document.getElementById("statusDesc").textContent = "Un défi Corpo va être tiré pour toi…";
-                    } else {
-                        document.getElementById("statusTitle").textContent = `${data.victim.pseudo} est licencié(e)`;
-                        document.getElementById("statusDesc").textContent = "Un défi Corpo va être tiré…";
-                    }
-                } else {
+                if (!data || !data.victim) {
                     window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
                     return;
                 }
-            } catch (e) { console.error(e); }
 
-            // Connecter WS puis tirer le défi
+                localStorage.setItem("eliminatedPlayerId", data.victim.id);
+                localStorage.setItem("eliminatedPseudo", data.victim.pseudo);
+
+                const isMe = playerId === parseInt(data.victim.id);
+                document.getElementById("statusTitle").textContent = isMe
+                    ? "⚠️ Tu as été licencié(e) !"
+                    : `${data.victim.pseudo} est licencié(e)`;
+                document.getElementById("statusDesc").textContent = "Un défi Corpo va être tiré…";
+
+            } catch (e) { console.error(e); return; }
+
+            // 3. Connecter WS d'abord
             connectWS();
+
+            // 4. Tirer le défi en HTTP (TOUT LE MONDE appelle, le serveur est idempotent)
+            //    Petit délai pour laisser le WS se connecter avant le broadcast
+            setTimeout(async () => {
+                try {
+                    const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                    const party = await vRes.json();
+
+                    // Seul le HOST tire le défi
+                    if (party.host_id === playerId) {
+                        const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, {
+                            method: "POST"
+                        });
+                        if (!r.ok) {
+                            console.error("draw_defi error:", r.status, await r.text());
+                        }
+                    }
+                } catch (e) { console.error("draw_defi:", e); }
+            }, 1500); // 1.5s pour laisser le WS se connecter
         }
 
         function connectWS() {
             ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
-
-            ws.onopen = async () => {
-                // Tout le monde tire le défi via HTTP
-                // Le serveur ne tire qu'une fois (idempotent) et le broadcast
-                if (!defiDrawn) {
-                    defiDrawn = true;
-                    try {
-                        const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
-                        const party = await vRes.json();
-                        // Seul le HOST appelle draw_defi pour broadcaster
-                        if (party.host_id === parseInt(playerId)) {
-                            await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
-                        }
-                    } catch (e) { console.error("draw_defi error:", e); }
-                }
-            };
 
             ws.onmessage = (event) => {
                 const msg = event.data;
