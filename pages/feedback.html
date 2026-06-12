@@ -180,6 +180,7 @@
             if (msg.startsWith("tiff_mots:")) {
                 try {
                     window._motsInterdits = JSON.parse(msg.substring(10));
+                    addMessage(`🚫 Nouveaux mots interdits : ${window._motsInterdits.join(", ")}`, true, false);
                 } catch (e) { }
                 return;
             }
@@ -193,14 +194,6 @@
                 addMessage(`🚫 ${parts[1]} a dit un mot interdit : "${parts[2]}" → Licenciement en cours !`, true, false);
                 return;
             }
-
-            if (msg === "phase:defi_decision" || msg.startsWith("defi_card:")) {
-                clearInterval(timerInterval);
-                localStorage.removeItem("feedbackMode");
-                window.location.href = `defi_corpo.html?code=${partyCode}`;
-                return;
-            }
-
             if (msg === "phase:vote") {
                 clearInterval(timerInterval);
                 localStorage.removeItem("feedbackMode");
@@ -293,6 +286,9 @@
                 const res = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
                 const data = await res.json();
                 window._motsInterdits = data.mots_actifs || [];
+                if (window._motsInterdits.length > 0) {
+                    addMessage(`🚫 Mots interdits actifs : ${window._motsInterdits.join(", ")}`, true, false);
+                }
             } catch (e) { window._motsInterdits = []; }
         }
     </script>
