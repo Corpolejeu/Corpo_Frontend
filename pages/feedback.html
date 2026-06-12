@@ -36,7 +36,7 @@
             </div>
 
             <div class="feedback-timer">
-                Temps restant : <span id="timerDisplay">120s</span>
+                Temps restant : <span id="timerDisplay">90s</span>
             </div>
 
             <div class="feedback-center">
@@ -71,7 +71,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const pseudo = localStorage.getItem("pseudo");
         const playerId = localStorage.getItem("playerId");
@@ -108,7 +108,7 @@
         // ---------------------------------------------------
         // Timer 2 minutes
         // ---------------------------------------------------
-        let timeLeft = 120;
+        let timeLeft = 90;
         const timerEl = document.getElementById("timerDisplay");
         const timerInterval = setInterval(() => {
             timeLeft--;
@@ -162,7 +162,7 @@
         // ---------------------------------------------------
         // WebSocket
         // ---------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;
@@ -180,7 +180,6 @@
             if (msg.startsWith("tiff_mots:")) {
                 try {
                     window._motsInterdits = JSON.parse(msg.substring(10));
-                    addMessage(`🚫 Nouveaux mots interdits : ${window._motsInterdits.join(", ")}`, true, false);
                 } catch (e) { }
                 return;
             }
@@ -194,20 +193,32 @@
                 addMessage(`🚫 ${parts[1]} a dit un mot interdit : "${parts[2]}" → Licenciement en cours !`, true, false);
                 return;
             }
+
+            if (msg === "phase:defi_decision" || msg.startsWith("defi_card:")) {
+                // Vérifier que ce n'est pas juste après un licenciement Tiffany
+                // On attend 500ms pour voir si un next_meeting ou game_over arrive
+                setTimeout(() => {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem("feedbackMode");
+                    window.location.href = `feedback_defi.html?code=${partyCode}`;
+                }, 500);
+                return;
+            }
+
             if (msg === "phase:vote") {
                 clearInterval(timerInterval);
                 localStorage.removeItem("feedbackMode");
                 window.location.href = `vote.html?code=${partyCode}`;
                 return;
             }
-            // 🔥 Rester sur feedback si on reçoit phase:feedback (après un défi)
+
             if (msg === "phase:feedback" || msg === "phase:feedback:pre_vote") {
-                // On est déjà sur feedback, on recharge juste en mode pre_vote
                 clearInterval(timerInterval);
                 localStorage.setItem("feedbackMode", "pre_vote");
                 window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
                 return;
             }
+
             if (msg.startsWith("next_meeting:")) {
                 clearInterval(timerInterval);
                 localStorage.removeItem("feedbackMode");
@@ -294,9 +305,6 @@
                 const res = await fetch(`${API_URL}/party/tiff/mots_actifs/${partyCode}`);
                 const data = await res.json();
                 window._motsInterdits = data.mots_actifs || [];
-                if (window._motsInterdits.length > 0) {
-                    addMessage(`🚫 Mots interdits actifs : ${window._motsInterdits.join(", ")}`, true, false);
-                }
             } catch (e) { window._motsInterdits = []; }
         }
     </script>
