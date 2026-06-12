@@ -195,9 +195,13 @@
             }
 
             if (msg === "phase:defi_decision" || msg.startsWith("defi_card:")) {
-                clearInterval(timerInterval);
-                localStorage.removeItem("feedbackMode");
-                window.location.href = `defi_corpo.html?code=${partyCode}`;
+                // Vérifier que ce n'est pas juste après un licenciement Tiffany
+                // On attend 500ms pour voir si un next_meeting ou game_over arrive
+                setTimeout(() => {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem("feedbackMode");
+                    window.location.href = `feedback_defi.html?code=${partyCode}`;
+                }, 500);
                 return;
             }
 
