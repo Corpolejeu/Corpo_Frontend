@@ -84,7 +84,7 @@
     </div>
 
     <script>
-        const API_URL = "http://127.0.0.1:8000";
+        const API_URL = "https://corpo-backend.onrender.com";
         const partyCode = localStorage.getItem("partyCode");
         const playerId = localStorage.getItem("playerId");
         const pseudo = localStorage.getItem("pseudo");
@@ -113,7 +113,7 @@
         // ---------------------------------------------------
         // WebSocket — fallback si localStorage vide (reconnexion tardive)
         // ---------------------------------------------------
-        const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = async (event) => {
             const msg = event.data;
@@ -122,18 +122,6 @@
             if ((msg === "defi_result:success" || msg === "defi_result:fail") && !resultShown) {
                 const outcome = msg.split(":")[1];
                 await showResult(outcome);
-                return;
-            }
-
-            // 🔥 Nouvelle victime dans la file → mettre à jour et aller sur defi_corpo
-            if (msg.startsWith("next_victim:")) {
-                const parts = msg.split(":");
-                const newId = parseInt(parts[1]);
-                const newPseudo = parts[2];
-                localStorage.setItem("eliminatedPlayerId", newId);
-                localStorage.setItem("eliminatedPseudo", newPseudo);
-                localStorage.removeItem("defiOutcome");
-                window.location.href = `defi_corpo.html?code=${partyCode}`;
                 return;
             }
 
