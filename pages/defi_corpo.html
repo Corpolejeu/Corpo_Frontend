@@ -455,21 +455,10 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     timerEl.textContent = "⌛ Temps écoulé !";
-                    if (!hasSentAnswer) {
-                        document.getElementById("chatInput").value = "(temps écoulé)";
-                        sendAnswer();
-                        // 🔥 Déclencher defi_done auto 1.5s après envoi réponse
-                        setTimeout(() => {
-                            const doneBtn = document.getElementById("doneBtn");
-                            if (doneBtn && !doneBtn.disabled) {
-                                doneBtn.click();
-                            } else {
-                                const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
-                                if (ws.readyState === WebSocket.OPEN) doSend();
-                                else ws.addEventListener("open", doSend, { once: true });
-                            }
-                        }, 1500);
-                    }
+                    // 🔥 Toujours déclencher defi_done à la fin du timer, peu importe si répondu ou pas
+                    const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
+                    if (ws.readyState === WebSocket.OPEN) doSend();
+                    else ws.addEventListener("open", doSend, { once: true });
                 }
             }, 1000);
         }
