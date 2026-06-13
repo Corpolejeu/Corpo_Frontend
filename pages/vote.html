@@ -149,8 +149,7 @@
                         <p>${p.pseudo}</p>
                     `;
 
-                    div.onclick = () => selectPlayer(p.id, div);
-                    grid.appendChild(div);
+                    div.onclick = () => { selectPlayer(p.id, div); submitVote(); }; grid.appendChild(div);
                 });
 
                 document.getElementById("validateBtn").style.display = "block";
@@ -214,6 +213,8 @@
                 clearInterval(timerInterval);
                 timerEl.textContent = "Temps écoulé !";
                 document.getElementById("validateBtn").style.display = "none";
+                // 🔥 Si joueur sélectionné → voter, sinon le serveur gère le timeout
+                if (selectedPlayerId) submitVote();
             }
         }, 1000);
 

@@ -260,14 +260,12 @@
 
         const iAmEliminated = playerId === eliminatedId;
 
-        // ── Afficher le défi reçu du serveur ──
         function displayDefi(card) {
             const text = card.text || card.question || "Réalise ton défi !";
             document.getElementById("defiText").textContent = text;
             document.getElementById("defiTypeBadge").textContent = "Défi Solo";
             localStorage.setItem("currentDefi", text);
 
-            // Options QCM
             if (card.options && card.options.length > 0) {
                 document.getElementById("defiTypeBadge").textContent = "QCM";
                 const qcmDiv = document.getElementById("qcmOptions");
@@ -291,7 +289,6 @@
                 });
             }
 
-            // Afficher la bonne zone
             if (iAmEliminated) {
                 document.getElementById("zoneEliminated").style.display = "block";
             } else {
@@ -299,7 +296,6 @@
             }
         }
 
-        // Charger le défi via HTTP (fallback si déjà tiré)
         async function loadDefiHTTP() {
             try {
                 const res = await fetch(`${API_URL}/party/current_corpocard/${partyCode}`);
@@ -312,19 +308,16 @@
 
         loadDefiHTTP();
 
-        // ── WebSocket ──
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;
 
-            // Défi broadcasté → afficher pour tout le monde
             if (msg.startsWith("defi_card:")) {
                 try { displayDefi(JSON.parse(msg.substring(10))); } catch (e) { }
                 return;
             }
 
-            // Chat → dans les deux zones
             if (msg.startsWith("chat:")) {
                 const text = msg.substring(5);
                 addMessage(text, "chatMessages");
@@ -332,11 +325,30 @@
                 return;
             }
 
-            // Victime terminée → afficher vote aux observateurs
+            // 🔥 Victime terminée → afficher vote + timer 15s auto
             if (msg === "phase:resultat_defi") {
                 if (!iAmEliminated) {
                     document.getElementById("waitingAnswer").style.display = "none";
                     document.getElementById("voteSection").style.display = "block";
+
+                    // Timer 15s → vote automatique éliminé si pas voté
+                    let voteLeft = 15;
+                    const voteTimerEl = document.createElement("p");
+                    voteTimerEl.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin-top:8px;";
+                    voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
+                    document.getElementById("voteSection").appendChild(voteTimerEl);
+
+                    const voteCountdown = setInterval(() => {
+                        voteLeft--;
+                        voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
+                        if (voteLeft <= 0) {
+                            clearInterval(voteCountdown);
+                            // Si pas encore voté → vote éliminé automatique
+                            if (!document.getElementById("btnReste").disabled) {
+                                submitVote(false);
+                            }
+                        }
+                    }, 1000);
                 }
                 return;
             }
@@ -366,7 +378,6 @@
             }
         };
 
-        // ── Chat ──
         function addMessage(text, containerId) {
             const msgs = document.getElementById(containerId);
             if (!msgs) return;
@@ -407,7 +418,6 @@
             }, 1000);
         }
 
-        // ── Bouton "J'ai terminé" ──
         document.getElementById("doneBtn").addEventListener("click", () => {
             document.getElementById("doneBtn").disabled = true;
             document.getElementById("doneBtn").textContent = "⏳ En attente du jury…";
@@ -416,7 +426,6 @@
             else ws.addEventListener("open", doSend, { once: true });
         });
 
-        // ── Vote jury ──
         async function submitVote(success) {
             document.getElementById("btnReste").disabled = true;
             document.getElementById("btnElimine").disabled = true;
@@ -434,7 +443,7 @@
         document.getElementById("btnReste").onclick = () => submitVote(true);
         document.getElementById("btnElimine").onclick = () => submitVote(false);
 
-        // ── Timer pour la victime (30s) ──
+        // 🔥 Timer victime 30s → envoi auto + defi_done auto
         if (iAmEliminated) {
             let timeLeft = 30;
             const timerEl = document.getElementById("defiTimer");
@@ -449,6 +458,17 @@
                     if (!hasSentAnswer) {
                         document.getElementById("chatInput").value = "(temps écoulé)";
                         sendAnswer();
+                        // 🔥 Déclencher defi_done auto 1.5s après envoi réponse
+                        setTimeout(() => {
+                            const doneBtn = document.getElementById("doneBtn");
+                            if (doneBtn && !doneBtn.disabled) {
+                                doneBtn.click();
+                            } else {
+                                const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
+                                if (ws.readyState === WebSocket.OPEN) doSend();
+                                else ws.addEventListener("open", doSend, { once: true });
+                            }
+                        }, 1500);
                     }
                 }
             }, 1000);
