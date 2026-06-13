@@ -214,7 +214,13 @@
                 timerEl.textContent = "Temps écoulé !";
                 document.getElementById("validateBtn").style.display = "none";
                 // 🔥 Si joueur sélectionné → voter, sinon le serveur gère le timeout
-                if (selectedPlayerId) submitVote();
+                if (selectedPlayerId) {
+                    submitVote();
+                } else {
+                    // 🔥 Pas de joueur sélectionné → voter pour soi-même pour forcer le décompte
+                    selectedPlayerId = parseInt(playerId);
+                    submitVote();
+                }
             }
         }, 1000);
 
