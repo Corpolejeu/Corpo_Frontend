@@ -1057,11 +1057,13 @@
             if (msg.startsWith("new_role:")) {
                 const newRole = msg.substring(9);
                 localStorage.setItem("lastRole", newRole);
+                playerRole = newRole;   // 🔥 LIGNE QUI MANQUAIT
                 document.getElementById("myRoleName").textContent = newRole;
                 document.getElementById("infoBox").style.display = "block";
                 document.getElementById("infoReveal").textContent = `🔄 Ton nouveau rôle est : ${newRole}`;
                 return;
             }
+
             if (msg.startsWith("plante_arroseur:")) {
                 document.getElementById("tableTurnLabel").textContent = `🌱 Arroseur : ${msg.split(":")[1]}`;
                 return;
