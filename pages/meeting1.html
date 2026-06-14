@@ -1054,6 +1054,21 @@
                 document.getElementById("infoReveal").textContent = `🤝 ${p[2]} t'a révélé son identité : ${p[1]}`;
                 return;
             }
+
+            if (msg.startsWith("stephane_vu_claire:")) {
+                const parts = msg.split(":");
+                document.getElementById("infoBox").style.display = "block";
+                document.getElementById("infoReveal").textContent = `⚠️ ${parts[1]} a révélé Claire — il sera licencié en fin de meeting !`;
+                return;
+            }
+
+            if (msg.startsWith("abdel_reveal:")) {
+                const parts = msg.split(":");
+                document.getElementById("infoBox").style.display = "block";
+                document.getElementById("infoReveal").textContent = `🦠 ${parts[1]} (Abdel) est éliminé ! Infectés : ${parts[2]}`;
+                return;
+            }
+
             if (msg.startsWith("new_role:")) {
                 const newRole = msg.substring(9);
                 localStorage.setItem("lastRole", newRole);
@@ -1064,10 +1079,6 @@
                 return;
             }
 
-            if (msg.startsWith("plante_arroseur:")) {
-                document.getElementById("tableTurnLabel").textContent = `🌱 Arroseur : ${msg.split(":")[1]}`;
-                return;
-            }
             if (msg.startsWith("player_eliminated_direct:") || msg.startsWith("player_fired:")) {
                 loadPlayers(); // Rafraîchir la table
                 return;

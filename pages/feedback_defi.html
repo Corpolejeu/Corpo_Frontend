@@ -149,6 +149,15 @@
                     return;
                 }
 
+                if (msg.startsWith("player_eliminated_direct:")) {
+                    const parts = msg.split(":");
+                    document.getElementById("statusTitle").textContent = `❌ ${parts[1]} est licencié(e) !`;
+                    document.getElementById("statusDesc").textContent = `Rôle révélé : ${parts[2]}`;
+                    // Masquer le spinner
+                    document.querySelector(".spinner").style.display = "none";
+                    return;
+                }
+
                 if (msg.startsWith("defi_card:")) {
                     window.location.href = `defi_corpo.html?code=${partyCode}`;
                     return;
