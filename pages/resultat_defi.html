@@ -99,7 +99,7 @@
         document.getElementById("defiRappel").textContent = "Défi évalué : " + defiText;
 
         let resultShown = false;
-
+        let nextPhaseCalled = false;
         // ---------------------------------------------------
         // Lire le résultat depuis localStorage (stocké par defi_corpo.html)
         // ---------------------------------------------------
@@ -243,28 +243,32 @@
                     if (autoLeft <= 0) {
                         clearInterval(autoInterval);
                         autoTimerEl.textContent = "";
-                        try {
-                            await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
-                        } catch (e) { console.error(e); }
+                        if (!nextPhaseCalled) {
+                            nextPhaseCalled = true;
+                            try {
+                                await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
+                            } catch (e) { console.error(e); }
+                        }
                     }
                 }, 1000);
             }
         }
-            // ---------------------------------------------------
-            // Le host déclenche la phase feedback pour tout le monde
-            // ---------------------------------------------------
-            document.getElementById("btnNextStep").addEventListener("click", async () => {
-                document.getElementById("btnNextStep").disabled = true;
-                document.getElementById("btnNextStep").textContent = "Synchronisation…";
-
-                try {
-                    await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
-                    // Le broadcast "phase:feedback" est envoyé par le serveur → redirection via WS
-                } catch (e) {
-                    console.error("Erreur next_phase :", e);
-                    document.getElementById("btnNextStep").disabled = false;
-                }
-            });
+        // ---------------------------------------------------
+        // Le host déclenche la phase feedback pour tout le monde
+        // ---------------------------------------------------
+        document.getElementById("btnNextStep").addEventListener("click", async () => {
+            document.getElementById("btnNextStep").disabled = true;
+            document.getElementById("btnNextStep").textContent = "Synchronisation…";
+            if (nextPhaseCalled) return;
+            nextPhaseCalled = true;
+            try {
+                await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
+                // Le broadcast "phase:feedback" est envoyé par le serveur → redirection via WS
+            } catch (e) {
+                console.error("Erreur next_phase :", e);
+                document.getElementById("btnNextStep").disabled = false;
+            }
+        });
     </script>
 
 </body>
