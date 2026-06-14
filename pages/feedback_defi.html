@@ -127,6 +127,28 @@
             ws.onmessage = (event) => {
                 const msg = event.data;
 
+                if (msg.startsWith("licenciements_recap:")) {
+                    try {
+                        const victims = JSON.parse(msg.substring(20));
+
+                        // Afficher le récap
+                        document.getElementById("statusTitle").textContent = "🚨 Licenciements ce meeting";
+
+                        let html = "<ul style='text-align:left;margin-top:10px;'>";
+                        victims.forEach((v, i) => {
+                            const jokerText = v.has_joker ? "⚔️ Défi en attente" : "💀 Éliminé direct";
+                            html += `<li style="margin:8px 0;font-size:14px;">
+                <strong>${i + 1}. ${v.pseudo}</strong> — ${v.reason}<br>
+                <span style="color:${v.has_joker ? '#c0392b' : '#888'}">${jokerText}</span>
+            </li>`;
+                        });
+                        html += "</ul>";
+
+                        document.getElementById("statusDesc").innerHTML = html;
+                    } catch (e) { }
+                    return;
+                }
+
                 if (msg.startsWith("defi_card:")) {
                     window.location.href = `defi_corpo.html?code=${partyCode}`;
                     return;
