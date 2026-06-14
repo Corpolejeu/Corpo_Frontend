@@ -222,7 +222,6 @@
             }
 
             // Seul le host peut déclencher la suite
-            // Seul le host peut déclencher la suite
             const isHost = await checkHost();
             if (isHost) {
                 document.getElementById("btnNextStep").style.display = "inline-block";
@@ -231,38 +230,40 @@
             }
 
             // 🔥 Timer 10s → next_phase auto
-            let autoLeft = 10;
-            const autoTimerEl = document.createElement("p");
-            autoTimerEl.style.cssText = "text-align:center;color:#888;font-style:italic;margin-top:10px;";
-            autoTimerEl.textContent = `⏱ Suite dans ${autoLeft}s…`;
-            document.getElementById("zoneResult").appendChild(autoTimerEl);
-            const autoInterval = setInterval(async () => {
-                autoLeft--;
+            // 🔥 Timer 10s → next_phase auto (HOST SEULEMENT)
+            if (isHost) {
+                let autoLeft = 10;
+                const autoTimerEl = document.createElement("p");
+                autoTimerEl.style.cssText = "text-align:center;color:#888;font-style:italic;margin-top:10px;";
                 autoTimerEl.textContent = `⏱ Suite dans ${autoLeft}s…`;
-                if (autoLeft <= 0) {
-                    clearInterval(autoInterval);
-                    autoTimerEl.textContent = "";
-                    try {
-                        await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
-                    } catch (e) { console.error(e); }
-                }
-            }, 1000);
-        }
-        // ---------------------------------------------------
-        // Le host déclenche la phase feedback pour tout le monde
-        // ---------------------------------------------------
-        document.getElementById("btnNextStep").addEventListener("click", async () => {
-            document.getElementById("btnNextStep").disabled = true;
-            document.getElementById("btnNextStep").textContent = "Synchronisation…";
+                document.getElementById("zoneResult").appendChild(autoTimerEl);
+                const autoInterval = setInterval(async () => {
+                    autoLeft--;
+                    autoTimerEl.textContent = `⏱ Suite dans ${autoLeft}s…`;
+                    if (autoLeft <= 0) {
+                        clearInterval(autoInterval);
+                        autoTimerEl.textContent = "";
+                        try {
+                            await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
+                        } catch (e) { console.error(e); }
+                    }
+                }, 1000);
+            }}
+            // ---------------------------------------------------
+            // Le host déclenche la phase feedback pour tout le monde
+            // ---------------------------------------------------
+            document.getElementById("btnNextStep").addEventListener("click", async () => {
+                document.getElementById("btnNextStep").disabled = true;
+                document.getElementById("btnNextStep").textContent = "Synchronisation…";
 
-            try {
-                await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
-                // Le broadcast "phase:feedback" est envoyé par le serveur → redirection via WS
-            } catch (e) {
-                console.error("Erreur next_phase :", e);
-                document.getElementById("btnNextStep").disabled = false;
-            }
-        });
+                try {
+                    await fetch(`${API_URL}/party/next_phase/${partyCode}`, { method: "POST" });
+                    // Le broadcast "phase:feedback" est envoyé par le serveur → redirection via WS
+                } catch (e) {
+                    console.error("Erreur next_phase :", e);
+                    document.getElementById("btnNextStep").disabled = false;
+                }
+            });
     </script>
 
 </body>
