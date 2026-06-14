@@ -644,7 +644,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code") || localStorage.getItem("partyCode");
         const playerId = localStorage.getItem("playerId");
-        const playerRole = (localStorage.getItem("lastRole") || "").trim();
+        let playerRole = (localStorage.getItem("lastRole") || "").trim();
         const partyCode = localStorage.getItem("partyCode");
         const pseudo = localStorage.getItem("pseudo");
 
