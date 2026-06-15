@@ -125,6 +125,15 @@
                 return;
             }
 
+            if (msg.startsWith("abdel_reveal:")) {
+                // Abdel éliminé → annuler next_phase auto et aller vers feedback_defi
+                nextPhaseCalled = true; // bloquer le timer auto
+                localStorage.removeItem("currentDefi");
+                localStorage.removeItem("defiOutcome");
+                window.location.href = `feedback_defi.html?code=${partyCode}`;
+                return;
+            }
+
             // Défi du meeting → aller au feedback/débat
             if (msg === "phase:feedback" || msg === "phase:feedback:pre_vote") {
                 localStorage.removeItem("currentDefi");
