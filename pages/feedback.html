@@ -189,6 +189,13 @@
                 } catch (e) { }
                 return;
             }
+
+            if (msg.startsWith("abdel_reveal:")) {
+                const parts = msg.split(":");
+                addMessage(`🦠 ${parts[1]} était Abdel ! Victimes infectées : ${parts[2]} → licenciement en cours !`, true, false);
+                return;
+            }
+            
             if (msg.startsWith("player_eliminated_direct:")) {
                 const parts = msg.split(":");
                 addMessage(`❌ ${parts[1]} a été licencié(e) ! (Rôle : ${parts[2]})`, true, false);

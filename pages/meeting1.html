@@ -1079,8 +1079,15 @@
                 return;
             }
 
+            if (msg.startsWith("abdel_reveal:")) {
+                const parts = msg.split(":");
+                document.getElementById("infoBox").style.display = "block";
+                document.getElementById("infoReveal").innerHTML =
+                    `🦠 <strong>${parts[1]}</strong> était Abdel ! Ses victimes infectées : <strong>${parts[2]}</strong> — elles vont être licenciées !`;
+                return;
+            }
             if (msg.startsWith("player_eliminated_direct:") || msg.startsWith("player_fired:")) {
-                loadPlayers(); // Rafraîchir la table
+                loadPlayers();
                 return;
             }
         }

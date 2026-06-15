@@ -149,12 +149,25 @@
                     return;
                 }
 
+                if (msg.startsWith("abdel_reveal:")) {
+                    const parts = msg.split(":");
+                    document.getElementById("statusTitle").textContent = `🦠 ${parts[1]} était Abdel !`;
+                    document.getElementById("statusDesc").textContent = `Victimes infectées : ${parts[2]} → licenciement en cours !`;
+                    document.querySelector(".spinner").style.display = "none";
+                    return;
+                }
+
                 if (msg.startsWith("player_eliminated_direct:")) {
                     const parts = msg.split(":");
                     document.getElementById("statusTitle").textContent = `❌ ${parts[1]} est licencié(e) !`;
                     document.getElementById("statusDesc").textContent = `Rôle révélé : ${parts[2]}`;
-                    // Masquer le spinner
                     document.querySelector(".spinner").style.display = "none";
+                    return;
+                }
+
+                if (msg === "phase:defi_decision") {
+                    // Joueur suivant dans la file → recharger la victime et tirer un défi
+                    window.location.href = `feedback_defi.html?code=${partyCode}`;
                     return;
                 }
 
