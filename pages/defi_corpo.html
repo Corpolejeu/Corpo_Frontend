@@ -353,6 +353,16 @@
                 return;
             }
 
+            if (msg.startsWith("abdel_reveal:")) {
+                // 🔥 FIX : Abdel éliminé → afficher l'info avant redirection
+                const parts = msg.split(":");
+                const infoEl = document.createElement("p");
+                infoEl.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin:10px 0;font-size:16px;";
+                infoEl.innerHTML = `🦠 <strong>${parts[1]}</strong> était Abdel ! Infectés : <strong>${parts[2]}</strong>`;
+                document.querySelector(".defi-box").appendChild(infoEl);
+                return;
+            }
+
             if (msg.startsWith("defi_result:")) {
                 localStorage.setItem("defiOutcome", msg.split(":")[1]);
                 window.location.href = `resultat_defi.html?code=${partyCode}`;

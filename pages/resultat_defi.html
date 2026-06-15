@@ -126,11 +126,18 @@
             }
 
             if (msg.startsWith("abdel_reveal:")) {
-                // Abdel éliminé → annuler next_phase auto et aller vers feedback_defi
-                nextPhaseCalled = true; // bloquer le timer auto
+                // 🔥 FIX : Abdel éliminé → bloquer next_phase et afficher l'info 3s avant redirect
+                nextPhaseCalled = true;
+                const parts = msg.split(":");
+                const infoEl = document.createElement("p");
+                infoEl.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin:15px 0;font-size:16px;";
+                infoEl.innerHTML = `🦠 <strong>${parts[1]}</strong> était Abdel ! Infectés : <strong>${parts[2]}</strong> — licenciements en cours…`;
+                document.querySelector(".resultat-box").appendChild(infoEl);
                 localStorage.removeItem("currentDefi");
                 localStorage.removeItem("defiOutcome");
-                window.location.href = `feedback_defi.html?code=${partyCode}`;
+                setTimeout(() => {
+                    window.location.href = `feedback_defi.html?code=${partyCode}`;
+                }, 3000);
                 return;
             }
 
@@ -185,7 +192,7 @@
             try {
                 const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
-                return data.host_id === parseInt(playerId);
+                return data.host_id === parseInt(playerId, 10);
             } catch (e) {
                 return false;
             }

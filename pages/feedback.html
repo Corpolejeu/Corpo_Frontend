@@ -132,7 +132,7 @@
             try {
                 const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
-                if (data.host_id === parseInt(playerId)) {
+                if (data.host_id === parseInt(playerId, 10)) {
                     document.getElementById("actionContainer").style.display = "block";
                 } else {
                     document.getElementById("waitingMsg").style.display = "block";

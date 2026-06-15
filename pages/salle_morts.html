@@ -175,7 +175,11 @@
                 phaseEl.textContent = "Défi Corpo en cours";
                 detailEl.textContent = "Un joueur réalise son défi !";
             }
-            // 🔥 Annonce immédiate d'élimination directe
+            else if (msg.startsWith("abdel_reveal:")) {
+                const parts = msg.split(":");
+                phaseEl.textContent = "Virus Abdel !";
+                detailEl.textContent = `🦠 ${parts[1]} était Abdel ! Infectés : ${parts[2]} — licenciements en cours…`;
+            }
             else if (msg.startsWith("player_eliminated_direct:")) {
                 const parts = msg.split(":");
                 showElimination(parts[1], parts[2]);

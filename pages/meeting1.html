@@ -1062,17 +1062,10 @@
                 return;
             }
 
-            if (msg.startsWith("abdel_reveal:")) {
-                const parts = msg.split(":");
-                document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoReveal").textContent = `🦠 ${parts[1]} (Abdel) est éliminé ! Infectés : ${parts[2]}`;
-                return;
-            }
-
             if (msg.startsWith("new_role:")) {
                 const newRole = msg.substring(9);
                 localStorage.setItem("lastRole", newRole);
-                playerRole = newRole;   // 🔥 LIGNE QUI MANQUAIT
+                playerRole = newRole;
                 document.getElementById("myRoleName").textContent = newRole;
                 document.getElementById("infoBox").style.display = "block";
                 document.getElementById("infoReveal").textContent = `🔄 Ton nouveau rôle est : ${newRole}`;

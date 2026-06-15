@@ -109,7 +109,15 @@
                     const party = await vRes.json();
 
                     // Seul le HOST tire le défi
-                    if (party.host_id === playerId) {
+                    if (party.host_id === parseInt(playerId, 10)) {
+                        // 🔥 FIX : Marquer la victime comme ayant utilisé son joker
+                        try {
+                            const victimId = localStorage.getItem("eliminatedPlayerId");
+                            if (victimId) {
+                                await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
+                            }
+                        } catch (e) { console.error("draw_corpocard:", e); }
+
                         const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, {
                             method: "POST"
                         });
