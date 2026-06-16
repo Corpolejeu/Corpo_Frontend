@@ -77,7 +77,8 @@
                 if (!d.is_alive) { window.location.href = "salle_morts.html"; return; }
             } catch (e) { }
 
-            // 2. Récupérer la victime
+            // 2. Récupérer la victime DEPUIS L'API (jamais depuis localStorage)
+            let victimId = null;
             try {
                 const res = await fetch(`${API_URL}/party/meeting_victim/${partyCode}`);
                 const data = await res.json();
@@ -87,10 +88,12 @@
                     return;
                 }
 
+                victimId = parseInt(data.victim.id);
+                // 🔥 FIX : toujours mettre à jour depuis l'API, pas depuis localStorage
                 localStorage.setItem("eliminatedPlayerId", data.victim.id);
                 localStorage.setItem("eliminatedPseudo", data.victim.pseudo);
 
-                const isMe = playerId === parseInt(data.victim.id);
+                const isMe = playerId === victimId;
                 document.getElementById("statusTitle").textContent = isMe
                     ? "⚠️ Tu as été licencié(e) !"
                     : `${data.victim.pseudo} est licencié(e)`;
@@ -98,35 +101,28 @@
 
             } catch (e) { console.error(e); return; }
 
-            // 3. Connecter WS d'abord
+            // 3. Connecter WS
             connectWS();
 
-            // 4. Tirer le défi en HTTP (TOUT LE MONDE appelle, le serveur est idempotent)
-            //    Petit délai pour laisser le WS se connecter avant le broadcast
+            // 4. Seul le HOST : marquer draw_corpocard PUIS tirer le défi
             setTimeout(async () => {
                 try {
                     const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
                     const party = await vRes.json();
 
-                    // Seul le HOST tire le défi
-                    if (party.host_id === parseInt(playerId, 10)) {
-                        // 🔥 FIX : Marquer la victime comme ayant utilisé son joker
-                        try {
-                            const victimId = localStorage.getItem("eliminatedPlayerId");
-                            if (victimId) {
-                                await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
-                            }
-                        } catch (e) { console.error("draw_corpocard:", e); }
-
-                        const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, {
-                            method: "POST"
-                        });
+                    if (parseInt(party.host_id) === playerId) {
+                        // 🔥 FIX : appeler draw_corpocard sur la victime actuelle (depuis API)
+                        if (victimId) {
+                            await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
+                        }
+                        // Puis tirer le défi
+                        const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
                         if (!r.ok) {
                             console.error("draw_defi error:", r.status, await r.text());
                         }
                     }
                 } catch (e) { console.error("draw_defi:", e); }
-            }, 1500); // 1.5s pour laisser le WS se connecter
+            }, 1500);
         }
 
         function connectWS() {
@@ -138,10 +134,7 @@
                 if (msg.startsWith("licenciements_recap:")) {
                     try {
                         const victims = JSON.parse(msg.substring(20));
-
-                        // Afficher le récap
                         document.getElementById("statusTitle").textContent = "🚨 Licenciements ce meeting";
-
                         let html = "<ul style='text-align:left;margin-top:10px;'>";
                         victims.forEach((v, i) => {
                             const jokerText = v.has_joker ? "⚔️ Défi en attente" : "💀 Éliminé direct";
@@ -151,8 +144,9 @@
             </li>`;
                         });
                         html += "</ul>";
-
                         document.getElementById("statusDesc").innerHTML = html;
+                        // 🔥 FIX : stocker le recap pour que la victime soit connue même si phase:defi_decision arrive avant
+                        window._victimsList = victims;
                     } catch (e) { }
                     return;
                 }
