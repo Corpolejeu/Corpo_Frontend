@@ -72,7 +72,7 @@
                 div.classList.add("public-party");
 
                 div.innerHTML = `
-                    <p><strong>Partie #${p.party_id}</strong></p>
+                    <p><strong>${p.name || 'Partie sans nom'}</strong></p>
                     <p>Code : ${p.code}</p>
                     <button onclick="joinPublic('${p.code}')" class="btn">Rejoindre</button>
                     <hr>
