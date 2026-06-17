@@ -80,7 +80,10 @@
 
         document.getElementById("userPseudo").textContent = pseudo;
         document.getElementById("partyCode").textContent = code;
-        localStorage.setItem("partyCode", code);
+        // 🔥 Afficher le nom de la partie
+        fetch(`${API_URL}/party/verify/${code}`)
+            .then(r => r.json())
+            .then(d => { if (d.name) document.querySelector("h1").textContent = d.name; }); localStorage.setItem("partyCode", code);
 
         let partyId = null;
         let hostId = null;
