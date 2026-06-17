@@ -126,22 +126,24 @@
             }
 
             if (msg.startsWith("abdel_reveal:")) {
-                // 🔥 Abdel éliminé → afficher les infectés 3s puis rediriger
-                nextPhaseCalled = true;
+                // Abdel éliminé → annuler next_phase auto et aller vers feedback_defi
+                nextPhaseCalled = true; // bloquer le timer auto
                 localStorage.removeItem("currentDefi");
                 localStorage.removeItem("defiOutcome");
-                const parts = msg.split(":");
-                const abdelInfo = document.createElement("p");
-                abdelInfo.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin:15px 0;font-size:16px;";
-                abdelInfo.innerHTML = `🦠 <strong>${parts[1]}</strong> était Abdel ! Infectés : <strong>${parts[2]}</strong> — licenciements en cours…`;
-                document.getElementById("zoneResult").appendChild(abdelInfo);
-                setTimeout(() => {
-                    window.location.href = `feedback_defi.html?code=${partyCode}`;
-                }, 3000);
+                window.location.href = `feedback_defi.html?code=${partyCode}`;
                 return;
             }
 
-            // Défi du meeting/feedback → aller au feedback/débat
+            // Défi du meeting → aller au feedback/débat
+            // 🔥 FIX : Victime suivante dans la file → aller sur feedback_defi
+            if (msg === "phase:defi_decision") {
+                nextPhaseCalled = true; // Bloquer le timer auto du host
+                localStorage.removeItem("currentDefi");
+                localStorage.removeItem("defiOutcome");
+                window.location.href = `feedback_defi.html?code=${partyCode}`;
+                return;
+            }
+
             if (msg === "phase:feedback" || msg === "phase:feedback:pre_vote") {
                 localStorage.removeItem("currentDefi");
                 localStorage.removeItem("defiOutcome");
@@ -232,16 +234,6 @@
                             roleInfo.style.cssText = "font-size:20px; font-weight:bold; margin-top:12px; color:#c0392b;";
                             roleInfo.textContent = `Rôle révélé : ${data.victim.role}`;
                             roleZone.appendChild(roleInfo);
-
-                            // 🔥 FIX ABDEL : Si la victime est Abdel, bloquer le bouton Continuer
-                            // et attendre abdel_reveal avant de continuer
-                            if (data.victim.role === "Abdel") {
-                                const abdelMsg = document.createElement("p");
-                                abdelMsg.style.cssText = "text-align:center;color:#c0392b;font-style:italic;margin-top:10px;";
-                                abdelMsg.textContent = "⏳ Traitement du virus Abdel en cours…";
-                                document.getElementById("zoneResult").appendChild(abdelMsg);
-                                return; // Ne pas afficher le bouton Continuer
-                            }
                         }
                     }
                 } catch (e) { /* pas grave */ }
