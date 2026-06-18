@@ -119,7 +119,7 @@
                         if (victimId) {
                             console.log("🎴 draw_corpocard", victimId);
                             await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
-                        }
+                        } 
                         // Puis tirer le défi
                         console.log("🎯 draw_defi");
                         const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
@@ -128,7 +128,7 @@
                         }
                     }
                 } catch (e) { console.error("draw_defi:", e); }
-            }, 1500);
+            }, 3000);
         }
 
         function connectWS() {
@@ -174,8 +174,12 @@
                 }
 
                 if (msg === "phase:defi_decision") {
-                    // Joueur suivant dans la file → recharger la victime et tirer un défi
-                    window.location.href = `feedback_defi.html?code=${partyCode}`;
+                    document.getElementById("statusTitle").textContent = "⏳ Prochain défi en préparation…";
+                    document.getElementById("statusDesc").textContent = "Redirection dans un instant…";
+                    document.querySelector(".spinner").style.display = "block";
+                    setTimeout(() => {
+                        window.location.href = `feedback_defi.html?code=${partyCode}`;
+                    }, 2000);
                     return;
                 }
 

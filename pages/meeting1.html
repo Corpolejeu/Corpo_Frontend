@@ -935,10 +935,27 @@
             } else if (role === "Fabien") {
                 desc.textContent = "Désigne secrètement un collaborateur à licencier :";
                 buildPlayerGrid(false);
-                addBtn(btns, "✅ Valider ma victime", "btn-main", () => {
-                    if (!selectedTargetId) { alert("Sélectionne un joueur !"); return; }
+                const fabienBtn = document.createElement("button");
+                fabienBtn.textContent = "✅ Valider ma victime";
+                fabienBtn.className = "btn btn-main";
+                fabienBtn.disabled = true; // 🔥 Désactivé tant qu'aucun joueur sélectionné
+                fabienBtn.style.opacity = "0.4";
+                fabienBtn.onclick = () => {
+                    if (!selectedTargetId) return;
+                    fabienBtn.disabled = true;
                     sendAction("manager_victim", selectedTargetId);
+                };
+                btns.appendChild(fabienBtn);
+
+                // 🔥 Activer le bouton uniquement quand un joueur est sélectionné
+                const origBuildGrid = buildPlayerGrid;
+                const gridEl = document.getElementById("playerGrid");
+                const observer = new MutationObserver(() => {
+                    const selected = gridEl.querySelector(".player-select-card.selected");
+                    fabienBtn.disabled = !selected;
+                    fabienBtn.style.opacity = selected ? "1" : "0.4";
                 });
+                observer.observe(gridEl, { subtree: true, attributes: true, attributeFilter: ["class"] });
             } else if (role === "Claire") {
                 desc.textContent = "Sauver la victime, désigner quelqu'un d'autre, ou passer (1 seule fois) :";
                 buildPlayerGrid(false);
