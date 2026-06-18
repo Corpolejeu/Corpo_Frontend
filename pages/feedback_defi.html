@@ -84,9 +84,11 @@
                 const data = await res.json();
 
                 if (!data || !data.victim) {
-                    window.location.href = `feedback.html?code=${partyCode}&mode=pre_vote`;
+                    console.log("❌ Pas de victime trouvée");
                     return;
                 }
+
+                console.log("✅ Victime trouvée :", data.victim.id, data.victim.pseudo);
 
                 victimId = parseInt(data.victim.id);
                 // 🔥 FIX : toujours mettre à jour depuis l'API, pas depuis localStorage
@@ -111,11 +113,15 @@
                     const party = await vRes.json();
 
                     if (parseInt(party.host_id) === playerId) {
+                        console.log("HOST =", playerId);
+                        console.log("victimId =", victimId);
                         // 🔥 FIX : appeler draw_corpocard sur la victime actuelle (depuis API)
                         if (victimId) {
+                            console.log("🎴 draw_corpocard", victimId);
                             await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
                         }
                         // Puis tirer le défi
+                        console.log("🎯 draw_defi");
                         const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
                         if (!r.ok) {
                             console.error("draw_defi error:", r.status, await r.text());
