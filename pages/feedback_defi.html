@@ -112,16 +112,19 @@
                     const vRes = await fetch(`${API_URL}/party/verify/${partyCode}`);
                     const party = await vRes.json();
 
-                    if (parseInt(party.host_id) === playerId) {
-                        console.log("HOST =", playerId);
-                        console.log("victimId =", victimId);
-                        // 🔥 FIX : appeler draw_corpocard sur la victime actuelle (depuis API)
+                    // 🔥 FIX : si le host est mort, le premier joueur vivant prend le relais
+                    const aliveRes = await fetch(`${API_URL}/party/players/${party.party_id}`);
+                    const players = await aliveRes.json();
+                    const alivePlayers = players.filter(p => p.is_alive);
+                    const isOriginalHostAlive = alivePlayers.some(p => p.id === party.host_id);
+                    const effectiveHostId = isOriginalHostAlive
+                        ? party.host_id
+                        : (alivePlayers[0]?.id || null);
+
+                    if (effectiveHostId === playerId) {
                         if (victimId) {
-                            console.log("🎴 draw_corpocard", victimId);
                             await fetch(`${API_URL}/party/draw_corpocard/${victimId}`, { method: "POST" });
-                        } 
-                        // Puis tirer le défi
-                        console.log("🎯 draw_defi");
+                        }
                         const r = await fetch(`${API_URL}/party/draw_defi/${partyCode}`, { method: "POST" });
                         if (!r.ok) {
                             console.error("draw_defi error:", r.status, await r.text());
