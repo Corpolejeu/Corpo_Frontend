@@ -59,7 +59,12 @@
                 alert("Tu dois être connecté pour créer une partie !");
                 return;
             }
-
+            console.log({
+                pseudo: savedPseudo,
+                name: partyName,
+                is_private: isPrivate
+            });
+            
             try {
                 const response = await fetch("https://corpo-backend.onrender.com/party/create", {
                     method: "POST",
