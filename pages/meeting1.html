@@ -1080,9 +1080,8 @@
             }
 
             if (msg.startsWith("stephane_vu_claire:")) {
-                const parts = msg.split(":");
                 document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoReveal").textContent = `⚠️ ${parts[1]} a révélé Claire — il sera licencié en fin de meeting !`;
+                document.getElementById("infoReveal").textContent = `⚠️ Stéphane a vu Claire — il sera licencié en fin de meeting !`;
                 return;
             }
 

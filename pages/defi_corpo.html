@@ -327,29 +327,36 @@
 
             // 🔥 Victime terminée → afficher vote + timer 15s auto
             if (msg === "phase:resultat_defi") {
+                clearInterval(countdown); // 🔥 Arrêter le timer 30s
+                timerEl.textContent = "";
+
                 if (!iAmEliminated) {
                     document.getElementById("waitingAnswer").style.display = "none";
                     document.getElementById("voteSection").style.display = "block";
-
-                    // Timer 15s → vote automatique éliminé si pas voté
-                    let voteLeft = 15;
-                    const voteTimerEl = document.createElement("p");
-                    voteTimerEl.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin-top:8px;";
-                    voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
-                    document.getElementById("voteSection").appendChild(voteTimerEl);
-
-                    const voteCountdown = setInterval(() => {
-                        voteLeft--;
-                        voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
-                        if (voteLeft <= 0) {
-                            clearInterval(voteCountdown);
-                            // Si pas encore voté → vote éliminé automatique
-                            if (!document.getElementById("btnReste").disabled) {
-                                submitVote(false);
-                            }
-                        }
-                    }, 1000);
                 }
+
+                // 🔥 Timer 15s visible par TOUS (jury vote, victime attend)
+                let voteLeft = 15;
+                const voteTimerEl = document.createElement("p");
+                voteTimerEl.style.cssText = "text-align:center;color:#c0392b;font-weight:bold;margin-top:8px;";
+                voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
+                const zoneTarget = iAmEliminated
+                    ? document.getElementById("zoneEliminated")
+                    : document.getElementById("voteSection");
+                zoneTarget.appendChild(voteTimerEl);
+
+                const voteCountdown = setInterval(() => {
+                    voteLeft--;
+                    voteTimerEl.textContent = `⏱ ${voteLeft}s pour voter`;
+                    if (voteLeft <= 0) {
+                        clearInterval(voteCountdown);
+                        voteTimerEl.textContent = "⌛ Verdict en cours…";
+                        // 🔥 Seulement le jury vote auto si pas voté
+                        if (!iAmEliminated && !document.getElementById("btnReste").disabled) {
+                            submitVote(false);
+                        }
+                    }
+                }, 1000);
                 return;
             }
 
@@ -455,20 +462,22 @@
 
         // 🔥 Timer victime 30s → envoi auto + defi_done auto
         if (iAmEliminated) {
+            // 🔥 Timer 30s visible par TOUS (victime + jury)
             let timeLeft = 30;
             const timerEl = document.getElementById("defiTimer");
             timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
-
             const countdown = setInterval(() => {
                 timeLeft--;
                 timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     timerEl.textContent = "⌛ Temps écoulé !";
-                    // 🔥 Toujours déclencher defi_done à la fin du timer, peu importe si répondu ou pas
-                    const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
-                    if (ws.readyState === WebSocket.OPEN) doSend();
-                    else ws.addEventListener("open", doSend, { once: true });
+                    // 🔥 Seulement la victime envoie defi_done
+                    if (iAmEliminated) {
+                        const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
+                        if (ws.readyState === WebSocket.OPEN) doSend();
+                        else ws.addEventListener("open", doSend, { once: true });
+                    }
                 }
             }, 1000);
         }
