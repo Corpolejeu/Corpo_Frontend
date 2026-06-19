@@ -715,11 +715,19 @@
                 seat.style.left = `${x}%`;
                 seat.style.top = `${y}%`;
 
+                const roleImages = {
+                    "Fabien": "Fabien.png", "Claire": "Claire.png",
+                    "Pascal": "Pascal.png", "Tiff": "Tiff.png",
+                    "Stéphane": "Stephane.png", "Cindy": "Cindy.png",
+                    "Denis": "Denis.png", "Abdel": "Abdel.png"
+                };
+                const imgFile = (p.role && roleImages[p.role]) ? roleImages[p.role] : "joueur1.png";
                 seat.innerHTML = `
                 <div class="seat-avatar ${isMe ? 'me' : ''} ${!p.is_alive ? 'dead' : ''}" id="ring-${p.id}">
-                    <img src="../assets/images/joueur1.png" alt="${p.pseudo}">
+                    <img src="../assets/images/${!p.is_alive && p.role ? imgFile : 'joueur1.png'}" alt="${p.pseudo}">
                     ${!p.is_alive ? '<div class="dead-icon">💀</div>' : ''}
                 </div>
+                
                 <div class="seat-name ${isMe ? 'me' : ''}">${isMe ? '⭐ ' : ''}${p.pseudo}</div>
                 <div class="neighbor-badge ${isLeft ? 'show' : ''}">◀ voisin</div>
                 <div class="neighbor-badge ${isRight ? 'show' : ''}">voisin ▶</div>
