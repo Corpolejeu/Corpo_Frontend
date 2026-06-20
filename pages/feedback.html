@@ -32,7 +32,7 @@
             </div>
 
             <div class="cho-message">
-                <p><strong>CHO :</strong> <span id="choText">Le débat est ouvert !</span></p>
+                <p><strong>CHO :</strong> <span id="choText">Le feedback est ouvert !</span></p>
             </div>
 
             <div class="feedback-timer">
@@ -40,7 +40,7 @@
             </div>
 
             <div class="feedback-center">
-                <p class="feedback-info">Débattez ensemble pour désigner les suspects…</p>
+                <p class="feedback-info">Brainstormez pour licencier vos ennemis !</p>
             </div>
 
             <!-- Chat -->
@@ -59,7 +59,7 @@
                 <button class="btn feedback-vote-btn" id="actionBtn">…</button>
             </div>
 
-            <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
+        #    <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
                 ⏳ En attente de l'hôte…
             </p>
 
@@ -92,7 +92,7 @@
             if (feedbackMode === "pre_vote") {
                 badge.textContent = "🗣 Débat avant le vote";
                 badge.style.background = "#c0392b";
-                cho.textContent = "Débattez et désignez vos suspects. Le vote arrive !";
+                cho.textContent = "Débattez et désignez ce qui sont pas corpo. Le vote arrive !";
                 btn.textContent = "🗳 Passer au vote";
                 btn.onclick = triggerVote;
             } else {

@@ -47,7 +47,7 @@
         <div class="box">
 
             <h1>Lobby</h1>
-            <p>En attente des joueurs...</p>
+            <p>En attente des collaborateurs...</p>
 
             <h3>Code de la partie :</h3>
             <p id="partyCode" style="font-size:28px; font-weight:bold; letter-spacing:4px;"></p>
@@ -58,10 +58,10 @@
             </div>
 
             <p id="waitingMsg" style="color:#444; font-weight:bold; margin-top:15px;">
-                En attente de 4 joueurs pour démarrer...
+                En attente de 4 collaborateurs pour démarrer...
             </p>
 
-            <button id="startBtn" class="btn">Lancer la partie</button>
+            <button id="startBtn" class="btn">Lancer le meeting</button>
 
         </div>
     </main>
@@ -145,7 +145,7 @@
 
                 // Note : Ajuste à 1 ou 2 si tu testes seul ou à deux joueurs pour la phase de dev
                 if (players.length < 4) {
-                    waitingMsg.textContent = `En attente de joueurs (${players.length}/4)...`;
+                    waitingMsg.textContent = `En attente de collaborateurs (${players.length}/4)...`;
                     waitingMsg.style.display = "block";
                     startBtn.style.display = "none";
                 } else {

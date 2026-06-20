@@ -46,7 +46,7 @@
         }
 
         .social-link.shop {
-            background: #c0392b;
+            background: #ff3131;
         }
 
         .social-link.linkedin {
@@ -81,7 +81,7 @@
         <div class="victoire-box">
             <h1 id="mainTitle">Victoire !</h1>
             <div class="cho-message">
-                <p id="choMsg"><strong>CHO :</strong> Félicitations ! Votre équipe a remporté la partie.</p>
+                <p id="choMsg"><strong>CHO :</strong>Les collaborateurs ont gagné la partie !</p>
             </div>
             <div class="victoire-center">
                 <img id="resultImg" src="../assets/images/victoire.png" class="victoire-img" alt="Victoire">
@@ -101,7 +101,7 @@
                 </a>
             </div>
 
-            <p class="social-title">Nous suivre & acheter le jeu :</p>
+            <p class="social-title">Acheter le jeu pour renouveler Corentin Le Stagiaire</p>
             <div class="social-links">
                 <a class="social-link shop" href="https://corpolejeu.com/corpo-le-jeu-officiel" target="_blank">🛒
                     Acheter le jeu</a>
@@ -142,14 +142,14 @@
 
             if (isManager) {
                 title.textContent = "Défaite…";
-                title.style.color = "#c0392b";
+                title.style.color = "#ff3131";
                 choMsg.innerHTML = "<strong>CHO :</strong> Les collaborateurs ont démasqué tous les managers.";
                 img.src = "../assets/images/defaite.png";
                 text.textContent = "Tu as été démasqué. Les collaborateurs ont sauvé l'entreprise… sans toi.";
             } else {
                 title.textContent = "Victoire !";
                 title.style.color = "#27ae60";
-                choMsg.innerHTML = "<strong>CHO :</strong> Félicitations ! Votre équipe a remporté la partie.";
+                choMsg.innerHTML = "<strong>CHO :</strong>Les collaborateurs ont gagné la partie !";
                 img.src = "../assets/images/victoire.png";
                 text.textContent = "Vous avez su déjouer les pièges et survivre aux meetings. L'entreprise est sauvée !";
             }

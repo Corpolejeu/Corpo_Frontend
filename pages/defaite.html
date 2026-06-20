@@ -81,12 +81,11 @@
         <div class="defaite-box">
             <h1 id="mainTitle">Défaite…</h1>
             <div class="cho-message">
-                <p id="choMsg"><strong>CHO :</strong> Les managers infiltrés ont gagné la partie.</p>
+                <p id="choMsg"><strong>CHO :</strong> Les managers toxiques ont encore gagné la partie !</p>
             </div>
             <div class="defaite-center">
                 <img id="resultImg" src="../assets/images/defaite.png" class="defaite-img" alt="Défaite">
-                <p id="resultText" class="defaite-text">Vous n'avez pas réussi à sauver l'entreprise. Les managers ont
-                    pris le contrôle…</p>
+                <p id="resultText" class="defaite-text">Merci de quitter l'entreprise au plus vite et de préparer votre carton avec vos affaires !</p>
             </div>
 
             <div class="end-actions">
@@ -101,7 +100,7 @@
                 </a>
             </div>
 
-            <p class="social-title">Nous suivre & acheter le jeu :</p>
+            <p class="social-title">Acheter le jeu pour renouveler Corentin Le Stagiaire</p>
             <div class="social-links">
                 <a class="social-link shop" href="https://corpolejeu.com/corpo-le-jeu-officiel" target="_blank">🛒
                     Acheter le jeu</a>
@@ -143,15 +142,15 @@
             if (isManager) {
                 title.textContent = "Victoire !";
                 title.style.color = "#27ae60";
-                choMsg.innerHTML = "<strong>CHO :</strong> Les managers ont pris le contrôle de l'entreprise !";
+                choMsg.innerHTML = "<strong>CHO :</strong>  Les managers toxiques ont encore gagné la partie !";
                 img.src = "../assets/images/victoire.png";
-                text.textContent = "Brillant. Tu as manipulé tout le monde et licencié chaque collaborateur. L'entreprise t'appartient.";
+                text.textContent = "Brillant ! Tu es très toxique, continue ainsi.";
             } else {
                 title.textContent = "Défaite…";
                 title.style.color = "#c0392b";
-                choMsg.innerHTML = "<strong>CHO :</strong> Les managers infiltrés ont pris le contrôle. Vous avez échoué.";
+                choMsg.innerHTML = "<strong>CHO :</strong> Merci de quitter l'entreprise au plus vite !";
                 img.src = "../assets/images/defaite.png";
-                text.textContent = "Vous n'avez pas réussi à sauver l'entreprise. Les managers ont pris le contrôle…";
+                text.textContent = "Préparer votre carton avec vos affaires";
             }
         }
         init();

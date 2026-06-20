@@ -24,15 +24,15 @@
 
     <main class="main">
         <div class="box">
-            <h1>Créer<br>une<br>partie</h1>
-            <p>Entrez un nom pour votre partie.</p>
+            <h1>Créer<br>un<br>meeting</h1>
+            <p>Entrez le nom de votre entreprise de rêve !</p>
             <input type="text" id="partyName" placeholder="Ex: Venez jouer !">
 
             <label style="display:block;margin-top:10px;">
-                <input type="checkbox" id="isPrivate"> Partie privée
+                <input type="checkbox" id="isPrivate"> Meeting privé
             </label>
 
-            <button class="btn" id="createBtn">Créer la partie</button>
+            <button class="btn" id="createBtn">Créer un meeting</button>
         </div>
     </main>
 
@@ -52,11 +52,11 @@
             const isPrivate = document.getElementById("isPrivate").checked;
 
             if (!partyName) {
-                alert("Veuillez entrer un nom pour votre partie !");
+                alert("Veuillez entrer un nom pour votre meeting !");
                 return;
             }
             if (!savedPseudo) {
-                alert("Tu dois être connecté pour créer une partie !");
+                alert("Tu dois être connecté pour créer un meeting !");
                 return;
             }
             console.log({
@@ -79,7 +79,7 @@
                     localStorage.setItem("playerId", data.player_id);
                     window.location.href = `lobby.html?code=${data.code}`;
                 } else {
-                    alert(data.detail || "Erreur lors de la création de la partie");
+                    alert(data.detail || "Erreur lors de la création du meeting");
                 }
             } catch (error) {
                 alert("Erreur de connexion au serveur !");
