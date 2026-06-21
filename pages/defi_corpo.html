@@ -205,7 +205,7 @@
                         Envoie ta réponse dans le chat, puis clique sur "J'ai terminé".
                     </p>
                     <button class="chat-send-btn" id="doneBtn"
-                        style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;" disabled>
+                        style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;">
                         ✅ J'ai terminé mon défi !
                     </button>
                 </div>
@@ -403,39 +403,26 @@
         });
 
         let hasSentAnswer = false;
+        // APRÈS
         function sendAnswer() {
-            if (hasSentAnswer) return;
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
-
-            hasSentAnswer = true;
-            document.getElementById("sendBtn").disabled = true;
-            input.disabled = true;
-
-            const doSend = () => {
-                ws.send(JSON.stringify({ type: "chat", pseudo: eliminatedPseudo + " (réponse)", message: text }));
-                addMessage(`${eliminatedPseudo} : ${text}`, "chatMessages");
-            };
-
-            if (ws.readyState === WebSocket.OPEN) doSend();
-            else ws.addEventListener("open", doSend, { once: true });
-
-            // Activer "J'ai terminé" après envoi
-            setTimeout(() => {
-                const doneBtn = document.getElementById("doneBtn");
-                if (doneBtn) doneBtn.disabled = false;
-            }, 1000);
+            ws.send(JSON.stringify({ type: "chat", pseudo: eliminatedPseudo + " (réponse)", message: text }));
+            addMessage(`${eliminatedPseudo} : ${text}`, "chatMessages");
+            input.value = "";
         }
 
         document.getElementById("doneBtn").addEventListener("click", () => {
             document.getElementById("doneBtn").disabled = true;
             document.getElementById("doneBtn").textContent = "⏳ En attente du jury…";
+            document.getElementById("sendBtn").disabled = true;
+            document.getElementById("chatInput").disabled = true;
+            clearInterval(countdown);
             const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
             if (ws.readyState === WebSocket.OPEN) doSend();
             else ws.addEventListener("open", doSend, { once: true });
         });
-
         async function submitVote(success) {
             document.getElementById("btnReste").disabled = true;
             document.getElementById("btnElimine").disabled = true;
@@ -454,24 +441,27 @@
         document.getElementById("btnElimine").onclick = () => submitVote(false);
 
         // 🔥 Timer victime 30s → envoi auto + defi_done auto
-        if (iAmEliminated) {
-            let timeLeft = 30;
-            const timerEl = document.getElementById("defiTimer");
-            timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
+        let timeLeft = 30;
+        const timerEl = document.getElementById("defiTimer");
+        timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
 
-            const countdown = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    timerEl.textContent = "⌛ Temps écoulé !";
-                    // 🔥 Toujours déclencher defi_done à la fin du timer, peu importe si répondu ou pas
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerEl.textContent = "⌛ Temps écoulé !";
+                if (iAmEliminated) {
+                    document.getElementById("sendBtn").disabled = true;
+                    document.getElementById("chatInput").disabled = true;
+                    document.getElementById("doneBtn").disabled = true;
                     const doSend = () => ws.send(JSON.stringify({ type: "defi_done" }));
                     if (ws.readyState === WebSocket.OPEN) doSend();
                     else ws.addEventListener("open", doSend, { once: true });
                 }
-            }, 1000);
-        }
+            }
+        }, 1000);
+
     </script>
 
 </body>

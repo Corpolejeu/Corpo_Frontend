@@ -85,6 +85,8 @@
             margin-top: 2px;
         }
 
+
+
         #timerCenter {
             font-size: 20px;
             font-weight: 800;
@@ -597,6 +599,8 @@
                     <div class="oval-surface">
                         <div id="tableTurnRole">En attente…</div>
                         <div id="tableTurnLabel">Le meeting va commencer</div>
+                        <img id="roleImg" src="" alt=""
+                            style="width:60px;height:60px;border-radius:50%;margin:6px auto;display:none;border:3px solid #c0392b;">
                         <div id="timerCenter">–</div>
                     </div>
                 </div>
@@ -770,6 +774,19 @@
         // ── AFFICHER TOUR ──
         function showRoleTurn(role) {
             meetingStarted = true;
+            const roleImagesMap = {
+                "Fabien": "Fabien.png", "Claire": "Claire.png",
+                "Pascal": "Pascal.png", "Tiff": "Tiff.png",
+                "Stéphane": "Stephane.png", "Cindy": "Cindy.png",
+                "Denis": "Denis.png", "Abdel": "Abdel.png"
+            };
+            const roleImg = document.getElementById("roleImg");
+            if (roleImagesMap[role]) {
+                roleImg.src = `../assets/images/${roleImagesMap[role]}`;
+                roleImg.style.display = "block";
+            } else {
+                roleImg.style.display = "none";
+            }
             if (readyInterval) { clearInterval(readyInterval); readyInterval = null; }
 
             document.getElementById("tableTurnRole").textContent = role;
@@ -1062,7 +1079,7 @@
                     });
                     addBtn(btns, "⏭ Terminer", "btn-skip", () => sendAction("done"));
                 } else {
-                    sendAction("done");
+                    setTimeout(() => sendAction("done"), 5000);
                 }
                 return;
             }
@@ -1070,7 +1087,8 @@
                 const p = msg.split(":");
                 document.getElementById("infoBox").style.display = "block";
                 document.getElementById("infoReveal").textContent = `🤝 ${p[2]} est : ${p[1]} — garde ça secret !`;
-                sendAction("done"); return;
+                setTimeout(() => sendAction("done"), 5000);
+                return;
             }
             if (msg.startsWith("stephane_reveal_target:")) {
                 const p = msg.split(":");
