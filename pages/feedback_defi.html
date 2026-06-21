@@ -8,40 +8,232 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .waiting-box {
-            max-width: 500px;
-            margin: 60px auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            max-width: 600px;
+            margin: 70px auto;
             padding: 40px;
+            border-radius: 28px;
+
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(255, 255, 255, .5);
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, .08),
+                0 0 0 1px rgba(255, 255, 255, .5);
+
             text-align: center;
+
+            position: relative;
+            overflow: hidden;
         }
+
+
+        .waiting-box::before {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background: rgba(192, 57, 43, .08);
+
+            top: -80px;
+            right: -80px;
+        }
+
+
+        .waiting-box::after {
+            content: "";
+
+            position: absolute;
+
+            width: 140px;
+            height: 140px;
+
+            border-radius: 50%;
+
+            background: rgba(243, 156, 18, .08);
+
+            bottom: -60px;
+            left: -60px;
+        }
+
+
 
         .spinner {
-            width: 48px;
-            height: 48px;
-            border: 5px solid #eee;
-            border-top-color: #c0392b;
+
+            width: 64px;
+            height: 64px;
+
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+
+            border: 5px solid rgba(192, 57, 43, .15);
+
+            border-top-color: #ff3131;
+
+            animation: spin .8s linear infinite;
+
+            margin: 0 auto 30px;
+
         }
 
+
         @keyframes spin {
+
             to {
                 transform: rotate(360deg);
             }
+
         }
+
+
 
         .waiting-box h2 {
-            color: #c0392b;
-            font-size: 22px;
-            margin-bottom: 10px;
+
+            margin: 0 0 14px;
+
+            color: #ff3131;
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+
         }
 
+
+
         .waiting-box p {
-            color: #888;
-            font-size: 14px;
+
+            margin: 0;
+
+            color: #6b7280;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+        }
+
+
+
+        .waiting-box ul {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin: 20px 0 0;
+
+        }
+
+
+        .waiting-box li {
+
+            background: #fafafa;
+
+            border-radius: 14px;
+
+            padding: 14px;
+
+            margin-bottom: 12px;
+
+            border: 1px solid #ececec;
+
+            transition: .2s;
+
+        }
+
+
+        .waiting-box li:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+
+        }
+
+
+
+        .waiting-box strong {
+
+            color: #ff3131;
+
+        }
+
+
+
+        .spinner.hidden {
+            display: none;
+        }
+
+
+
+        @media(max-width:768px) {
+
+            .waiting-box {
+
+                margin: 30px 16px;
+
+                padding: 28px 22px;
+
+            }
+
+
+            .waiting-box h2 {
+
+                font-size: 24px;
+
+            }
+
+
+            .waiting-box p {
+
+                font-size: 14px;
+
+            }
+
+
+            .spinner {
+
+                width: 52px;
+                height: 52px;
+
+            }
+
+
+        }
+
+
+        @media(max-width:480px) {
+
+            .waiting-box {
+
+                border-radius: 22px;
+
+                padding: 24px 18px;
+
+            }
+
+
+            .waiting-box h2 {
+
+                font-size: 21px;
+
+            }
+
+
+            .waiting-box p {
+
+                font-size: 13px;
+
+            }
+
         }
     </style>
 </head>

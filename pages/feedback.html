@@ -5,6 +5,183 @@
     <meta charset="UTF-8">
     <title>Feedback - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            margin: 0;
+
+            /* on laisse ton background actuel */
+            /* ne rien mettre ici si style.css s'en occupe */
+
+            min-height: 100vh;
+        }
+
+
+        /* Conteneur principal */
+
+        .feedback-container {
+            max-width: 950px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+
+        /* Carte principale */
+
+        .feedback-box {
+
+            background: rgba(255, 255, 255, 0.93);
+
+            backdrop-filter: blur(12px);
+
+            -webkit-backdrop-filter: blur(12px);
+
+            border: 1px solid rgba(255, 255, 255, .4);
+
+            border-radius: 28px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, .18);
+
+        }
+
+
+        /* titre */
+
+        .feedback-box h1 {
+
+            color: #ff3131;
+
+            font-size: 34px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+
+        /* badge */
+
+        #contextBadge {
+
+            background: linear-gradient(135deg,
+                    #ff3131,
+                    #ff5c5c);
+
+            color: white;
+
+            padding: 10px 24px;
+
+            border-radius: 50px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        /* CHO */
+
+        .cho-message {
+
+            background: rgba(255, 255, 255, .75);
+
+            border: 2px solid rgba(255, 49, 49, .15);
+
+            border-radius: 18px;
+
+            padding: 18px;
+
+        }
+
+
+
+        .cho-message strong {
+
+            color: #ff3131;
+
+        }
+
+
+        /* timer */
+
+        .feedback-timer {
+
+            background: rgba(255, 255, 255, .85);
+
+            border: 2px solid rgba(255, 49, 49, .15);
+
+            border-radius: 16px;
+
+            padding: 12px 24px;
+
+            color: #ff3131;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+        }
+
+
+
+        /* chat */
+
+        .chat-box {
+
+            background: rgba(255, 255, 255, .88);
+
+            backdrop-filter: blur(8px);
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(0, 0, 0, .05);
+
+        }
+
+
+
+        .chat-messages {
+
+            background: rgba(250, 250, 250, .8);
+
+        }
+
+
+
+        .chat-send-btn,
+        .feedback-vote-btn {
+
+            background: linear-gradient(135deg,
+                    #ff3131,
+                    #ff5757);
+
+            color: white;
+
+            border: none;
+
+            border-radius: 14px;
+
+            font-weight: 700;
+
+        }
+
+
+        .chat-send-btn:hover,
+        .feedback-vote-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 24px rgba(255, 49, 49, .25);
+
+        }
+    </style>
 </head>
 
 <body>
@@ -59,7 +236,7 @@
                 <button class="btn feedback-vote-btn" id="actionBtn">…</button>
             </div>
 
-        #    <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
+             <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
                 ⏳ En attente de l'hôte…
             </p>
 
@@ -195,7 +372,7 @@
                 addMessage(`🦠 ${parts[1]} était Abdel ! Victimes infectées : ${parts[2]} → licenciement en cours !`, true, false);
                 return;
             }
-            
+
             if (msg.startsWith("player_eliminated_direct:")) {
                 const parts = msg.split(":");
                 addMessage(`❌ ${parts[1]} a été licencié(e) ! (Rôle : ${parts[2]})`, true, false);

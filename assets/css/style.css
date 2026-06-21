@@ -1,8 +1,31 @@
-/* ==========================================
-        CORPO! 2026
-==========================================*/
+/*==================================================
+CORPO! 2026
+PARTIE 1 - BASE GLOBALE
+==================================================*/
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+
+    --primary: #ff3131;
+    --primary-light: #ff5757;
+    --primary-dark: #e62828;
+
+    --text: #2c3e50;
+    --text-light: #666;
+
+    --glass: rgba(255, 255, 255, .90);
+
+    --radius: 28px;
+
+    --shadow:
+        0 15px 45px rgba(0, 0, 0, .10);
+
+    --shadow-red:
+        0 12px 30px rgba(255, 49, 49, .25);
+
+}
+
 
 * {
     margin: 0;
@@ -12,12 +35,12 @@
 }
 
 
+
 body {
 
     min-height: 100vh;
 
 
-    /* garde ton image actuelle */
     background:
 
         linear-gradient(rgba(255, 255, 255, .70),
@@ -25,11 +48,11 @@ body {
 
         url("../images/background.png");
 
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+
 
     overflow-x: hidden;
 
@@ -37,137 +60,236 @@ body {
 
 
 
+a {
 
-/************************************
+    text-decoration: none;
 
+}
+
+
+
+img {
+
+    max-width: 100%;
+
+    display: block;
+
+}
+
+
+
+
+/*=========================
 NAVBAR
-
-************************************/
+=========================*/
 
 .navbar {
 
+
     height: 78px;
+
 
     padding: 0 45px;
 
+
     display: flex;
 
-    justify-content: space-between;
 
     align-items: center;
 
 
-    background: #ff3131;
+    justify-content: space-between;
+
+
+    background:
+
+        linear-gradient(135deg,
+            var(--primary),
+            var(--primary-light));
 
 
     box-shadow:
-        0 5px 25px rgba(255, 49, 49, .30);
+
+        0 5px 25px rgba(255, 49, 49, .25);
+
 
     position: sticky;
 
+
     top: 0;
+
 
     z-index: 999;
 
+
 }
+
+
 
 
 .logo {
 
+
     font-size: 30px;
+
 
     font-weight: 800;
 
-    text-decoration: none;
 
     color: white;
 
+
 }
+
+
 
 
 .nav-links {
 
+
     display: flex;
+
 
     gap: 35px;
 
+
 }
+
+
 
 
 .nav-links a {
 
+
     color: white;
+
 
     font-weight: 600;
 
-    text-decoration: none;
-
-    transition: .25s;
 
     opacity: .9;
 
+
+    transition: .25s;
+
+
 }
+
+
 
 
 .nav-links a:hover {
 
+
     opacity: 1;
+
 
     transform: translateY(-2px);
 
+
 }
+
 
 
 
 .nav-user {
 
+
     font-weight: 700;
 
-    font-size: 17px;
 
     color: white;
 
+
+    font-size: 16px;
+
+
+}
+
+
+
+/*=========================
+FOOTER
+=========================*/
+
+.footer {
+
+
+    padding: 20px;
+
+
+    text-align: center;
+
+
+    color: #666;
+
+
+    font-size: 14px;
+
+
 }
 
 
 
 
-/************************************
-
+/*=========================
 MAIN
-
-************************************/
-
+=========================*/
 
 .main {
 
-    display: flex;
 
-    justify-content: center;
+    min-height:
 
-    align-items: center;
+
+        calc(100vh - 78px);
+
 
     padding: 40px 20px;
 
-    min-height: calc(100vh - 78px);
+
+    display: flex;
+
+
+    justify-content: center;
+
+
+    align-items: center;
+
 
 }
 
 
 
-
-/************************************
-
+/*=========================
 BOX
+=========================*/
 
-************************************/
+.box,
 
 
-.box {
+.game-panel,
+
+
+.feedback-box,
+
+
+.defi-box,
+
+
+.vote-box,
+
+
+.defaite-box,
+
+
+.waiting-box {
+
 
     width: 100%;
 
-    max-width: 650px;
+
+    max-width: 950px;
 
 
     padding: 45px;
@@ -178,6 +300,7 @@ BOX
 
     background:
 
+
         rgba(255, 255, 255, .90);
 
 
@@ -186,18 +309,30 @@ BOX
 
     box-shadow:
 
-        0 15px 45px rgba(0, 0, 0, .10);
+
+        var(--shadow);
 
 
-    animation: fadeUp .6s;
+    animation: fadeUp .5s;
 
 
 }
 
 
 
+.box h1,
 
-.box h1 {
+
+.feedback-box h1,
+
+
+.defi-box h1,
+
+
+.vote-box h1,
+
+
+.defaite-box h1 {
 
 
     font-size: 42px;
@@ -206,27 +341,10 @@ BOX
     font-weight: 800;
 
 
-    line-height: 1.1;
+    color: var(--primary);
 
 
-    color: #ff3131;
-
-
-    margin-bottom: 15px;
-
-
-}
-
-
-
-
-.box p {
-
-
-    font-size: 15px;
-
-
-    color: #666;
+    text-align: center;
 
 
     margin-bottom: 25px;
@@ -237,54 +355,98 @@ BOX
 
 
 
+/*=========================
+CHO MESSAGE
+=========================*/
 
-/************************************
-
-INPUT
-
-************************************/
-
-
-input {
-
-
-    width: 100%;
+.cho-message {
 
 
     padding: 18px;
 
 
-    border-radius: 16px;
+    border-radius: 20px;
 
 
-    border: 2px solid #ededed;
+    background:
 
 
-    outline: none;
+        linear-gradient(135deg,
+            #fff4f4,
+            #fffafa);
 
 
-    font-size: 15px;
+    border:
 
 
-    transition: .3s;
+        1px solid rgba(255, 49, 49, .15);
 
 
-    background: white;
+    margin-bottom: 25px;
 
 
 }
 
 
 
-input:focus {
+
+.cho-message strong {
 
 
-    border-color: #ff3131;
+    color: var(--primary);
+
+
+}
+
+
+
+
+/*=========================
+BADGES
+=========================*/
+
+.badge,
+
+
+.corpo-badge {
+
+
+    display: inline-flex;
+
+
+    align-items: center;
+
+
+    gap: 8px;
+
+
+    padding: 10px 18px;
+
+
+    border-radius: 999px;
+
+
+    font-size: 14px;
+
+
+    font-weight: 700;
+
+
+    background:
+
+
+        linear-gradient(135deg,
+            var(--primary),
+            var(--primary-light));
+
+
+    color: white;
 
 
     box-shadow:
 
-        0 0 18px rgba(255, 49, 49, .20);
+
+        var(--shadow-red);
 
 
 }
@@ -292,43 +454,11 @@ input:focus {
 
 
 
-
-/************************************
-
-CHECKBOX
-
-************************************/
-
-
-input[type=checkbox] {
-
-
-    width: 18px;
-
-
-    height: 18px;
-
-
-    accent-color: #ff3131;
-
-
-}
-
-
-
-
-
-/************************************
-
-BUTTON
-
-************************************/
-
+/*=========================
+BUTTONS
+=========================*/
 
 .btn {
-
-
-    margin-top: 25px;
 
 
     width: 100%;
@@ -357,19 +487,19 @@ BUTTON
 
     background:
 
+
         linear-gradient(135deg,
-
-            #ff3131,
-
-            #ff5959);
+            var(--primary),
+            var(--primary-light));
 
 
     box-shadow:
 
-        0 10px 30px rgba(255, 49, 49, .35);
+
+        var(--shadow-red);
 
 
-    transition: .3s;
+    transition: .25s;
 
 
 }
@@ -380,14 +510,7 @@ BUTTON
 .btn:hover {
 
 
-    transform:
-
-        translateY(-4px);
-
-
-    box-shadow:
-
-        0 18px 40px rgba(255, 49, 49, .40);
+    transform: translateY(-3px);
 
 
 }
@@ -406,59 +529,95 @@ BUTTON
 
 
 
-
-/************************************
-
-PLAYER LIST
-
-************************************/
-
-
-.player-list {
-
-
-    margin-top: 20px;
-
-
-    padding: 15px;
-
-
-    border-radius: 22px;
+.btn-secondary {
 
 
     background:
 
-        rgba(255, 255, 255, .65);
 
-
-    backdrop-filter: blur(8px);
+        linear-gradient(135deg,
+            #2c3e50,
+            #34495e);
 
 
 }
 
 
 
-.player-item {
+
+.btn-success {
 
 
-    padding: 16px;
+    background:
 
 
-    margin-bottom: 12px;
+        linear-gradient(135deg,
+            #27ae60,
+            #39d77f);
 
 
-    border-radius: 14px;
+}
 
 
-    background: white;
 
 
-    font-weight: 600;
+.btn-warning {
 
 
-    box-shadow:
+    background:
 
-        0 3px 12px rgba(0, 0, 0, .05);
+
+        linear-gradient(135deg,
+            #f39c12,
+            #ffbe55);
+
+
+}
+
+
+
+
+.btn-danger {
+
+
+    background:
+
+
+        linear-gradient(135deg,
+            #e74c3c,
+            #ff6767);
+
+
+}
+
+
+
+/*=========================
+INPUTS
+=========================*/
+
+input,
+
+
+textarea {
+
+
+    width: 100%;
+
+
+    padding: 18px;
+
+
+    border-radius: 16px;
+
+
+    border: 2px solid #ececec;
+
+
+    font-size: 15px;
+
+
+    outline: none;
 
 
     transition: .25s;
@@ -468,72 +627,20 @@ PLAYER LIST
 
 
 
-.player-item:hover {
+
+input:focus,
 
 
-    transform:
-
-        translateX(5px);
+textarea:focus {
 
 
-    box-shadow:
-
-        0 6px 18px rgba(0, 0, 0, .08);
-
-
-}
-
-
-
-
-.player-item:last-child {
-
-
-    margin-bottom: 0;
-
-
-}
-
-
-
-
-
-/************************************
-
-WAITING BOX
-
-************************************/
-
-
-.waiting-box {
-
-
-    max-width: 600px;
-
-
-    padding: 45px;
-
-
-    margin: auto;
-
-
-    border-radius: 32px;
-
-
-    background:
-
-        rgba(255, 255, 255, .90);
-
-
-    backdrop-filter: blur(12px);
+    border-color: var(--primary);
 
 
     box-shadow:
 
-        0 15px 40px rgba(0, 0, 0, .08);
 
-
-    text-align: center;
+        0 0 20px rgba(255, 49, 49, .15);
 
 
 }
@@ -541,7 +648,14 @@ WAITING BOX
 
 
 
-.waiting-box h2 {
+/*=========================
+TIMER
+=========================*/
+
+.timer,
+
+
+.corpo-timer {
 
 
     font-size: 30px;
@@ -550,27 +664,16 @@ WAITING BOX
     font-weight: 800;
 
 
-    color: #ff3131;
+    text-align: center;
 
 
-    margin-bottom: 15px;
+    color: var(--primary);
 
 
-}
+    margin-top: 15px;
 
 
-
-
-.waiting-box p {
-
-
-    font-size: 15px;
-
-
-    color: #666;
-
-
-    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
 
 
 }
@@ -578,104 +681,9 @@ WAITING BOX
 
 
 
-/************************************
-
-BADGE
-
-************************************/
-
-
-.badge {
-
-
-    display: inline-block;
-
-
-    padding: 8px 15px;
-
-
-    border-radius: 999px;
-
-
-    background: #ffe2e2;
-
-
-    color: #ff3131;
-
-
-    font-size: 13px;
-
-
-    font-weight: 700;
-
-
-}
-
-
-
-
-/************************************
-
-SPINNER
-
-************************************/
-
-
-.spinner {
-
-
-    width: 68px;
-
-
-    height: 68px;
-
-
-    margin: auto;
-
-
-    margin-bottom: 25px;
-
-
-    border-radius: 50%;
-
-
-    border: 6px solid rgba(255, 49, 49, .15);
-
-
-    border-top: 6px solid #ff3131;
-
-
-    animation: spin 1s linear infinite;
-
-
-}
-
-
-
-
-@keyframes spin {
-
-
-    to {
-
-
-        transform: rotate(360deg);
-
-
-    }
-
-
-}
-
-
-
-
-/************************************
-
+/*=========================
 ANIMATIONS
-
-************************************/
-
+=========================*/
 
 @keyframes fadeUp {
 
@@ -686,13 +694,10 @@ ANIMATIONS
         opacity: 0;
 
 
-        transform:
-
-            translateY(35px);
+        transform: translateY(25px);
 
 
     }
-
 
 
     to {
@@ -701,9 +706,33 @@ ANIMATIONS
         opacity: 1;
 
 
-        transform:
+        transform: translateY(0);
 
-            translateY(0);
+
+    }
+
+
+}
+
+
+
+@keyframes pulse {
+
+
+    0%,
+    100% {
+
+
+        transform: scale(1);
+
+
+    }
+
+
+    50% {
+
+
+        transform: scale(1.05);
 
 
     }
@@ -714,32 +743,11 @@ ANIMATIONS
 
 
 
-/************************************
-
+/*=========================
 RESPONSIVE
+=========================*/
 
-************************************/
-
-
-@media(max-width:700px) {
-
-
-    .navbar {
-
-
-        padding: 0 15px;
-
-
-    }
-
-
-    .logo {
-
-
-        font-size: 23px;
-
-
-    }
+@media(max-width:768px) {
 
 
     .nav-links {
@@ -751,31 +759,772 @@ RESPONSIVE
     }
 
 
-    .box {
+
+    .logo {
+
+
+        font-size: 24px;
+
+
+    }
+
+
+
+    .navbar {
+
+
+        padding: 0 15px;
+
+
+    }
+
+
+
+    .box,
+
+
+    .feedback-box,
+
+
+    .defi-box,
+
+
+    .vote-box,
+
+
+    .defaite-box {
 
 
         padding: 30px;
 
 
     }
+
 
 
     .box h1 {
 
 
-        font-size: 34px;
+        font-size: 32px;
 
 
     }
 
 
-    .waiting-box {
+
+}
+
+/*=========================================
+AUTH + LOBBY PAGES
+=========================================*/
+
+/* ===== Containers spécifiques ===== */
+
+.auth-container,
+.lobby-container,
+.create-container,
+.join-container {
+
+    width: 100%;
+    max-width: 700px;
+
+    background: rgba(255, 255, 255, .90);
+    backdrop-filter: blur(12px);
+
+    border-radius: 32px;
+    padding: 45px;
+
+    box-shadow: 0 15px 45px rgba(0, 0, 0, .10);
+
+    animation: fadeUp .6s;
+}
+
+/* ===== TITRES ===== */
+
+.auth-container h1,
+.lobby-container h1,
+.create-container h1,
+.join-container h1 {
+
+    font-size: 40px;
+    font-weight: 800;
+    color: #ff3131;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ===== TEXTES ===== */
+
+.auth-container p,
+.lobby-container p {
+
+    font-size: 15px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ===== INPUTS SPECIAL ===== */
+
+.auth-container input,
+.create-container input,
+.join-container input {
+
+    width: 100%;
+    padding: 16px 18px;
+
+    border-radius: 16px;
+    border: 2px solid #eee;
+
+    font-size: 15px;
+
+    transition: .25s;
+}
+
+.auth-container input:focus,
+.create-container input:focus,
+.join-container input:focus {
+
+    border-color: #ff3131;
+    box-shadow: 0 0 18px rgba(255, 49, 49, .20);
+}
+
+/* ===== LOBBY LIST PLAYERS ===== */
+
+.lobby-players {
+
+    margin-top: 25px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lobby-player {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    background: white;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .05);
+
+    transition: .25s;
+}
+
+.lobby-player:hover {
+    transform: translateX(5px);
+}
+
+.lobby-player img {
+
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid #ff3131;
+}
+
+/* ===== ROLE DISCOVERY ===== */
+
+.role-card {
+
+    text-align: center;
+
+    padding: 40px;
+
+    border-radius: 28px;
+
+    background: linear-gradient(135deg, #fff, #ffeaea);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .08);
+
+    animation: fadeUp .6s;
+}
+
+.role-title {
+
+    font-size: 34px;
+    font-weight: 800;
+
+    color: #ff3131;
+
+    margin-bottom: 15px;
+}
+
+.role-description {
+
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* ===== BADGES ===== */
+
+.role-badge {
+
+    display: inline-block;
+    padding: 10px 18px;
+
+    border-radius: 999px;
+
+    font-weight: 700;
+    font-size: 13px;
+
+    background: #ffe2e2;
+    color: #ff3131;
+
+    margin-top: 15px;
+}
+
+/* ===== BUTTON START LOBBY ===== */
+
+.start-btn {
+
+    background: linear-gradient(135deg, #ff3131, #ff5b5b);
+    color: white;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    font-weight: 700;
+
+    border: none;
+
+    width: 100%;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    margin-top: 20px;
+}
+
+.start-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(255, 49, 49, .35);
+}
+
+/* =========================================
+   PARTIE 3 — GAME PHASES (MEETING / FEEDBACK / DEFI / VOTE)
+   ========================================= */
 
 
-        padding: 30px;
+/* ===== CONTAINERS COMMUNS ===== */
+
+.meeting-page,
+.feedback-container,
+.defi-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    min-height: calc(100vh - 78px);
+}
+
+.meeting-box,
+.feedback-box,
+.defi-box {
+    width: 100%;
+    max-width: 950px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    animation: fadeUp .5s ease;
+}
 
 
+/* ===== TITRES ===== */
+
+.meeting-box h1,
+.feedback-box h1,
+.defi-box h1 {
+    font-size: 40px;
+    font-weight: 800;
+    color: #ff3131;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* ===== BADGE CONTEXTE ===== */
+
+.context-badge,
+.defi-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    background: linear-gradient(135deg, #ff3131, #ff6b6b);
+    color: white;
+    box-shadow: 0 8px 20px rgba(255, 49, 49, 0.25);
+    margin-bottom: 15px;
+}
+
+
+/* ===== CHO MESSAGE ===== */
+
+.cho-message {
+    background: linear-gradient(135deg, #fff3f3, #ffeaea);
+    border: 2px solid rgba(255, 49, 49, 0.25);
+    padding: 16px 18px;
+    border-radius: 16px;
+    font-size: 15px;
+    color: #b10000;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+/* ===== TIMER ===== */
+
+.feedback-timer,
+.timer-defi {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: #ff3131;
+    margin: 15px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-warning {
+    color: #ff6b6b;
+    animation: pulse 1s infinite;
+}
+
+
+/* ===== CHAT BOX ===== */
+
+.chat-box {
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.chat-messages {
+    height: 260px;
+    overflow-y: auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* messages */
+.chat-msg {
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    max-width: 75%;
+    animation: fadeUp .2s ease;
+}
+
+.chat-msg.me {
+    margin-left: auto;
+    background: linear-gradient(135deg, #ff3131, #ff5b5b);
+    color: white;
+}
+
+.chat-msg.other {
+    background: #f1f1f1;
+    color: #333;
+}
+
+.chat-msg.system {
+    background: #fff3f3;
+    color: #ff3131;
+    border: 1px solid rgba(255, 49, 49, 0.2);
+    max-width: 100%;
+    text-align: center;
+}
+
+
+/* ===== INPUT CHAT ===== */
+
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid #eee;
+    outline: none;
+    transition: .2s;
+}
+
+.chat-input-area input:focus {
+    border-color: #ff3131;
+    box-shadow: 0 0 12px rgba(255, 49, 49, 0.2);
+}
+
+.chat-send-btn {
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, #ff3131, #ff5b5b);
+    box-shadow: 0 10px 25px rgba(255, 49, 49, 0.25);
+    transition: .2s;
+}
+
+.chat-send-btn:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ===== QCM ===== */
+
+.qcm-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.qcm-option {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 2px solid #ff3131;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.qcm-option:hover {
+    background: #fff0f0;
+}
+
+.qcm-option.selected {
+    background: linear-gradient(135deg, #ff3131, #ff6b6b);
+    color: white;
+}
+
+
+/* ===== VOTE ===== */
+
+.vote-btns {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-reste,
+.btn-elimine {
+    padding: 16px 28px;
+    border-radius: 18px;
+    border: none;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    color: white;
+    transition: .2s;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.btn-reste {
+    background: linear-gradient(135deg, #2ecc71, #58d68d);
+}
+
+.btn-elimine {
+    background: linear-gradient(135deg, #ff3131, #ff6b6b);
+}
+
+.btn-reste:hover,
+.btn-elimine:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ===== WAITING ===== */
+
+.waiting-msg {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+
+/* ===== INFO BOX ===== */
+
+.info-reveal {
+    background: #fff3f3;
+    border: 2px solid rgba(255, 49, 49, 0.3);
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    color: #b10000;
+    text-align: center;
+}
+
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
     }
 
+    50% {
+        transform: scale(1.05);
+    }
 
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* =========================================
+   PARTIE 4 — POLISH FINAL / OVERRIDES
+   ========================================= */
+
+/* ===== GLOBAL IMPROVEMENTS ===== */
+
+body {
+    color: #2c3e50;
+}
+
+/* smooth scroll partout */
+html {
+    scroll-behavior: smooth;
+}
+
+/* selection text */
+::selection {
+    background: #ff3131;
+    color: white;
+}
+
+/* =========================================
+   BACKGROUND VARIANTS (MEETING / FEEDBACK)
+   ========================================= */
+
+/* Meeting dynamique (dégradé corporate moderne) */
+.meeting-page {
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255, 49, 49, 0.12), transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(255, 120, 120, 0.12), transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(44, 62, 80, 0.08), transparent 50%);
+}
+
+/* Feedback ambiance débat */
+.feedback-container {
+    background:
+        linear-gradient(135deg, rgba(255, 49, 49, 0.05), rgba(255, 255, 255, 0.6)),
+        radial-gradient(circle at top, rgba(255, 49, 49, 0.10), transparent 50%);
+}
+
+/* Défi ambiance urgence */
+.defi-container {
+    background:
+        radial-gradient(circle at top, rgba(255, 49, 49, 0.18), transparent 45%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.7));
+}
+
+/* =========================================
+   NAVBAR IMPROVEMENT (glass effect modern)
+   ========================================= */
+
+.navbar {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* =========================================
+   BOX HOVER LIFT (ultra moderne UI feel)
+   ========================================= */
+
+.box:hover,
+.feedback-box:hover,
+.defi-box:hover,
+.vote-box:hover,
+.defaite-box:hover {
+    transform: translateY(-3px);
+    transition: 0.3s ease;
+}
+
+/* =========================================
+   CHAT SCROLLBAR (clean UI)
+   ========================================= */
+
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 49, 49, 0.4);
+    border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* =========================================
+   BUTTON ENHANCEMENT (ALL BUTTONS)
+   ========================================= */
+
+.btn,
+.chat-send-btn,
+.start-btn,
+.btn-reste,
+.btn-elimine {
+    position: relative;
+    overflow: hidden;
+}
+
+/* effet shine */
+.btn::after,
+.chat-send-btn::after,
+.start-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: 0.5s;
+}
+
+.btn:hover::after,
+.chat-send-btn:hover::after,
+.start-btn:hover::after {
+    left: 100%;
+}
+
+/* =========================================
+   DEFIS QCM FIX + MODERN LOOK
+   ========================================= */
+
+.qcm-option {
+    transition: 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.qcm-option:hover {
+    transform: translateY(-2px);
+}
+
+.qcm-option.selected {
+    box-shadow: 0 10px 25px rgba(255, 49, 49, 0.25);
+}
+
+/* =========================================
+   TIMER PULSE IMPORTANT STATE
+   ========================================= */
+
+.timer-defi,
+.feedback-timer {
+    letter-spacing: 1px;
+}
+
+.timer-warning {
+    color: #ff3131;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 49, 49, 0.3);
+}
+
+/* =========================================
+   VOTE BUTTON ENHANCED FEEL
+   ========================================= */
+
+.btn-reste,
+.btn-elimine {
+    min-width: 180px;
+}
+
+.btn-reste:hover {
+    box-shadow: 0 15px 35px rgba(46, 204, 113, 0.3);
+}
+
+.btn-elimine:hover {
+    box-shadow: 0 15px 35px rgba(255, 49, 49, 0.35);
+}
+
+/* =========================================
+   FEEDBACK BADGE IMPROVED
+   ========================================= */
+
+.context-badge {
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* =========================================
+   CHAT MESSAGE IMPROVEMENT
+   ========================================= */
+
+.chat-msg {
+    line-height: 1.4;
+}
+
+/* message system glow */
+.chat-msg.system {
+    box-shadow: 0 0 15px rgba(255, 49, 49, 0.08);
+}
+
+/* =========================================
+   LOADING / WAIT STATES
+   ========================================= */
+
+.waiting-msg {
+    animation: pulse 2s infinite;
+}
+
+/* =========================================
+   FOOTER MODERN FIX
+   ========================================= */
+
+.footer {
+    margin-top: 40px;
+    opacity: 0.7;
+}
+
+/* =========================================
+   SMALL DEVICE FIX FINAL
+   ========================================= */
+
+@media (max-width: 500px) {
+
+    .btn-reste,
+    .btn-elimine {
+        width: 100%;
+    }
+
+    .chat-box {
+        max-width: 100%;
+    }
+
+    .box h1,
+    .feedback-box h1,
+    .defi-box h1 {
+        font-size: 28px;
+    }
 }
