@@ -16,6 +16,945 @@
         }
 
         /* ── LAYOUT ── */
+        /*═══════════════════════════════
+
+MEETING PAGE
+
+═══════════════════════════════*/
+
+        .meeting-page {
+
+            display: flex;
+
+            gap: 25px;
+
+            max-width: 1400px;
+
+            margin: 25px auto;
+
+            padding: 0 25px;
+
+            align-items: flex-start;
+
+        }
+
+
+
+        /*═══════════════════════════════
+
+TABLE
+
+═══════════════════════════════*/
+
+
+        .table-col {
+
+            flex: 1;
+
+        }
+
+
+
+        .box-table {
+
+            padding: 30px;
+
+            border-radius: 32px;
+
+
+            background:
+
+                rgba(255, 255, 255, .90);
+
+
+            backdrop-filter: blur(12px);
+
+
+            box-shadow:
+
+                0 15px 45px rgba(0, 0, 0, .10);
+
+
+            animation: fadeUp .6s;
+
+        }
+
+
+        .box-table h2 {
+
+
+            color: #ff3131;
+
+
+            font-size: 22px;
+
+
+            font-weight: 800;
+
+
+            text-align: center;
+
+
+            margin-bottom: 25px;
+
+
+        }
+
+
+
+
+        /*═══════════════════════════════
+
+TABLE OVALE
+
+═══════════════════════════════*/
+
+
+        .oval-wrap {
+
+
+            position: relative;
+
+
+            width: 100%;
+
+
+            padding-bottom: 62%;
+
+
+        }
+
+
+
+        .oval-surface {
+
+
+            position: absolute;
+
+
+            inset: 12%;
+
+
+
+            border-radius: 50%;
+
+
+
+            background:
+
+
+                linear-gradient(145deg,
+
+                    rgba(255, 255, 255, .95),
+
+                    rgba(255, 245, 245, .95));
+
+
+
+            border: 4px solid #ff3131;
+
+
+
+            box-shadow:
+
+
+                0 0 0 10px rgba(255, 49, 49, .08),
+
+                0 15px 35px rgba(255, 49, 49, .18);
+
+
+
+            display: flex;
+
+
+            flex-direction: column;
+
+
+            align-items: center;
+
+
+            justify-content: center;
+
+
+        }
+
+
+
+        #tableTurnRole {
+
+
+            font-size: 22px;
+
+
+            font-weight: 800;
+
+
+            color: #ff3131;
+
+
+        }
+
+
+
+        #tableTurnLabel {
+
+
+            color: #999;
+
+
+            font-size: 12px;
+
+
+        }
+
+
+
+        #timerCenter {
+
+
+            font-size: 30px;
+
+
+            font-weight: 800;
+
+
+            color: #ff3131;
+
+
+            font-family: Poppins;
+
+
+            margin-top: 8px;
+
+
+        }
+
+
+
+
+        /*═══════════════════════════════
+
+JOUEURS
+
+═══════════════════════════════*/
+
+
+        .player-seat {
+
+
+            position: absolute;
+
+
+            display: flex;
+
+
+            flex-direction: column;
+
+
+            align-items: center;
+
+
+            gap: 4px;
+
+
+            transform: translate(-50%, -50%);
+
+
+        }
+
+
+
+        .seat-avatar {
+
+
+            width: 58px;
+
+
+            height: 58px;
+
+
+            border-radius: 50%;
+
+
+            overflow: hidden;
+
+
+
+            background: white;
+
+
+
+            border: 3px solid rgba(255, 49, 49, .15);
+
+
+
+            transition: .3s;
+
+
+        }
+
+
+
+        .seat-avatar img {
+
+
+            width: 100%;
+
+
+            height: 100%;
+
+
+            object-fit: cover;
+
+
+        }
+
+
+
+        .seat-avatar:hover {
+
+
+            transform: scale(1.08);
+
+
+        }
+
+
+
+        .seat-avatar.me {
+
+
+            border-color: #ff3131;
+
+
+
+            box-shadow:
+
+
+                0 0 0 5px rgba(255, 49, 49, .15);
+
+
+        }
+
+
+
+        .seat-avatar.active {
+
+
+            border-color: #ff3131;
+
+
+
+            animation: pulseSeat 1s infinite;
+
+
+
+        }
+
+
+
+        @keyframes pulseSeat {
+
+
+            0% {
+
+
+                box-shadow:
+
+                    0 0 0 0 rgba(255, 49, 49, .5);
+
+
+            }
+
+
+            70% {
+
+
+                box-shadow:
+
+                    0 0 0 15px rgba(255, 49, 49, 0);
+
+
+            }
+
+
+
+            100% {
+
+
+                box-shadow:
+
+                    0 0 0 0 rgba(255, 49, 49, 0);
+
+
+            }
+
+
+        }
+
+
+
+        .seat-avatar.neighbor {
+
+
+            border-color: #ffb400;
+
+
+
+            box-shadow:
+
+                0 0 20px rgba(255, 180, 0, .5);
+
+
+        }
+
+
+
+        .seat-name {
+
+
+            font-size: 11px;
+
+
+            font-weight: 700;
+
+
+            color: #555;
+
+
+            max-width: 65px;
+
+
+            text-align: center;
+
+
+        }
+
+
+
+        .seat-name.me {
+
+
+            color: #ff3131;
+
+
+        }
+
+
+
+
+        /*═══════════════════════════════
+
+PANNEAU DROIT
+
+═══════════════════════════════*/
+
+
+        .action-col {
+
+
+            width: 300px;
+
+
+            display: flex;
+
+
+            flex-direction: column;
+
+
+            gap: 15px;
+
+
+        }
+
+
+
+        .box {
+
+
+            padding: 22px;
+
+
+
+            border-radius: 28px;
+
+
+
+            background:
+
+
+                rgba(255, 255, 255, .90);
+
+
+
+            backdrop-filter: blur(12px);
+
+
+
+            box-shadow:
+
+
+                0 10px 35px rgba(0, 0, 0, .08);
+
+
+        }
+
+
+
+        .box h3 {
+
+
+            font-size: 13px;
+
+
+            font-weight: 800;
+
+
+            letter-spacing: 2px;
+
+
+            color: #ff3131;
+
+
+            margin-bottom: 15px;
+
+
+        }
+
+
+
+        /*═══════════════════════════════
+
+ROLE BADGE
+
+═══════════════════════════════*/
+
+
+        #myRoleBadge {
+
+
+            padding: 16px;
+
+
+
+            border-radius: 22px;
+
+
+
+            background:
+
+
+                linear-gradient(135deg,
+
+                    #ff3131,
+
+                    #ff5b5b);
+
+
+
+            box-shadow:
+
+
+                0 10px 30px rgba(255, 49, 49, .30);
+
+
+
+            font-size: 14px;
+
+
+
+            font-weight: 700;
+
+
+
+            text-align: center;
+
+
+
+            color: white;
+
+
+        }
+
+
+
+        /*═══════════════════════════════
+
+INFO
+
+═══════════════════════════════*/
+
+
+        .info-reveal {
+
+
+            padding: 15px;
+
+
+            border-radius: 18px;
+
+
+
+            background:
+
+
+                #fff5d6;
+
+
+
+            border: 2px solid #ffd86b;
+
+
+
+            color: #8a6800;
+
+
+
+            font-size: 13px;
+
+
+        }
+
+
+
+
+        /*═══════════════════════════════
+
+PLAYER GRID
+
+═══════════════════════════════*/
+
+
+        #playerGrid {
+
+
+            display: flex;
+
+
+            flex-wrap: wrap;
+
+
+            gap: 10px;
+
+
+        }
+
+
+
+        .player-select-card {
+
+
+            width: 72px;
+
+
+
+            padding: 10px;
+
+
+
+            border-radius: 18px;
+
+
+
+            background:
+
+
+                rgba(255, 255, 255, .80);
+
+
+
+            border: 2px solid transparent;
+
+
+
+            transition: .25s;
+
+
+
+            cursor: pointer;
+
+
+        }
+
+
+
+        .player-select-card:hover {
+
+
+            transform: translateY(-3px);
+
+
+
+            background: #fff1f1;
+
+
+
+            border-color: #ff3131;
+
+
+        }
+
+
+
+        .player-select-card.selected {
+
+
+            background: #ffe6e6;
+
+
+
+            border-color: #ff3131;
+
+
+
+            box-shadow:
+
+
+                0 6px 18px rgba(255, 49, 49, .20);
+
+
+        }
+
+
+
+        .player-select-card img {
+
+
+            width: 40px;
+
+
+            height: 40px;
+
+
+            border-radius: 50%;
+
+
+        }
+
+
+
+        .player-select-card span {
+
+
+            font-size: 10px;
+
+
+            font-weight: 700;
+
+
+        }
+
+
+
+
+        /*═══════════════════════════════
+
+BOUTONS
+
+═══════════════════════════════*/
+
+
+        #actionButtons {
+
+
+            display: flex;
+
+
+            flex-direction: column;
+
+
+            gap: 12px;
+
+
+        }
+
+
+
+        #actionButtons .btn {
+
+
+            padding: 15px;
+
+
+
+            border: none;
+
+
+
+            border-radius: 18px;
+
+
+
+            font-size: 14px;
+
+
+
+            font-weight: 700;
+
+
+
+            cursor: pointer;
+
+
+
+            transition: .3s;
+
+
+
+            color: white;
+
+
+        }
+
+
+
+        .btn-main {
+
+
+            background:
+
+
+                linear-gradient(135deg,
+
+                    #ff3131,
+
+                    #ff5a5a);
+
+
+
+            box-shadow:
+
+
+                0 10px 30px rgba(255, 49, 49, .35);
+
+
+        }
+
+
+
+        .btn-ok {
+
+
+            background:
+
+
+                linear-gradient(135deg,
+
+                    #2ecc71,
+
+                    #48d987);
+
+
+
+            box-shadow:
+
+
+                0 10px 30px rgba(46, 204, 113, .25);
+
+
+        }
+
+
+
+        .btn-skip {
+
+
+            background:
+
+
+                linear-gradient(135deg,
+
+                    #cfcfcf,
+
+                    #b9b9b9);
+
+
+        }
+
+
+
+        #actionButtons .btn:hover {
+
+
+            transform: translateY(-4px);
+
+
+        }
+
+
+
+        #actionButtons .btn:active {
+
+
+            transform: scale(.98);
+
+
+        }
+
+
+
+        /*═══════════════════════════════
+
+RESPONSIVE
+
+═══════════════════════════════*/
+
+
+        @media(max-width:700px) {
+
+            .meeting-page {
+
+
+                flex-direction: column;
+
+
+                padding: 0 12px;
+
+
+            }
+
+
+            .action-col {
+
+
+                width: 100%;
+
+
+            }
+
+
+            .oval-wrap {
+
+
+                padding-bottom: 85%;
+
+
+            }
+
+
+            .seat-avatar {
+
+
+                width: 40px;
+
+
+                height: 40px;
+
+
+            }
+
+
+            #timerCenter {
+
+
+                font-size: 22px;
+
+
+            }
+
+
+        }
+
         .meeting-page {
             display: flex;
             gap: 20px;

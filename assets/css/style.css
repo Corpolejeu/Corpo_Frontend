@@ -1,1076 +1,781 @@
-/* ============================================================
-   GLOBAL
-============================================================ */
+/* ==========================================
+        CORPO! 2026
+==========================================*/
 
-html,
-body {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+* {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
 }
+
 
 body {
-    background-image: url("../images/background.png");
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
+
     min-height: 100vh;
+
+
+    /* garde ton image actuelle */
+    background:
+
+        linear-gradient(rgba(255, 255, 255, .70),
+            rgba(255, 255, 255, .70)),
+
+        url("../images/background.png");
+
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    overflow-x: hidden;
+
 }
 
-/* ============================================================
-   NAVBAR
-============================================================ */
+
+
+
+/************************************
+
+NAVBAR
+
+************************************/
 
 .navbar {
-    width: 100%;
-    background-color: #c95d5d;
-    padding: 15px 20px;
+
+    height: 78px;
+
+    padding: 0 45px;
+
     display: flex;
-    justify-content: flex-start;
+
+    justify-content: space-between;
+
     align-items: center;
-    gap: 40px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+
+    background: #ff3131;
+
+
+    box-shadow:
+        0 5px 25px rgba(255, 49, 49, .30);
+
     position: sticky;
+
     top: 0;
-    z-index: 1000;
+
+    z-index: 999;
+
 }
 
-.navbar .logo {
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
+
+.logo {
+
+    font-size: 30px;
+
+    font-weight: 800;
+
     text-decoration: none;
-}
-.navbar .nav-links-right {
-    margin-left: 60%;
+
+    color: white;
+
 }
 
-.navbar .nav-links {
+
+.nav-links {
+
     display: flex;
-    gap: 20px;
+
+    gap: 35px;
+
 }
 
-.navbar .nav-links a {
+
+.nav-links a {
+
     color: white;
+
+    font-weight: 600;
+
     text-decoration: none;
-    font-size: 16px;
-    transition: 0.2s;
+
+    transition: .25s;
+
+    opacity: .9;
+
 }
 
-.navbar .nav-links a:hover {
-    opacity: 0.7;
+
+.nav-links a:hover {
+
+    opacity: 1;
+
+    transform: translateY(-2px);
+
 }
 
-/* ============================================================
-   FOOTER
-============================================================ */
 
-.footer {
-    width: 100%;
-    background-color: #c95d5d;
+
+.nav-user {
+
+    font-weight: 700;
+
+    font-size: 17px;
+
     color: white;
-    text-align: center;
-    padding: 15px 0;
-    position: sticky;
-    bottom: 0;
-    z-index: 1000;
+
 }
 
-/* ============================================================
-   MAIN CONTENT BOXES
-============================================================ */
+
+
+
+/************************************
+
+MAIN
+
+************************************/
+
 
 .main {
-    flex: 1;
+
     display: flex;
-    justify-content: flex-start;
+
+    justify-content: center;
+
     align-items: center;
-    padding: 80px 40px 120px;
+
+    padding: 40px 20px;
+
+    min-height: calc(100vh - 78px);
+
 }
 
-.box,
-.lobby-box,
-.role-box,
-.meeting-box,
-.defi-box,
-.feedback-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
+
+
+
+/************************************
+
+BOX
+
+************************************/
+
+
+.box {
+
     width: 100%;
+
+    max-width: 650px;
+
+
+    padding: 45px;
+
+
+    border-radius: 32px;
+
+
+    background:
+
+        rgba(255, 255, 255, .90);
+
+
+    backdrop-filter: blur(10px);
+
+
+    box-shadow:
+
+        0 15px 45px rgba(0, 0, 0, .10);
+
+
+    animation: fadeUp .6s;
+
+
 }
 
-h1 {
-    color: #c95d5d;
-    font-size: 48px;
-    font-weight: bold;
-    margin-top: 0;
+
+
+
+.box h1 {
+
+
+    font-size: 42px;
+
+
+    font-weight: 800;
+
+
+    line-height: 1.1;
+
+
+    color: #ff3131;
+
+
+    margin-bottom: 15px;
+
+
 }
+
+
+
+
+.box p {
+
+
+    font-size: 15px;
+
+
+    color: #666;
+
+
+    margin-bottom: 25px;
+
+
+}
+
+
+
+
+
+/************************************
+
+INPUT
+
+************************************/
+
 
 input {
+
+
     width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+
+
+    padding: 18px;
+
+
+    border-radius: 16px;
+
+
+    border: 2px solid #ededed;
+
+
+    outline: none;
+
+
+    font-size: 15px;
+
+
+    transition: .3s;
+
+
+    background: white;
+
+
 }
+
+
+
+input:focus {
+
+
+    border-color: #ff3131;
+
+
+    box-shadow:
+
+        0 0 18px rgba(255, 49, 49, .20);
+
+
+}
+
+
+
+
+
+/************************************
+
+CHECKBOX
+
+************************************/
+
+
+input[type=checkbox] {
+
+
+    width: 18px;
+
+
+    height: 18px;
+
+
+    accent-color: #ff3131;
+
+
+}
+
+
+
+
+
+/************************************
+
+BUTTON
+
+************************************/
+
 
 .btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    background-color: #c95d5d;
+
+
+    margin-top: 25px;
+
+
+    width: 100%;
+
+
+    padding: 18px;
+
+
+    border: none;
+
+
+    border-radius: 18px;
+
+
+    cursor: pointer;
+
+
+    font-size: 16px;
+
+
+    font-weight: 700;
+
+
     color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: 0.2s;
+
+
+    background:
+
+        linear-gradient(135deg,
+
+            #ff3131,
+
+            #ff5959);
+
+
+    box-shadow:
+
+        0 10px 30px rgba(255, 49, 49, .35);
+
+
+    transition: .3s;
+
+
 }
+
+
+
 
 .btn:hover {
-    opacity: 0.8;
+
+
+    transform:
+
+        translateY(-4px);
+
+
+    box-shadow:
+
+        0 18px 40px rgba(255, 49, 49, .40);
+
+
 }
 
-/* ============================================================
-   LOBBY
-============================================================ */
 
-.lobby-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+
+
+.btn:active {
+
+
+    transform: scale(.98);
+
+
 }
 
-.lobby-section {
-    margin-top: 25px;
-    text-align: left;
-}
 
-.lobby-section h2 {
-    color: #c95d5d;
-    margin-bottom: 10px;
-}
 
-.lobby-code {
-    background: #c95d5d;
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 20px;
-    text-align: center;
-    font-weight: bold;
-}
+
+
+/************************************
+
+PLAYER LIST
+
+************************************/
+
 
 .player-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
 
-.player-list li {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 8px;
-}
 
-.chat-disabled {
-    background: rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    color: #555;
-    font-style: italic;
-}
-
-.lobby-start-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-    font-size: 18px;
-}
-
-/* ============================================================
-   DÉCOUVERTE DU RÔLE
-============================================================ */
-
-.role-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.role-card {
-    text-align: center;
     margin-top: 20px;
-}
 
-.role-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
 
-.role-name {
-    color: #c95d5d;
-    font-size: 28px;
-    margin: 5px 0;
-}
-
-.role-team {
-    font-size: 18px;
-    color: #333;
-}
-
-.role-description {
-    margin-top: 20px;
-    font-size: 16px;
-    line-height: 1.5;
-}
-
-.role-timer {
-    margin-top: 25px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #c95d5d;
-    text-align: center;
-}
-
-.role-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-    font-size: 18px;
-}
-
-/* ============================================================
-   MEETING 1
-============================================================ */
-
-.meeting-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.cho-message {
-    background: rgba(139, 0, 0, 0.1);
     padding: 15px;
-    border-left: 4px solid #c95d5d;
-    border-radius: 6px;
-    margin-top: 20px;
-}
-
-.meeting-center {
-    margin-top: 30px;
-    padding: 25px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    text-align: center;
-}
-
-.meeting-info {
-    font-size: 18px;
-    color: #333;
-}
-
-.meeting-timer {
-    margin-top: 25px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #c95d5d;
-    text-align: center;
-}
-
-.meeting-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-}
-
-.side-btn {
-    width: 48%;
-    text-align: center;
-}
-
-.meeting-chat {
-    margin-top: 30px;
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-/* ============================================================
-   DÉFI CORPO
-============================================================ */
-
-.defi-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.defi-timer {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c95d5d;
-    text-align: center;
-}
-
-.defi-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    text-align: center;
-}
-
-.defi-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.defi-text {
-    font-size: 18px;
-    color: #333;
-}
-
-.defi-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-    font-size: 18px;
-}
-
-.defi-chat {
-    margin-top: 25px;
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-/* ============================================================
-   FEEDBACK / DÉBAT
-============================================================ */
-
-.feedback-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.feedback-timer {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c95d5d;
-    text-align: center;
-}
-
-.feedback-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    text-align: center;
-}
-
-.feedback-info {
-    font-size: 18px;
-    color: #333;
-}
-
-/* CHAT */
-.chat-box {
-    margin-top: 30px;
-}
-
-.chat-messages {
-    background: rgba(0, 0, 0, 0.05);
-    height: 180px;
-    border-radius: 8px;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-.chat-placeholder {
-    color: #666;
-    font-style: italic;
-}
-
-.chat-input-area {
-    display: flex;
-    margin-top: 10px;
-    gap: 10px;
-}
-
-.chat-input-area input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-.chat-send-btn {
-    padding: 12px 20px;
-    background-color: #c95d5d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.chat-send-btn:hover {
-    opacity: 0.8;
-}
-
-.chat-reactions {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 24px;
-}
-
-.chat-reactions span {
-    margin: 0 8px;
-    cursor: pointer;
-}
-
-/* ====== PAGE VOTE ====== */
-
-.vote-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.vote-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 550px;
-    width: 100%;
-}
-
-.vote-timer {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c95d5d;
-    text-align: center;
-}
-
-.vote-list {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.vote-player {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 15px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.vote-img {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-}
-
-.vote-btn {
-    margin-left: auto;
-    background-color: #c95d5d;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-.vote-btn:hover {
-    opacity: 0.8;
-}
-
-.vote-chat {
-    margin-top: 25px;
-    text-align: center;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-/* ====== RÉSULTAT DU VOTE ====== */
-
-.resultat-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.resultat-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
-
-.resultat-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
-
-.resultat-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
-
-.resultat-text {
-    font-size: 20px;
-    color: #333;
-}
-
-.resultat-timer {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c95d5d;
-}
-
-.resultat-btn {
-    width: 100%;
-    margin-top: 25px;
-    font-size: 18px;
-}
-
-.resultat-chat {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-/* ====== DÉFI CORPO (POST-VOTE) ====== */
-
-.defi2-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.defi2-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
-
-.defi2-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
-
-.defi2-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
 
-.defi2-text {
-    font-size: 18px;
-    color: #333;
-}
-
-.defi2-card {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(139, 0, 0, 0.1);
-    border-left: 4px solid #c95d5d;
-    border-radius: 8px;
-    font-size: 18px;
-}
-
-.defi2-timer {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #c95d5d;
-}
-
-.defi2-btn {
-    width: 100%;
-    margin-top: 25px;
-    font-size: 18px;
-}
 
-.defi2-chat {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 8px;
-}
+    border-radius: 22px;
 
-/* ====== VICTOIRE ====== */
 
-.victoire-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
+    background:
 
-.victoire-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
+        rgba(255, 255, 255, .65);
 
-.victoire-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
 
-.victoire-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
+    backdrop-filter: blur(8px);
 
-.victoire-text {
-    font-size: 18px;
-    color: #333;
-}
 
-.victoire-btn {
-    width: 100%;
-    margin-top: 25px;
 }
-
 
-/* ====== DÉFAITE ====== */
-
-.defaite-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
 
-.defaite-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
 
-.defaite-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
+.player-item {
 
-.defaite-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 15px;
-}
 
-.defaite-text {
-    font-size: 18px;
-    color: #333;
-}
+    padding: 16px;
 
-.defaite-btn {
-    width: 100%;
-    margin-top: 25px;
-}
 
-/* ====== SALLE DES MORTS ====== */
+    margin-bottom: 12px;
 
-.morts-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
 
-.morts-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
+    border-radius: 14px;
 
-.morts-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
 
-.morts-img {
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-    border-radius: 50%;
-    border: 4px solid #c95d5d;
     background: white;
-    margin-bottom: 15px;
+
+
+    font-weight: 600;
+
+
+    box-shadow:
+
+        0 3px 12px rgba(0, 0, 0, .05);
+
+
+    transition: .25s;
+
+
 }
 
-.morts-text {
-    font-size: 18px;
-    color: #333;
-    margin-top: 10px;
+
+
+.player-item:hover {
+
+
+    transform:
+
+        translateX(5px);
+
+
+    box-shadow:
+
+        0 6px 18px rgba(0, 0, 0, .08);
+
+
 }
 
-.morts-chat {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 8px;
-    background: rgba(139, 0, 0, 0.1);
-    border-left: 4px solid #c95d5d;
-    font-size: 16px;
-    color: #c95d5d;
+
+
+
+.player-item:last-child {
+
+
+    margin-bottom: 0;
+
+
 }
 
-/* ====== PAGE VOTE ====== */
 
-.vote-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
 
-.vote-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 900px;
-    width: 100%;
-    text-align: center;
-}
 
-.vote-subtitle {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px;
-}
 
-.vote-timer {
-    font-weight: bold;
-    color: #c95d5d;
-    margin-bottom: 20px;
-}
+/************************************
 
-.vote-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    justify-items: center;
-    margin-bottom: 25px;
-}
+WAITING BOX
 
-.vote-player img {
-    width: 120px;
-    height: 120px;
-    border-radius: 10px;
-    object-fit: cover;
-    border: 3px solid #ccc;
-}
+************************************/
 
-.vote-btn {
-    margin-top: 8px;
-    background-color: #c95d5d;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
-}
 
-.vote-btn:hover {
-    background-color: #c95d5d;
-}
+.waiting-box {
 
-.vote-validate {
-    display: inline-block;
-    margin-top: 20px;
-    background-color: #555;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-}
 
-.vote-validate:hover {
-    background-color: #333;
-}
-
-.vote-chat {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 8px;
-    background: rgba(139, 0, 0, 0.1);
-    border-left: 4px solid #c95d5d;
-    font-size: 16px;
-    color: #c95d5d;
-}
-
-.vote-end-buttons {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.vote-end-buttons .btn {
-    background-color: #c95d5d;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.vote-end-buttons .btn:hover {
-    background-color: #c95d5d;
-}
-
-/* ====== PAGE RÉVÉLATION DU RÔLE ====== */
-
-.revelation-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.revelation-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-}
-
-.revelation-center {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-}
-
-.revelation-img {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    border-radius: 50%;
-    border: 4px solid #c95d5d;
-    background: white;
-    margin-bottom: 15px;
-}
-
-.revelation-role {
-    font-size: 22px;
-    color: #c95d5d;
-    font-weight: bold;
-}
-
-.revelation-text {
-    font-size: 16px;
-    color: #333;
-    margin-top: 10px;
-}
-
-.revelation-btn {
-    display: inline-block;
-    margin-top: 20px;
-    background-color: #c95d5d;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.revelation-btn:hover {
-    background-color: #c95d5d;
-}
-
-/* ====== PAGES VICTOIRE & DEFAITE ====== */
-
-.victoire-container,
-.defaite-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.victoire-box,
-.defaite-box {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     max-width: 600px;
-    width: 100%;
+
+
+    padding: 45px;
+
+
+    margin: auto;
+
+
+    border-radius: 32px;
+
+
+    background:
+
+        rgba(255, 255, 255, .90);
+
+
+    backdrop-filter: blur(12px);
+
+
+    box-shadow:
+
+        0 15px 40px rgba(0, 0, 0, .08);
+
+
     text-align: center;
+
+
 }
 
-.victoire-box h1,
-.defaite-box h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #c95d5d;
-    margin-bottom: 20px;
+
+
+
+.waiting-box h2 {
+
+
+    font-size: 30px;
+
+
+    font-weight: 800;
+
+
+    color: #ff3131;
+
+
+    margin-bottom: 15px;
+
+
 }
 
-.victoire-img,
-.defaite-img {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 10px;
-    margin: 20px auto;
-    display: block;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+
+
+
+.waiting-box p {
+
+
+    font-size: 15px;
+
+
+    color: #666;
+
+
+    line-height: 1.6;
+
+
 }
 
-.victoire-text,
-.defaite-text {
-    font-size: 18px;
-    color: #333;
-    margin-top: 10px;
-    line-height: 1.5;
-}
 
-.victoire-btn,
-.defaite-btn {
+
+
+/************************************
+
+BADGE
+
+************************************/
+
+
+.badge {
+
+
     display: inline-block;
-    margin-top: 25px;
-    background-color: #c95d5d;
-    color: white;
-    padding: 12px 22px;
-    border-radius: 8px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s;
+
+
+    padding: 8px 15px;
+
+
+    border-radius: 999px;
+
+
+    background: #ffe2e2;
+
+
+    color: #ff3131;
+
+
+    font-size: 13px;
+
+
+    font-weight: 700;
+
+
 }
 
-.victoire-btn:hover,
-.defaite-btn:hover {
-    background-color: #c95d5d;
+
+
+
+/************************************
+
+SPINNER
+
+************************************/
+
+
+.spinner {
+
+
+    width: 68px;
+
+
+    height: 68px;
+
+
+    margin: auto;
+
+
+    margin-bottom: 25px;
+
+
+    border-radius: 50%;
+
+
+    border: 6px solid rgba(255, 49, 49, .15);
+
+
+    border-top: 6px solid #ff3131;
+
+
+    animation: spin 1s linear infinite;
+
+
 }
 
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
 
-@media (max-width: 1024px) {
-    body {
-        background-size: cover;
-        background-position: center top;
+
+@keyframes spin {
+
+
+    to {
+
+
+        transform: rotate(360deg);
+
+
     }
 
-    .main {
-        padding: 60px 20px 100px;
-    }
 
-    h1 {
-        font-size: 38px;
-    }
-
-    .box,
-    .lobby-box,
-    .role-box,
-    .meeting-box,
-    .defi-box,
-    .feedback-box {
-        max-width: 90%;
-    }
 }
 
-@media (max-width: 600px) {
-    body {
-        background-size: contain;
-        background-position: top center;
+
+
+
+/************************************
+
+ANIMATIONS
+
+************************************/
+
+
+@keyframes fadeUp {
+
+
+    from {
+
+
+        opacity: 0;
+
+
+        transform:
+
+            translateY(35px);
+
+
     }
+
+
+
+    to {
+
+
+        opacity: 1;
+
+
+        transform:
+
+            translateY(0);
+
+
+    }
+
+
+}
+
+
+
+
+/************************************
+
+RESPONSIVE
+
+************************************/
+
+
+@media(max-width:700px) {
+
 
     .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+
+
+        padding: 0 15px;
+
+
     }
+
+
+    .logo {
+
+
+        font-size: 23px;
+
+
+    }
+
 
     .nav-links {
-        gap: 10px;
+
+
+        display: none;
+
+
     }
 
-    .main {
-        justify-content: center;
-        padding: 40px 10px 80px;
-        text-align: center;
+
+    .box {
+
+
+        padding: 30px;
+
+
     }
 
-    h1 {
-        font-size: 28px;
+
+    .box h1 {
+
+
+        font-size: 34px;
+
+
     }
 
-    .btn {
-        width: 100%;
-        padding: 14px;
+
+    .waiting-box {
+
+
+        padding: 30px;
+
+
     }
 
-    .meeting-buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
 
-    .side-btn {
-        width: 100%;
-    }
 }

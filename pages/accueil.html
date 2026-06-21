@@ -2,256 +2,658 @@
 <html lang="fr">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Accueil - Corpo!</title>
+
     <link rel="stylesheet" href="../assets/css/style.css">
+
     <style>
         .login-box {
-            max-width: 400px;
+
+            max-width: 500px;
+
             margin: 60px auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-            padding: 40px;
-            text-align: center;
+
         }
 
-        .login-box h1 {
-            color: #c0392b;
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .login-box p {
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-            transition: border-color .2s;
-        }
-
-        .login-box input:focus {
-            border-color: #c0392b;
-            outline: none;
-        }
-
-        .login-box .btn-main {
-            width: 100%;
-            padding: 13px;
-            background: #c0392b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background .2s;
-        }
-
-        .login-box .btn-main:hover {
-            background: #a93226;
-        }
 
         .pseudo-zone {
+
             display: none;
-            margin-top: 12px;
+
+            margin-top: 15px;
+
         }
 
-        .pseudo-zone input {
-            margin-bottom: 12px;
-        }
 
         #statusMsg {
-            font-size: 13px;
-            margin-top: 10px;
-            min-height: 18px;
+
+            font-size: 14px;
+
             font-weight: 600;
+
+            margin-top: 12px;
+
+            min-height: 20px;
+
         }
+
 
         .success {
+
             color: #27ae60;
+
         }
+
 
         .error {
-            color: #c0392b;
+
+            color: #ff3131;
+
         }
 
-        /* Si déjà connecté */
+
+
         .connected-box {
+
             display: none;
-            margin-top: 20px;
+
+            margin-top: 15px;
+
         }
+
+
+        .connected-box h2 {
+
+            font-size: 30px;
+
+            font-weight: 800;
+
+            color: #ff3131;
+
+            margin-bottom: 10px;
+
+        }
+
 
         .connected-box p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 16px;
+
+            font-size: 15px;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
         }
 
-        .btn-secondary {
-            width: 100%;
-            padding: 13px;
-            background: #f0f0f0;
-            color: #555;
+
+
+        .nav-user {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+
+
+        #logoutBtn {
+
+            padding: 10px 18px;
+
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+
+            border-radius: 12px;
+
             cursor: pointer;
-            margin-top: 8px;
+
+            font-weight: 700;
+
+            background: #ffe4e4;
+
+            color: #ff3131;
+
+            transition: .25s;
+
         }
 
-        .btn-secondary:hover {
-            background: #e0e0e0;
+
+        #logoutBtn:hover {
+
+            background: #ff3131;
+
+            color: white;
+
+        }
+
+
+
+        .big-btn {
+
+            margin-top: 15px;
+
         }
     </style>
+
 </head>
 
 <body>
 
+
     <div class="navbar">
-        <a href="accueil.html" class="logo">Corpo! Le jeu</a>
-        <div class="nav-user"><span id="userPseudo"></span></div>
+
+        <a href="accueil.html" class="logo">
+
+            Corpo! Le jeu
+
+        </a>
+
+
+
+        <div class="nav-user">
+
+            <span id="userPseudo"></span>
+
+            <button id="logoutBtn" onclick="logout()">
+
+                Déconnexion
+
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="login-box">
-        <h1>Bienvenue chez Corpo! 🎮</h1>
-        <p>Le jeu de bluff en entreprise</p>
 
-        <!-- Zone non connecté -->
-        <div id="zoneLogin">
-            <input type="email" id="emailInput" placeholder="Ton adresse email…">
-            <div id="statusMsg"></div>
 
-            <!-- Zone pseudo (si nouveau compte) -->
-            <div class="pseudo-zone" id="pseudoZone">
-                <input type="text" id="pseudoInput" placeholder="Choisis un pseudo…" maxlength="20">
+    <main class="main">
+
+
+        <div class="box login-box">
+
+
+
+            <div id="zoneLogin">
+
+
+                <h1>
+
+                    Bienvenue 👋
+
+                </h1>
+
+                <p>
+
+                    Le jeu de bluff en entreprise
+
+                </p>
+
+
+                <input type="email" id="emailInput" placeholder="Ton adresse email...">
+
+
+                <div id="statusMsg"></div>
+
+
+
+                <div class="pseudo-zone" id="pseudoZone">
+
+                    <input type="text" id="pseudoInput" placeholder="Choisis un pseudo..." maxlength="20">
+
+                </div>
+
+
+
+                <button class="btn" id="mainBtn" onclick="handleLogin()">
+
+                    Continuer
+
+                </button>
+
+
+
             </div>
 
-            <button class="btn-main" id="mainBtn" onclick="handleLogin()">Continuer</button>
+
+
+
+
+            <div class="connected-box" id="zoneConnected">
+
+
+                <h2>
+
+                    Bonjour
+
+                    <span id="connectedPseudo"></span>
+
+                    👋
+
+                </h2>
+
+
+
+                <p>
+
+                    Que souhaites-tu faire ?
+
+                </p>
+
+
+
+                <button class="btn" onclick="window.location.href='creer_partie.html'">
+
+                    🏢 Créer un meeting
+
+                </button>
+
+
+
+
+                <button class="btn big-btn" onclick="window.location.href='rejoindre_partie.html'">
+
+                    🚪 Rejoindre un meeting
+
+                </button>
+
+
+            </div>
+
+
         </div>
 
-        <!-- Zone connecté -->
-        <div class="connected-box" id="zoneConnected">
-            <p>👋 Bonjour <strong id="connectedPseudo"></strong> !</p>
-            <button class="btn-main" onclick="window.location.href='creer_partie.html'">🏢 Créer un meeting</button>
-            <button class="btn-secondary" onclick="window.location.href='rejoindre_partie.html'">🚪 Rejoindre un
-                meeting</button>
-            <button class="btn-secondary" onclick="logout()">Se déconnecter</button>
-        </div>
-    </div>
+    </main>
 
-    <div class="footer">
-        <p>&copy; 2026 Corpo! – Tous droits réservés</p>
-    </div>
+
 
     <script>
-        const API_URL = "https://corpo-backend.onrender.com";
-        let emailVerified = false;
-        let accountExists = false;
 
-        // Si déjà connecté → afficher zone connecté
+        const API_URL = "https://corpo-backend.onrender.com";
+
+        let emailVerified = false;
+
+
+
         const savedPseudo = localStorage.getItem("pseudo");
+
+
         if (savedPseudo) {
+
             document.getElementById("zoneLogin").style.display = "none";
+
             document.getElementById("zoneConnected").style.display = "block";
+
             document.getElementById("connectedPseudo").textContent = savedPseudo;
+
             document.getElementById("userPseudo").textContent = savedPseudo;
+
         }
+
 
         async function handleLogin() {
+
+
             const email = document.getElementById("emailInput").value.trim();
+
             const status = document.getElementById("statusMsg");
 
-            if (!email) { showStatus("Entre ton email !", "error"); return; }
 
-            // Étape 1 : vérifier si le compte existe
+            if (!email) {
+
+                showStatus(
+
+                    "Entre ton email !",
+
+                    "error"
+
+                );
+
+                return;
+
+            }
+
+
+
             if (!emailVerified) {
-                showStatus("Vérification…", "");
+
+
+                showStatus(
+
+                    "Vérification...",
+
+                    ""
+
+                );
+
+
                 try {
-                    const res = await fetch(`${API_URL}/account/check_email`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email })
-                    });
+
+
+                    const res = await fetch(
+
+                        `${API_URL}/account/check_email`,
+
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type": "application/json"
+
+                            },
+
+                            body: JSON.stringify({
+
+                                email
+
+                            })
+
+                        }
+
+                    );
+
+
+
                     const data = await res.json();
+
+
 
                     if (data.exists) {
-                        // ✅ Compte existant → connexion directe SANS demander pseudo
-                        localStorage.setItem("pseudo", data.pseudo);
-                        localStorage.setItem("playerId", data.player_id);
-                        showStatus("✅ Connexion réussie !", "success");
-                        setTimeout(() => window.location.reload(), 1000);
-                        return; // 🔥 STOP ici, pas de suite
-                    } else {
-                        // Nouveau → demander pseudo
-                        emailVerified = true;
-                        showStatus("Nouveau ici ? Choisis un pseudo !", "success");
-                        document.getElementById("pseudoZone").style.display = "block";
-                        document.getElementById("mainBtn").textContent = "Créer mon compte";
+
+
+                        localStorage.setItem(
+
+                            "pseudo",
+
+                            data.pseudo
+
+                        );
+
+
+                        localStorage.setItem(
+
+                            "playerId",
+
+                            data.player_id
+
+                        );
+
+
+
+                        showStatus(
+
+                            "Connexion réussie !",
+
+                            "success"
+
+                        );
+
+
+                        setTimeout(() => {
+
+                            window.location.reload();
+
+                        }, 1000);
+
+
+                        return;
+
                     }
-                } catch (e) {
-                    showStatus("Erreur serveur.", "error");
+
+
+
+                    emailVerified = true;
+
+
+                    showStatus(
+
+                        "Nouveau joueur ? Choisis un pseudo !",
+
+                        "success"
+
+                    );
+
+
+                    document.getElementById(
+
+                        "pseudoZone"
+
+                    ).style.display = "block";
+
+
+                    document.getElementById(
+
+                        "mainBtn"
+
+                    ).textContent = "Créer mon compte";
+
+
                 }
+
+                catch (e) {
+
+                    showStatus(
+
+                        "Erreur serveur.",
+
+                        "error"
+
+                    );
+
+                }
+
                 return;
+
             }
 
-            // Étape 2 : créer le compte
-            if (!accountExists) {
-                const pseudo = document.getElementById("pseudoInput").value.trim();
-                if (!pseudo) { showStatus("Entre un pseudo !", "error"); return; }
 
-                showStatus("Création du compte…", "");
-                try {
-                    const res = await fetch(`${API_URL}/account/register`, {
+
+            const pseudo = document.getElementById(
+
+                "pseudoInput"
+
+            ).value.trim();
+
+
+
+            if (!pseudo) {
+
+                showStatus(
+
+                    "Entre un pseudo !",
+
+                    "error"
+
+                );
+
+                return;
+
+            }
+
+
+
+            try {
+
+
+                const res = await fetch(
+
+                    `${API_URL}/account/register`,
+
+                    {
+
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email, pseudo })
-                    });
-                    const data = await res.json();
 
-                    if (res.ok) {
-                        localStorage.setItem("pseudo", pseudo);
-                        localStorage.setItem("playerId", data.player_id);
-                        showStatus("✅ Compte créé ! Bienvenue !", "success");
-                        setTimeout(() => window.location.reload(), 1000);
-                    } else {
-                        showStatus(data.detail || "Erreur lors de la création.", "error");
+                        headers: {
+
+                            "Content-Type": "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            email,
+
+                            pseudo
+
+                        })
+
                     }
-                } catch (e) {
-                    showStatus("Erreur de connexion au serveur.", "error");
+
+                );
+
+
+
+                const data = await res.json();
+
+
+
+                if (res.ok) {
+
+
+                    localStorage.setItem(
+
+                        "pseudo",
+
+                        pseudo
+
+                    );
+
+
+                    localStorage.setItem(
+
+                        "playerId",
+
+                        data.player_id
+
+                    );
+
+
+
+                    showStatus(
+
+                        "Compte créé !",
+
+                        "success"
+
+                    );
+
+
+
+                    setTimeout(() => {
+
+                        window.location.reload();
+
+                    }, 1000);
+
+
                 }
+
+                else {
+
+
+                    showStatus(
+
+                        data.detail ||
+
+                        "Erreur.",
+
+                        "error"
+
+                    );
+
+
+                }
+
+
             }
+
+            catch (e) {
+
+                showStatus(
+
+                    "Connexion impossible.",
+
+                    "error"
+
+                );
+
+            }
+
         }
+
+
 
         function showStatus(msg, type) {
-            const el = document.getElementById("statusMsg");
+
+            const el = document.getElementById(
+
+                "statusMsg"
+
+            );
+
             el.textContent = msg;
+
             el.className = type;
+
         }
+
+
 
         function logout() {
+
             localStorage.clear();
+
             window.location.reload();
+
         }
 
-        // Enter pour valider
-        document.getElementById("emailInput").addEventListener("keydown", e => {
-            if (e.key === "Enter") handleLogin();
-        });
-        document.getElementById("pseudoInput")?.addEventListener("keydown", e => {
-            if (e.key === "Enter") handleLogin();
-        });
+
+
+        document.getElementById(
+
+            "emailInput"
+
+        ).addEventListener(
+
+            "keydown",
+
+            e => {
+
+                if (e.key === "Enter")
+
+                    handleLogin();
+
+            }
+
+        );
+
+
+
+        document.getElementById(
+
+            "pseudoInput"
+
+        )?.addEventListener(
+
+            "keydown",
+
+            e => {
+
+                if (e.key === "Enter")
+
+                    handleLogin();
+
+            }
+
+        );
+
     </script>
 
 </body>
