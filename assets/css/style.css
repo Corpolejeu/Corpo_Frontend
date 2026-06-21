@@ -1655,3 +1655,275 @@ html {
         font-size: 18px;
     }
 }
+
+/* =========================================
+   PARTIE 6 — VICTOIRE / DÉFAITE
+   ========================================= */
+
+/* ===== CONTAINERS ===== */
+
+.victoire-container,
+.defaite-container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 20px;
+
+    min-height: calc(100vh - 78px);
+
+    /* on garde le background image global */
+}
+
+/* petit effet ambiance différente */
+.victoire-container {
+    background:
+        radial-gradient(circle at top, rgba(39, 174, 96, 0.12), transparent 55%),
+        radial-gradient(circle at bottom, rgba(255, 49, 49, 0.08), transparent 60%);
+}
+
+.defaite-container {
+    background:
+        radial-gradient(circle at top, rgba(255, 49, 49, 0.18), transparent 55%),
+        radial-gradient(circle at bottom, rgba(44, 62, 80, 0.08), transparent 60%);
+}
+
+
+/* ===== BOX ===== */
+
+.victoire-box,
+.defaite-box {
+
+    width: 100%;
+    max-width: 900px;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+
+    border-radius: 28px;
+
+    padding: 40px;
+
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+
+    text-align: center;
+
+    animation: fadeUp .5s ease;
+}
+
+
+/* ===== TITRES ===== */
+
+.victoire-box h1,
+.defaite-box h1 {
+
+    font-size: 44px;
+    font-weight: 800;
+
+    margin-bottom: 20px;
+
+    color: var(--primary);
+}
+
+/* override dynamique JS */
+.defaite-box h1 {
+    color: #ff3131;
+}
+
+.victoire-box h1 {
+    color: #27ae60;
+}
+
+
+/* ===== CHO MESSAGE ===== */
+
+.victoire-box .cho-message,
+.defaite-box .cho-message {
+
+    margin: 20px auto;
+    max-width: 520px;
+
+    text-align: center;
+}
+
+
+/* ===== IMAGE RESULTAT ===== */
+
+.victoire-img,
+.defaite-img {
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    margin: 20px auto;
+
+    border: 4px solid #ff3131;
+
+    box-shadow: 0 15px 40px rgba(255, 49, 49, 0.25);
+
+    animation: pulse 2.5s infinite;
+}
+
+
+/* victoire override vert léger */
+.victoire-img {
+    border-color: #27ae60;
+    box-shadow: 0 15px 40px rgba(39, 174, 96, 0.25);
+}
+
+
+/* ===== TEXTE RESULT ===== */
+
+.victoire-text,
+.defaite-text {
+
+    font-size: 18px;
+    font-weight: 600;
+
+    margin-top: 15px;
+
+    color: #2c3e50;
+
+    line-height: 1.5;
+}
+
+
+/* ===== ACTIONS BOTTOM ===== */
+
+.end-actions {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    align-items: center;
+}
+
+.end-actions .btn {
+
+    width: 100%;
+    max-width: 320px;
+
+    text-align: center;
+}
+
+
+/* ===== SOCIAL LINKS ===== */
+
+.social-links {
+
+    display: flex;
+    justify-content: center;
+
+    gap: 14px;
+
+    margin-top: 18px;
+
+    flex-wrap: wrap;
+}
+
+.social-link {
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    font-weight: 700;
+
+    font-size: 14px;
+
+    text-decoration: none;
+
+    color: white;
+
+    transition: .25s;
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* shop couleur corpo */
+.social-link.shop {
+    background: linear-gradient(135deg, #ff3131, #ff5b5b);
+}
+
+/* linkedin */
+.social-link.linkedin {
+    background: #0077b5;
+}
+
+/* insta */
+.social-link.insta {
+    background: linear-gradient(45deg,
+            #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+
+/* ===== SOCIAL TITLE ===== */
+
+.social-title {
+
+    font-size: 13px;
+
+    color: #888;
+
+    margin-top: 16px;
+    margin-bottom: 6px;
+
+    font-style: italic;
+
+    text-align: center;
+}
+
+
+/* ===== IDEA BOX ===== */
+
+.idea-box .btn {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+
+/* ===== HOVER LIFT BOX ===== */
+
+.victoire-box:hover,
+.defaite-box:hover {
+    transform: translateY(-3px);
+    transition: .3s ease;
+}
+
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 600px) {
+
+    .victoire-box,
+    .defaite-box {
+        padding: 25px;
+    }
+
+    .victoire-box h1,
+    .defaite-box h1 {
+        font-size: 30px;
+    }
+
+    .victoire-img,
+    .defaite-img {
+        width: 120px;
+        height: 120px;
+    }
+}
