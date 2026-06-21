@@ -84,8 +84,9 @@
                 <p id="choMsg"><strong>CHO :</strong> Les managers toxiques ont encore gagné la partie !</p>
             </div>
             <div class="defaite-center">
-                <img id="resultImg" src="../assets/images/defaite.png" class="defaite-img" alt="Défaite">
-                <p id="resultText" class="defaite-text">Merci de quitter l'entreprise au plus vite et de préparer votre carton avec vos affaires !</p>
+                <img id="resultImg" src="../assets/images/Fabien.png" class="defaite-img" alt="Défaite">
+                <p id="resultText" class="defaite-text">Merci de quitter l'entreprise au plus vite et de préparer votre
+                    carton avec vos affaires !</p>
             </div>
 
             <div class="end-actions">
@@ -142,15 +143,15 @@
             if (isManager) {
                 title.textContent = "Victoire !";
                 title.style.color = "#27ae60";
-                choMsg.innerHTML = "<strong>CHO :</strong>  Les managers toxiques ont encore gagné la partie !";
-                img.src = "../assets/images/victoire.png";
+                choMsg.innerHTML = "<strong>CHO : </strong>  Les managers toxiques ont encore gagné la partie !";
+                img.src = "../assets/images/Fabien.png";
                 text.textContent = "Brillant ! Tu es très toxique, continue ainsi.";
             } else {
                 title.textContent = "Défaite…";
                 title.style.color = "#c0392b";
-                choMsg.innerHTML = "<strong>CHO :</strong> Merci de quitter l'entreprise au plus vite !";
-                img.src = "../assets/images/defaite.png";
-                text.textContent = "Préparer votre carton avec vos affaires";
+                choMsg.innerHTML = "<strong>CHO : </strong> Merci de quitter l'entreprise au plus vite !";
+                img.src = "../assets/images/Fabien.png";
+                text.textContent = "Préparer votre carton avec vos affaires !!! ";
             }
         }
         init();
