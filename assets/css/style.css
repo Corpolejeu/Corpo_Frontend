@@ -1528,3 +1528,130 @@ html {
         font-size: 28px;
     }
 }
+
+/* =========================================
+   PARTIE 5 — RESULTAT DÉFI
+   ========================================= */
+
+.resultat-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: calc(100vh - 78px);
+    background:
+        radial-gradient(circle at top, rgba(255, 49, 49, 0.12), transparent 55%),
+        radial-gradient(circle at bottom, rgba(44, 62, 80, 0.08), transparent 60%);
+}
+
+.resultat-box {
+    width: 100%;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+    animation: fadeUp .5s ease;
+    text-align: center;
+}
+
+/* TITRE */
+.resultat-box h1 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #ff3131;
+    margin-bottom: 20px;
+}
+
+/* IMAGE JOUEUR */
+.resultat-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ff3131;
+    margin: 15px auto;
+    box-shadow: 0 10px 30px rgba(255, 49, 49, 0.25);
+}
+
+/* NOM JOUEUR */
+#eliminatedName {
+    font-size: 26px;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-top: 10px;
+}
+
+/* CHO MESSAGE (override léger propre) */
+.resultat-box .cho-message {
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* TEXTE RÉSULTAT */
+#resultText {
+    font-size: 22px;
+    font-weight: 800;
+    margin-top: 20px;
+}
+
+.result-success {
+    color: #27ae60;
+    text-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
+}
+
+.result-fail {
+    color: #ff3131;
+    text-shadow: 0 0 10px rgba(255, 49, 49, 0.25);
+}
+
+/* RAPPEL DÉFI */
+.defi-rappel {
+    background: linear-gradient(135deg, #fff3f3, #ffeaea);
+    border: 2px solid rgba(255, 49, 49, 0.2);
+    padding: 14px 18px;
+    border-radius: 16px;
+    margin: 20px auto;
+    max-width: 420px;
+    font-style: italic;
+    color: #b10000;
+    font-size: 14px;
+}
+
+/* ZONES ETATS */
+#zoneWaiting {
+    margin-top: 20px;
+}
+
+#zoneResult {
+    margin-top: 20px;
+}
+
+/* BOUTON CONTINUER */
+#btnNextStep {
+    margin-top: 25px;
+}
+
+/* TIMER SUITE */
+.auto-timer {
+    margin-top: 12px;
+    font-style: italic;
+    color: #888;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .resultat-box {
+        padding: 25px;
+    }
+
+    .resultat-box h1 {
+        font-size: 30px;
+    }
+
+    #resultText {
+        font-size: 18px;
+    }
+}

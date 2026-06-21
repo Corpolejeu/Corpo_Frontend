@@ -250,6 +250,7 @@
             // 🔥 FIX : timer visible pour TOUS, mais seul le host (ou premier vivant si host mort) déclenche
             let autoLeft = 10;
             const autoTimerEl = document.createElement("p");
+            autoTimerEl.className = "auto-timer"; // 👈 ICI
             autoTimerEl.style.cssText = "text-align:center;color:#888;font-style:italic;margin-top:10px;";
             autoTimerEl.textContent = `⏱ Suite dans ${autoLeft}s…`;
             document.getElementById("zoneResult").appendChild(autoTimerEl);
@@ -281,7 +282,7 @@
                 }
             }, 1000);
         }
-        
+
         // ---------------------------------------------------
         // Le host déclenche la phase feedback pour tout le monde
         // ---------------------------------------------------
