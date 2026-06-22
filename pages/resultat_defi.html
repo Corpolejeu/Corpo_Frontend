@@ -66,13 +66,7 @@
                 <div id="roleRevelationZone"></div>
 
                 <div style="margin-top:25px;">
-                    <!-- Seul le host voit le bouton "Continuer" -->
-                    <button id="btnNextStep" class="btn" style="display:none;">
-                        Continuer ▶
-                    </button>
-                    <p id="waitingNext" style="display:none; color:#888; font-style:italic;">
-                        ⏳ En attente de la suite…
-                    </p>
+                    <p id="autoTimer" style="text-align:center;color:#888;font-style:italic;"></p>
                 </div>
             </div>
 
@@ -237,14 +231,6 @@
                         }
                     }
                 } catch (e) { /* pas grave */ }
-            }
-
-            // Seul le host peut déclencher la suite
-            const isHost = await checkHost();
-            if (isHost) {
-                document.getElementById("btnNextStep").style.display = "inline-block";
-            } else {
-                document.getElementById("waitingNext").style.display = "block";
             }
 
             // 🔥 FIX : timer visible pour TOUS, mais seul le host (ou premier vivant si host mort) déclenche
