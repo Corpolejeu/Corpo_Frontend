@@ -732,6 +732,9 @@
 
             // 🔥 Victime terminée → afficher vote + timer 15s auto
             if (msg === "phase:resultat_defi") {
+                // 🔥 Cacher le timer du défi pour tout le monde
+                clearInterval(countdown);
+                document.getElementById("defiTimer").style.display = "none";
                 // Timer vote visible pour TOUT LE MONDE
                 let voteLeft = 15;
                 const voteTimerEl = document.createElement("p");

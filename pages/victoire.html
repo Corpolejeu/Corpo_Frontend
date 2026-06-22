@@ -144,13 +144,13 @@
                 title.textContent = "Défaite…";
                 title.style.color = "#ff3131";
                 choMsg.innerHTML = "<strong>CHO : </strong> Les collaborateurs ont démasqué tous les managers.";
-                const pool = ["../assets/images/Claire.png", "../assets/images/Abdel.png"];
+                const pool = "../assets/images/Claire.png";
                 img.src = pool[Math.floor(Math.random() * pool.length)]; text.textContent = "Tu as été démasqué. Les collaborateurs ont sauvé l'entreprise… sans toi.";
             } else {
                 title.textContent = "Victoire !";
                 title.style.color = "#27ae60";
                 choMsg.innerHTML = "<strong>CHO : </strong>Les collaborateurs ont gagné la partie !";
-                const pool = ["../assets/images/Claire.png", "../assets/images/Abdel.png"];
+                const pool = "../assets/images/Claire.png";
                 img.src = pool[Math.floor(Math.random() * pool.length)]; text.textContent = "Vous avez su déjouer les pièges et survivre aux meetings. L'entreprise est sauvée !";
             }
         }
