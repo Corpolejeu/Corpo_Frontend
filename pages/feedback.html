@@ -255,18 +255,21 @@
         function setupUI() {
             const badge = document.getElementById("contextBadge");
             const cho = document.getElementById("choText");
+            const btn = document.getElementById("actionBtn");
 
             if (feedbackMode === "pre_vote") {
                 badge.textContent = "🗣 Débat avant le vote";
                 badge.style.background = "#c0392b";
                 cho.textContent = "Débattez et désignez ce qui sont pas corpo. Le vote arrive !";
-
+                btn.textContent = "🗳 Passer au vote";
+                btn.onclick = triggerVote;
             } else {
                 // post_vote → après le défi du vote, prochain meeting
                 badge.textContent = "🏁 Débat final du tour";
                 badge.style.background = "#2c3e50";
                 cho.textContent = "Dernier débat avant le prochain meeting !";
-    
+                btn.textContent = "▶ Lancer le meeting suivant";
+                btn.onclick = triggerNextMeeting;
             }
         }
 
@@ -458,6 +461,7 @@
         })();
 
         setupUI();
+        checkHost();
         loadMotsInterdits();
 
         // Charger les mots interdits actifs
