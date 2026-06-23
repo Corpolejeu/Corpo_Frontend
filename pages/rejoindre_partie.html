@@ -5,6 +5,49 @@
     <meta charset="UTF-8">
     <title>Rejoindre une partie - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        @media (max-width: 768px) {
+            .join-page {
+                padding: 40px 28px !important;
+                align-items: center !important;
+            }
+
+            .join-box {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 58px 34px !important;
+                border-radius: 42px !important;
+            }
+
+            .join-box h1 {
+                font-size: 46px !important;
+                line-height: 1.1 !important;
+                margin-bottom: 34px !important;
+            }
+
+            .join-box h2 {
+                font-size: 24px !important;
+                margin-bottom: 16px !important;
+            }
+
+            .join-box p {
+                font-size: 20px !important;
+            }
+
+            .join-box input {
+                padding: 24px !important;
+                font-size: 20px !important;
+                border-radius: 22px !important;
+                margin-bottom: 18px !important;
+            }
+
+            .join-box .btn {
+                padding: 26px !important;
+                font-size: 22px !important;
+                border-radius: 26px !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -28,13 +71,15 @@
             <h1>Rejoindre un meeting</h1>
 
             <h2>Meetings publiques disponibles</h2>
-            <br><div id="publicParties" class="public-list"></br>
+            <br>
+            <div id="publicParties" class="public-list"></br>
                 <p>Chargement des meetings publiques...</p>
             </div>
 
             <hr>
 
-            <br><p>Entrez votre pseudo et le code du meeting.</p></br>
+            <br>
+            <p>Entrez votre pseudo et le code du meeting.</p></br>
 
             <input type="text" id="pseudo" placeholder="Votre pseudo">
             <input type="text" id="code" placeholder="Code du meeting">
