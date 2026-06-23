@@ -314,23 +314,20 @@
         // ---------------------------------------------------
         // Actions host
         // ---------------------------------------------------
+        // APRÈS
         async function triggerVote() {
-            document.getElementById("actionBtn").disabled = true;
             try {
                 await fetch(`${API_URL}/meeting/phase/vote/${partyCode}`, { method: "POST" });
             } catch (e) {
                 console.error("Erreur passage au vote :", e);
-                document.getElementById("actionBtn").disabled = false;
             }
         }
 
         async function triggerNextMeeting() {
-            document.getElementById("actionBtn").disabled = true;
             try {
                 await fetch(`${API_URL}/party/next_meeting/${partyCode}`, { method: "POST" });
             } catch (e) {
                 console.error("Erreur next meeting :", e);
-                document.getElementById("actionBtn").disabled = false;
             }
         }
 
