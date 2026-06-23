@@ -231,15 +231,6 @@
                 </div>
             </div>
 
-            <!-- Bouton HOST : change selon le contexte -->
-            <div id="actionContainer" style="display:none; margin-top:20px;">
-                <button class="btn feedback-vote-btn" id="actionBtn">…</button>
-            </div>
-
-             <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
-                ⏳ En attente de l'hôte…
-            </p>
-
         </div>
     </main>
 
@@ -309,14 +300,8 @@
             try {
                 const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
-                if (data.host_id === parseInt(playerId, 10)) {
-                    document.getElementById("actionContainer").style.display = "block";
-                } else {
-                    document.getElementById("waitingMsg").style.display = "block";
-                }
-            } catch (e) {
-                console.error("Erreur vérification host :", e);
-            }
+                return data.host_id === parseInt(playerId);
+            } catch (e) { return false; }
         }
 
         // ---------------------------------------------------

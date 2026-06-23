@@ -707,7 +707,7 @@
                 const card = await res.json();
                 if (card && (card.text || card.question)) displayDefi(card);
             } catch (e) {
-                displayDefi({ text: "Fais un pitch de 30 secondes pour sauver ta place !" });
+                displayDefi({ text: "Fais un pitch de 40 secondes pour sauver ta place !" });
             }
         }
 
@@ -849,8 +849,8 @@
         document.getElementById("btnReste").onclick = () => submitVote(true);
         document.getElementById("btnElimine").onclick = () => submitVote(false);
 
-        // 🔥 Timer victime 30s → envoi auto + defi_done auto
-        let timeLeft = 30;
+        // 🔥 Timer victime 40s → envoi auto + defi_done auto
+        let timeLeft = 40;
         const timerEl = document.getElementById("defiTimer");
         timerEl.textContent = `⏱ ${timeLeft}s pour répondre`;
 

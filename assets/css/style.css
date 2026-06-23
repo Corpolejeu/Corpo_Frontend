@@ -1952,3 +1952,34 @@ html {
         height: 120px;
     }
 }
+
+@media (max-width: 768px) {
+
+    .main {
+        padding: 20px 15px;
+    }
+
+    .box {
+        max-width: 100%;
+        padding: 45px 30px;
+        border-radius: 32px;
+    }
+
+    .box h1 {
+        font-size: 46px;
+    }
+
+    .box p {
+        font-size: 18px;
+    }
+
+    .box input {
+        padding: 20px;
+        font-size: 18px;
+    }
+
+    .btn {
+        padding: 22px;
+        font-size: 19px;
+    }
+}
