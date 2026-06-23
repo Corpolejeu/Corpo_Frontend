@@ -11,1075 +11,114 @@
         }
 
         body {
-            background:
-
-                linear-gradient(rgba(255, 255, 255, 0.33),
-                    rgba(255, 255, 255, 0.159)),
-
-                url("../images/background.png");
-
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-
-
-            overflow-x: hidden;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        /* ── LAYOUT ── */
-        /*═══════════════════════════════
-
-MEETING PAGE
-
-═══════════════════════════════*/
-
         .meeting-page {
-
             display: flex;
-
             gap: 25px;
-
             max-width: 1400px;
-
-            margin: 25px auto;
-
+            margin: 35px auto;
             padding: 0 25px;
-
             align-items: flex-start;
-
+            background: transparent !important;
         }
 
-
-
-        /*═══════════════════════════════
-
-TABLE
-
-═══════════════════════════════*/
-
-
-        .table-col {
-
-            flex: 1;
-
-        }
-
-
-
-        .box-table {
-
-            padding: 30px;
-
-            border-radius: 32px;
-
-
-            background:
-
-                rgba(255, 255, 255, .90);
-
-
-            backdrop-filter: blur(12px);
-
-
-            box-shadow:
-
-                0 15px 45px rgba(0, 0, 0, .10);
-
-
-            animation: fadeUp .6s;
-
-        }
-
-
-        .box-table h2 {
-
-
-            color: #ff3131;
-
-
-            font-size: 22px;
-
-
-            font-weight: 800;
-
-
-            text-align: center;
-
-
-            margin-bottom: 25px;
-
-
-        }
-
-
-
-
-        /*═══════════════════════════════
-
-TABLE OVALE
-
-═══════════════════════════════*/
-
-
-        .oval-wrap {
-
-
-            position: relative;
-
-
-            width: 100%;
-
-
-            padding-bottom: 62%;
-
-
-        }
-
-
-
-        .oval-surface {
-
-
-            position: absolute;
-
-
-            inset: 12%;
-
-
-
-            border-radius: 50%;
-
-
-
-            background:
-
-
-                linear-gradient(145deg,
-
-                    rgba(255, 255, 255, .95),
-
-                    rgba(255, 245, 245, .95));
-
-
-
-            border: 4px solid #ff3131;
-
-
-
-            box-shadow:
-
-
-                0 0 0 10px rgba(255, 49, 49, .08),
-
-                0 15px 35px rgba(255, 49, 49, .18);
-
-
-
-            display: flex;
-
-
-            flex-direction: column;
-
-
-            align-items: center;
-
-
-            justify-content: center;
-
-
-        }
-
-
-
-        #tableTurnRole {
-
-
-            font-size: 22px;
-
-
-            font-weight: 800;
-
-
-            color: #ff3131;
-
-
-        }
-
-
-
-        #tableTurnLabel {
-
-
-            color: #999;
-
-
-            font-size: 12px;
-
-
-        }
-
-
-
-        #timerCenter {
-
-
-            font-size: 30px;
-
-
-            font-weight: 800;
-
-
-            color: #ff3131;
-
-
-            font-family: Poppins;
-
-
-            margin-top: 8px;
-
-
-        }
-
-
-
-
-        /*═══════════════════════════════
-
-JOUEURS
-
-═══════════════════════════════*/
-
-
-        .player-seat {
-
-
-            position: absolute;
-
-
-            display: flex;
-
-
-            flex-direction: column;
-
-
-            align-items: center;
-
-
-            gap: 4px;
-
-
-            transform: translate(-50%, -50%);
-
-
-        }
-
-
-
-        .seat-avatar {
-
-
-            width: 58px;
-
-
-            height: 58px;
-
-
-            border-radius: 50%;
-
-
-            overflow: hidden;
-
-
-
-            background: white;
-
-
-
-            border: 3px solid rgba(255, 49, 49, .15);
-
-
-
-            transition: .3s;
-
-
-        }
-
-
-
-        .seat-avatar img {
-
-
-            width: 100%;
-
-
-            height: 100%;
-
-
-            object-fit: cover;
-
-
-        }
-
-
-
-        .seat-avatar:hover {
-
-
-            transform: scale(1.08);
-
-
-        }
-
-
-
-        .seat-avatar.me {
-
-
-            border-color: #ff3131;
-
-
-
-            box-shadow:
-
-
-                0 0 0 5px rgba(255, 49, 49, .15);
-
-
-        }
-
-
-
-        .seat-avatar.active {
-
-
-            border-color: #ff3131;
-
-
-
-            animation: pulseSeat 1s infinite;
-
-
-
-        }
-
-
-
-        @keyframes pulseSeat {
-
-
-            0% {
-
-
-                box-shadow:
-
-                    0 0 0 0 rgba(255, 49, 49, .5);
-
-
-            }
-
-
-            70% {
-
-
-                box-shadow:
-
-                    0 0 0 15px rgba(255, 49, 49, 0);
-
-
-            }
-
-
-
-            100% {
-
-
-                box-shadow:
-
-                    0 0 0 0 rgba(255, 49, 49, 0);
-
-
-            }
-
-
-        }
-
-
-
-        .seat-avatar.neighbor {
-
-
-            border-color: #ffb400;
-
-
-
-            box-shadow:
-
-                0 0 20px rgba(255, 180, 0, .5);
-
-
-        }
-
-
-
-        .seat-name {
-
-
-            font-size: 11px;
-
-
-            font-weight: 700;
-
-
-            color: #555;
-
-
-            max-width: 65px;
-
-
-            text-align: center;
-
-
-        }
-
-
-
-        .seat-name.me {
-
-
-            color: #ff3131;
-
-
-        }
-
-
-
-
-        /*═══════════════════════════════
-
-PANNEAU DROIT
-
-═══════════════════════════════*/
-
-
-        .action-col {
-
-
-            width: 300px;
-
-
-            display: flex;
-
-
-            flex-direction: column;
-
-
-            gap: 15px;
-
-
-        }
-
-
-
-        .box {
-
-
-            padding: 22px;
-
-
-
-            border-radius: 28px;
-
-
-
-            background:
-
-
-                rgba(255, 255, 255, .90);
-
-
-
-            backdrop-filter: blur(12px);
-
-
-
-            box-shadow:
-
-
-                0 10px 35px rgba(0, 0, 0, .08);
-
-
-        }
-
-
-
-        .box h3 {
-
-
-            font-size: 13px;
-
-
-            font-weight: 800;
-
-
-            letter-spacing: 2px;
-
-
-            color: #ff3131;
-
-
-            margin-bottom: 15px;
-
-
-        }
-
-
-
-        /*═══════════════════════════════
-
-ROLE BADGE
-
-═══════════════════════════════*/
-
-
-        #myRoleBadge {
-
-
-            padding: 16px;
-
-
-
-            border-radius: 22px;
-
-
-
-            background:
-
-
-                linear-gradient(135deg,
-
-                    #ff3131,
-
-                    #ff5b5b);
-
-
-
-            box-shadow:
-
-
-                0 10px 30px rgba(255, 49, 49, .30);
-
-
-
-            font-size: 14px;
-
-
-
-            font-weight: 700;
-
-
-
-            text-align: center;
-
-
-
-            color: white;
-
-
-        }
-
-
-
-        /*═══════════════════════════════
-
-INFO
-
-═══════════════════════════════*/
-
-
-        .info-reveal {
-
-
-            padding: 15px;
-
-
-            border-radius: 18px;
-
-
-
-            background:
-
-
-                #fff5d6;
-
-
-
-            border: 2px solid #ffd86b;
-
-
-
-            color: #8a6800;
-
-
-
-            font-size: 13px;
-
-
-        }
-
-
-
-
-        /*═══════════════════════════════
-
-PLAYER GRID
-
-═══════════════════════════════*/
-
-
-        #playerGrid {
-
-
-            display: flex;
-
-
-            flex-wrap: wrap;
-
-
-            gap: 10px;
-
-
-        }
-
-
-
-        .player-select-card {
-
-
-            width: 72px;
-
-
-
-            padding: 10px;
-
-
-
-            border-radius: 18px;
-
-
-
-            background:
-
-
-                rgba(255, 255, 255, .80);
-
-
-
-            border: 2px solid transparent;
-
-
-
-            transition: .25s;
-
-
-
-            cursor: pointer;
-
-
-        }
-
-
-
-        .player-select-card:hover {
-
-
-            transform: translateY(-3px);
-
-
-
-            background: #fff1f1;
-
-
-
-            border-color: #ff3131;
-
-
-        }
-
-
-
-        .player-select-card.selected {
-
-
-            background: #ffe6e6;
-
-
-
-            border-color: #ff3131;
-
-
-
-            box-shadow:
-
-
-                0 6px 18px rgba(255, 49, 49, .20);
-
-
-        }
-
-
-
-        .player-select-card img {
-
-
-            width: 40px;
-
-
-            height: 40px;
-
-
-            border-radius: 50%;
-
-
-        }
-
-
-
-        .player-select-card span {
-
-
-            font-size: 10px;
-
-
-            font-weight: 700;
-
-
-        }
-
-
-
-
-        /*═══════════════════════════════
-
-BOUTONS
-
-═══════════════════════════════*/
-
-
-        #actionButtons {
-
-
-            display: flex;
-
-
-            flex-direction: column;
-
-
-            gap: 12px;
-
-
-        }
-
-
-
-        #actionButtons .btn {
-
-
-            padding: 15px;
-
-
-
-            border: none;
-
-
-
-            border-radius: 18px;
-
-
-
-            font-size: 14px;
-
-
-
-            font-weight: 700;
-
-
-
-            cursor: pointer;
-
-
-
-            transition: .3s;
-
-
-
-            color: white;
-
-
-        }
-
-
-
-        .btn-main {
-
-
-            background:
-
-
-                linear-gradient(135deg,
-
-                    #ff3131,
-
-                    #ff5a5a);
-
-
-
-            box-shadow:
-
-
-                0 10px 30px rgba(255, 49, 49, .35);
-
-
-        }
-
-
-
-        .btn-ok {
-
-
-            background:
-
-
-                linear-gradient(135deg,
-
-                    #2ecc71,
-
-                    #48d987);
-
-
-
-            box-shadow:
-
-
-                0 10px 30px rgba(46, 204, 113, .25);
-
-
-        }
-
-
-
-        .btn-skip {
-
-
-            background:
-
-
-                linear-gradient(135deg,
-
-                    #cfcfcf,
-
-                    #b9b9b9);
-
-
-        }
-
-
-
-        #actionButtons .btn:hover {
-
-
-            transform: translateY(-4px);
-
-
-        }
-
-
-
-        #actionButtons .btn:active {
-
-
-            transform: scale(.98);
-
-
-        }
-
-
-
-        /*═══════════════════════════════
-
-RESPONSIVE
-
-═══════════════════════════════*/
-
-
-        @media(max-width:700px) {
-
-            .meeting-page {
-
-
-                flex-direction: column;
-
-
-                padding: 0 12px;
-
-
-            }
-
-
-            .action-col {
-
-
-                width: 100%;
-
-
-            }
-
-
-            .oval-wrap {
-
-
-                padding-bottom: 85%;
-
-
-            }
-
-
-            .seat-avatar {
-
-
-                width: 40px;
-
-
-                height: 40px;
-
-
-            }
-
-
-            #timerCenter {
-
-
-                font-size: 22px;
-
-
-            }
-
-
-        }
-
-        .meeting-page {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-            align-items: flex-start;
-        }
-
-        /* ── TABLE ── */
         .table-col {
             flex: 1;
             min-width: 0;
         }
 
         .box-table {
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.09);
-            padding: 18px;
+            padding: 30px;
+            border-radius: 32px;
+            background: rgba(255, 255, 255, .90);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .10);
+            animation: fadeUp .6s;
         }
 
         .box-table h2 {
-            color: #c0392b;
-            font-size: 16px;
+            color: #ff3131;
+            font-size: 22px;
             font-weight: 800;
             text-align: center;
-            margin-bottom: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 25px;
         }
 
         .oval-wrap {
             position: relative;
             width: 100%;
-            padding-bottom: 60%;
+            padding-bottom: 62%;
         }
 
         .oval-surface {
             position: absolute;
-            top: 13%;
-            left: 13%;
-            right: 13%;
-            bottom: 13%;
-            background: linear-gradient(145deg, #fdecea, #fff8f8);
+            inset: 12%;
             border-radius: 50%;
-            border: 3px solid #c0392b;
-            box-shadow: 0 4px 20px rgba(192, 57, 43, 0.10);
+            background: linear-gradient(145deg, rgba(255, 255, 255, .95), rgba(255, 245, 245, .95));
+            border: 4px solid #ff3131;
+            box-shadow:
+                0 0 0 10px rgba(255, 49, 49, .08),
+                0 15px 35px rgba(255, 49, 49, .18);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            padding: 8px;
         }
 
         #tableTurnRole {
-            font-size: 15px;
+            font-size: 22px;
             font-weight: 800;
-            color: #c0392b;
-            line-height: 1.2;
+            color: #ff3131;
         }
 
         #tableTurnLabel {
-            font-size: 10px;
-            color: #aaa;
-            margin-top: 2px;
+            color: #999;
+            font-size: 12px;
         }
 
-
-
         #timerCenter {
-            font-size: 20px;
+            font-size: 30px;
             font-weight: 800;
-            color: #c0392b;
-            margin-top: 4px;
-            font-family: monospace;
+            color: #ff3131;
+            margin-top: 8px;
         }
 
         #timerCenter.urgent {
-            color: #e74c3c;
+            color: #ff3131;
+            text-shadow: 0 0 14px rgba(255, 49, 49, .45);
             animation: blink .5s infinite alternate;
         }
 
         @keyframes blink {
             from {
-                opacity: 1
+                opacity: 1;
             }
 
             to {
-                opacity: .4
+                opacity: .45;
             }
         }
 
-        /* Sièges */
         .player-seat {
             position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             transform: translate(-50%, -50%);
         }
 
         .seat-avatar {
-            width: 52px;
-            height: 52px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
-            border: 3px solid #ddd;
             overflow: hidden;
-            background: #f9f9f9;
-            transition: all .2s;
+            background: white;
+            border: 3px solid rgba(255, 49, 49, .15);
+            transition: .3s;
             position: relative;
         }
 
@@ -1089,20 +128,37 @@ RESPONSIVE
             object-fit: cover;
         }
 
+        .seat-avatar:hover {
+            transform: scale(1.08);
+        }
+
         .seat-avatar.me {
-            border-color: #c0392b;
-            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.2);
+            border-color: #ff3131;
+            box-shadow: 0 0 0 5px rgba(255, 49, 49, .15);
         }
 
         .seat-avatar.active {
-            border-color: #f39c12;
-            box-shadow: 0 0 14px rgba(243, 156, 18, 0.6);
-            animation: activePulse 1s infinite;
+            border-color: #ff3131;
+            animation: pulseSeat 1s infinite;
+        }
+
+        @keyframes pulseSeat {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 49, 49, .5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 49, 49, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 49, 49, 0);
+            }
         }
 
         .seat-avatar.neighbor {
-            border-color: #f39c12;
-            box-shadow: 0 0 8px rgba(243, 156, 18, 0.4);
+            border-color: #ffb400;
+            box-shadow: 0 0 20px rgba(255, 180, 0, .5);
         }
 
         .seat-avatar.dead {
@@ -1115,47 +171,22 @@ RESPONSIVE
         }
 
         .seat-avatar.clickable:hover {
-            border-color: #c0392b;
-            transform: scale(1.08);
-        }
-
-        @keyframes activePulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 8px rgba(243, 156, 18, .5)
-            }
-
-            50% {
-                box-shadow: 0 0 22px rgba(243, 156, 18, .9)
-            }
-        }
-
-        .dead-icon {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, .55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            border-radius: 50%;
+            border-color: #ff3131;
         }
 
         .seat-name {
-            font-size: 10px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             color: #555;
+            max-width: 65px;
             text-align: center;
-            max-width: 64px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .seat-name.me {
-            color: #c0392b;
-            font-weight: 700;
+            color: #ff3131;
         }
 
         .neighbor-badge {
@@ -1173,35 +204,43 @@ RESPONSIVE
         }
 
         .player-seat.selected .seat-avatar {
-            border-color: #c0392b !important;
-            box-shadow: 0 0 14px rgba(192, 57, 43, 0.5) !important;
+            border-color: #ff3131 !important;
+            box-shadow: 0 0 14px rgba(255, 49, 49, .5) !important;
         }
 
-        /* ── PANNEAU DROIT ── */
         .action-col {
-            width: 280px;
+            width: 300px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         .box {
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.09);
-            padding: 16px;
+            padding: 22px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .90);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
         }
 
         .box h3 {
-            font-size: 11px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #ff3131;
+            margin-bottom: 15px;
+        }
+
+        #myRoleBadge {
+            padding: 16px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #ff3131, #ff5b5b);
+            box-shadow: 0 10px 30px rgba(255, 49, 49, .30);
+            font-size: 14px;
             font-weight: 700;
-            color: #c0392b;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #fdecea;
-            padding-bottom: 7px;
+            text-align: center;
+            color: white;
         }
 
         #turnStatusText {
@@ -1219,37 +258,19 @@ RESPONSIVE
         }
 
         .info-reveal {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            padding: 10px;
+            padding: 15px;
+            border-radius: 18px;
+            background: #fff5d6;
+            border: 2px solid #ffd86b;
+            color: #8a6800;
             font-size: 13px;
-            color: #856404;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        #myRoleBadge {
-            background: #c0392b;
-            color: white;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 13px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        #actionDesc {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        /* Grille joueurs */
         #playerGrid {
             display: none;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 10px;
             margin-bottom: 10px;
         }
 
@@ -1258,204 +279,142 @@ RESPONSIVE
         }
 
         .player-select-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
+            width: 72px;
+            padding: 10px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .80);
+            border: 2px solid transparent;
+            transition: .25s;
             cursor: pointer;
-            padding: 6px;
-            border-radius: 8px;
-            border: 2px solid #eee;
-            background: #fafafa;
-            width: 64px;
-            transition: all .15s;
+            text-align: center;
         }
 
         .player-select-card:hover {
-            border-color: #c0392b;
-            background: #fdecea;
+            transform: translateY(-3px);
+            background: #fff1f1;
+            border-color: #ff3131;
         }
 
         .player-select-card.selected {
-            border-color: #c0392b;
-            background: #fdecea;
+            background: #ffe6e6;
+            border-color: #ff3131;
+            box-shadow: 0 6px 18px rgba(255, 49, 49, .20);
         }
 
         .player-select-card img {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            border: 2px solid #ddd;
-        }
-
-        .player-select-card.selected img {
-            border-color: #c0392b;
+            margin: auto;
         }
 
         .player-select-card span {
             font-size: 10px;
-            font-weight: 600;
-            color: #444;
-            text-align: center;
+            font-weight: 700;
         }
 
         #selectedInfo {
             font-size: 12px;
             color: #27ae60;
-            font-weight: 600;
+            font-weight: 700;
             min-height: 16px;
             margin-bottom: 8px;
         }
 
-        /* Boutons action */
         #actionButtons {
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 12px;
         }
 
         #actionButtons .btn {
-            padding: 9px 12px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all .15s;
-            text-align: left;
+            transition: .3s;
+            color: white;
             width: 100%;
+            text-align: left;
         }
 
-        #actionButtons .btn-main {
-            background: #c0392b;
-            color: white;
+        .btn-main {
+            background: linear-gradient(135deg, #ff3131, #ff5a5a);
+            box-shadow: 0 10px 30px rgba(255, 49, 49, .35);
         }
 
-        #actionButtons .btn-main:hover {
-            background: #a93226;
+        .btn-ok {
+            background: linear-gradient(135deg, #2ecc71, #48d987);
+            box-shadow: 0 10px 30px rgba(46, 204, 113, .25);
         }
 
-        #actionButtons .btn-ok {
-            background: #27ae60;
-            color: white;
+        .btn-skip {
+            background: linear-gradient(135deg, #cfcfcf, #b9b9b9);
         }
 
-        #actionButtons .btn-ok:hover {
-            background: #219150;
+        #actionButtons .btn:hover {
+            transform: translateY(-4px);
         }
 
-        #actionButtons .btn-skip {
-            background: #f0f0f0;
-            color: #666;
-        }
-
-        #actionButtons .btn-skip:hover {
-            background: #e0e0e0;
+        #actionButtons .btn:active {
+            transform: scale(.98);
         }
 
         #actionButtons .btn:disabled {
-            opacity: .4;
+            opacity: .45;
             cursor: default;
         }
 
         #waitingMsg {
             font-size: 13px;
-            color: #bbb;
+            color: #999;
             font-style: italic;
             padding: 6px 0;
         }
 
-        /* ══ RESPONSIVE ══ */
-
-        /* Tablette large */
-        @media (max-width: 1024px) {
-            .action-col {
-                width: 250px;
-            }
-
-            .seat-avatar {
-                width: 46px;
-                height: 46px;
-            }
-        }
-
-        /* Tablette */
-        @media (max-width: 768px) {
-            .meeting-page {
-                gap: 12px;
-                padding: 0 12px;
-                margin: 12px auto;
-            }
-
-            .action-col {
-                width: 220px;
-            }
-
-            .seat-avatar {
-                width: 40px;
-                height: 40px;
-            }
-
-            .seat-name {
-                font-size: 9px;
-                max-width: 52px;
-            }
-
-            .oval-wrap {
-                padding-bottom: 68%;
-            }
-
-            .box {
-                padding: 14px;
-            }
-
-            #turnStatusText {
-                font-size: 13px;
-            }
-        }
-
-        /* Mobile — layout vertical */
-        @media (max-width: 600px) {
+        @media(max-width: 900px) {
             .meeting-page {
                 flex-direction: column;
-                gap: 10px;
-                padding: 0 10px;
-                margin: 10px auto;
-            }
-
-            .table-col {
-                width: 100%;
+                padding: 0 15px;
             }
 
             .action-col {
                 width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .action-col .box {
-                flex: 1;
-                min-width: 140px;
             }
 
             .oval-wrap {
-                padding-bottom: 72%;
+                padding-bottom: 78%;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .meeting-page {
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+
+            .box-table {
+                padding: 15px;
+            }
+
+            .box-table h2 {
+                font-size: 17px;
+            }
+
+            .oval-wrap {
+                padding-bottom: 85%;
             }
 
             .seat-avatar {
-                width: 34px;
-                height: 34px;
-                border-width: 2px;
-            }
-
-            .dead-icon {
-                font-size: 15px;
+                width: 38px;
+                height: 38px;
             }
 
             .seat-name {
                 font-size: 8px;
-                max-width: 42px;
+                max-width: 45px;
             }
 
             .neighbor-badge {
@@ -1463,69 +422,15 @@ RESPONSIVE
             }
 
             #tableTurnRole {
-                font-size: 13px;
-            }
-
-            #tableTurnLabel {
-                font-size: 9px;
+                font-size: 15px;
             }
 
             #timerCenter {
-                font-size: 16px;
-            }
-
-            .box-table {
-                padding: 10px;
-            }
-
-            .box-table h2 {
-                font-size: 13px;
-                margin-bottom: 10px;
+                font-size: 22px;
             }
 
             .box {
-                padding: 12px;
-            }
-
-            #myRoleBadge {
-                font-size: 12px;
-                padding: 8px 10px;
-            }
-
-            .player-select-card {
-                width: 56px;
-                padding: 5px;
-            }
-
-            .player-select-card img {
-                width: 32px;
-                height: 32px;
-            }
-
-            #actionButtons .btn {
-                padding: 9px 10px;
-                font-size: 12px;
-            }
-        }
-
-        /* Très petit mobile */
-        @media (max-width: 380px) {
-            .oval-wrap {
-                padding-bottom: 80%;
-            }
-
-            .seat-avatar {
-                width: 28px;
-                height: 28px;
-            }
-
-            .seat-name {
-                font-size: 7px;
-                max-width: 36px;
-            }
-
-            .action-col {
-                flex-direction: column;
+                padding: 16px;
             }
         }
     </style>
