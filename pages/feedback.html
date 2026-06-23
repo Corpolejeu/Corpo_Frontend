@@ -231,6 +231,7 @@
                 </div>
             </div>
 
+
         </div>
     </main>
 
@@ -293,6 +294,22 @@
             }
         }, 1000);
 
+        // ---------------------------------------------------
+        // Vérifier si le joueur est host
+        // ---------------------------------------------------
+        async function checkHost() {
+            try {
+                const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
+                const data = await res.json();
+                if (data.host_id === parseInt(playerId, 10)) {
+                    document.getElementById("actionContainer").style.display = "block";
+                } else {
+                    document.getElementById("waitingMsg").style.display = "block";
+                }
+            } catch (e) {
+                console.error("Erreur vérification host :", e);
+            }
+        }
 
         // ---------------------------------------------------
         // Actions host
