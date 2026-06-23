@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback - Corpo!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
@@ -198,7 +199,7 @@
     <main class="main feedback-container">
         <div class="feedback-box">
 
-            <h1>Feedback / Débat</h1>
+            <h1>Feedback</h1>
 
             <!-- Badge indiquant le contexte -->
             <div id="contextBadge" style="
@@ -230,6 +231,15 @@
                     <button class="chat-send-btn" id="sendBtn">Envoyer</button>
                 </div>
             </div>
+
+            <!-- Bouton HOST : change selon le contexte -->
+            <div id="actionContainer" style="display:none; margin-top:20px;">
+                <button class="btn feedback-vote-btn" id="actionBtn">…</button>
+            </div>
+
+            <p id="waitingMsg" style="display:none; color:#888; font-style:italic; margin-top:15px;">
+                ⏳ En attente de l'hôte…
+            </p>
 
         </div>
     </main>
@@ -300,8 +310,14 @@
             try {
                 const res = await fetch(`${API_URL}/party/verify/${partyCode}`);
                 const data = await res.json();
-                return data.host_id === parseInt(playerId);
-            } catch (e) { return false; }
+                if (data.host_id === parseInt(playerId, 10)) {
+                    document.getElementById("actionContainer").style.display = "block";
+                } else {
+                    document.getElementById("waitingMsg").style.display = "block";
+                }
+            } catch (e) {
+                console.error("Erreur vérification host :", e);
+            }
         }
 
         // ---------------------------------------------------
