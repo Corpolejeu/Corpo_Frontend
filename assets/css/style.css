@@ -1983,3 +1983,73 @@ html {
         font-size: 19px;
     }
 }
+/* MOBILE ONLY — CREER / REJOINDRE */
+@media (max-width: 768px) {
+
+    .create-page,
+    .join-page {
+        min-height: calc(100vh - 78px) !important;
+        padding: 35px 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .create-box,
+    .join-box {
+        width: 92vw !important;
+        max-width: 92vw !important;
+        padding: 48px 32px !important;
+        border-radius: 38px !important;
+    }
+
+    .create-box h1,
+    .join-box h1 {
+        font-size: 44px !important;
+        line-height: 1.08 !important;
+        margin-bottom: 30px !important;
+    }
+
+    .create-box p,
+    .join-box p,
+    .join-box h2 {
+        font-size: 20px !important;
+        line-height: 1.45 !important;
+    }
+
+    .create-box input,
+    .join-box input {
+        padding: 22px !important;
+        font-size: 18px !important;
+        border-radius: 20px !important;
+        margin-bottom: 18px !important;
+    }
+
+    .create-box .btn,
+    .join-box .btn {
+        padding: 24px !important;
+        font-size: 20px !important;
+        border-radius: 24px !important;
+    }
+
+    .private-checkbox {
+        font-size: 22px !important;
+        margin: 24px 0 !important;
+        gap: 16px !important;
+    }
+
+    .private-checkbox input[type="checkbox"] {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .public-list {
+        margin: 20px 0 !important;
+        font-size: 18px !important;
+    }
+
+    .public-party {
+        padding: 18px !important;
+        border-radius: 22px !important;
+    }
+}
