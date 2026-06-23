@@ -22,15 +22,18 @@
         </div>
     </div>
 
-    <main class="main">
-        <div class="box">
+    <main class="main create-page">
+        <div class="box create-box">
             <h1>Créer un meeting</h1>
+
             <p>Entrez le nom de votre entreprise de rêve !</p>
+
             <input type="text" id="partyName" placeholder="Ex: Venez jouer !">
 
-            <label style="display:block;margin-top:10px;">
-                <input type="checkbox" id="isPrivate"> Meeting privé
-            </label>
+            <br><label class="private-checkbox">
+                <input type="checkbox" id="isPrivate">
+                <span>Meeting privé</span>
+            </label></br>
 
             <button class="btn" id="createBtn">Créer un meeting</button>
         </div>
@@ -42,25 +45,26 @@
 
     <script>
         const savedPseudo = localStorage.getItem("pseudo");
+
         if (savedPseudo) {
             const el = document.getElementById("userPseudo");
             if (el) el.textContent = savedPseudo;
         }
 
         document.getElementById("createBtn").addEventListener("click", async () => {
-            const partyName = document.getElementById("partyName").value;
+            const partyName = document.getElementById("partyName").value.trim();
             const isPrivate = document.getElementById("isPrivate").checked;
 
             if (!partyName) {
                 alert("Veuillez entrer un nom pour votre meeting !");
                 return;
             }
+
             if (!savedPseudo) {
                 alert("Tu dois être connecté pour créer un meeting !");
                 return;
             }
 
-            // 🔥 Afficher le message de création
             const btn = document.getElementById("createBtn");
             btn.disabled = true;
             btn.textContent = "⏳ Création en cours…";
@@ -69,7 +73,11 @@
                 const response = await fetch("https://corpo-backend.onrender.com/party/create", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ pseudo: savedPseudo, name: partyName, is_private: isPrivate })
+                    body: JSON.stringify({
+                        pseudo: savedPseudo,
+                        name: partyName,
+                        is_private: isPrivate
+                    })
                 });
 
                 const data = await response.json();
@@ -78,6 +86,7 @@
                     btn.textContent = "✅ Meeting créé !";
                     localStorage.setItem("partyCode", data.code);
                     localStorage.setItem("playerId", data.player_id);
+
                     setTimeout(() => {
                         window.location.href = `lobby.html?code=${data.code}`;
                     }, 600);

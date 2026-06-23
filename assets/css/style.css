@@ -645,7 +645,35 @@ textarea:focus {
 
 }
 
+.private-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 
+    margin-top: 18px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #2c3e50;
+
+    cursor: pointer;
+}
+
+.private-checkbox input[type="checkbox"] {
+    width: 28px;
+    height: 28px;
+
+    accent-color: #ff3131;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+.private-checkbox span {
+    line-height: 1;
+}
 
 
 /*=========================
