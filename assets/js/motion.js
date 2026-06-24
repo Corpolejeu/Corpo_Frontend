@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             background:
                 linear-gradient(
-                    rgba(255,255,255,.45),
-                    rgba(255,255,255,.45)
+                    rgba(255, 255, 255, 0.21),
+                    rgba(255, 255, 255, 0.19)
                 ),
                 url("../assets/images/background.png");
 
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
             background: linear-gradient(
                 120deg,
                 transparent,
-                rgba(255,255,255,.45),
+                rgba(255, 255, 255, 0),
                 transparent
             );
 
