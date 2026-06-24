@@ -155,11 +155,11 @@
                 } else {
                     if (!autoStartTimer) {
                         countdown = 30;
-                        waitingMsg.textContent = `4 collaborateurs présents ! Démarrage automatique dans ${countdown}s...`;
+                        waitingMsg.textContent = `4 collaborateurs présents ! Démarrage dans ${countdown}s...`;
 
                         autoStartTimer = setInterval(async () => {
                             countdown--;
-                            waitingMsg.textContent = `4 collaborateurs présents ! Démarrage automatique dans ${countdown}s...`;
+                            waitingMsg.textContent = `4 collaborateurs présents ! Démarrage dans ${countdown}s...`;
 
                             if (countdown <= 0) {
                                 clearInterval(autoStartTimer);
@@ -170,7 +170,7 @@
                                     const data = await res.json();
 
                                     if (!res.ok) {
-                                        alert(data.detail || "Impossible de lancer la partie automatiquement.");
+                                        alert(data.detail || "Impossible de lancer la partie.");
                                     }
                                 } catch (e) {
                                     console.error("Erreur auto-start :", e);
@@ -211,6 +211,8 @@
 
     <script src="../assets/js/translate.js"></script>
     <script src="../assets/js/music.js"></script>
+    <script src="../assets/js/motion.js"></script>
+
 
 
 </body>
