@@ -1,40 +1,45 @@
 // ─────────────────────────────
-// TRADUCTION FR / EN - CORPO!
+// TRADUCTION MULTILINGUE - CORPO!
 // ─────────────────────────────
 
 document.body.insertAdjacentHTML("beforeend", `
     <div id="langSwitcher">
-        <button type="button" onclick="setLang('fr')">🇫🇷 FR</button>
-        <button type="button" onclick="setLang('en')">🇬🇧 EN</button>
+        <select id="langSelect" onchange="setLang(this.value)">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="it">🇮🇹 Italiano</option>
+        </select>
     </div>
 
     <div id="google_translate_element"></div>
 `);
 
 const style = document.createElement("style");
+
 style.innerHTML = `
 #langSwitcher{
     position:fixed;
     bottom:20px;
     right:20px;
     z-index:99999;
-
-    display:flex;
-    gap:8px;
 }
 
-#langSwitcher button{
+#langSelect{
     border:none;
-    border-radius:16px;
+    outline:none;
 
-    padding:11px 15px;
+    padding:12px 16px;
+
+    border-radius:18px;
 
     background:white;
     color:#ff3131;
 
     font-family:Poppins,sans-serif;
-    font-size:15px;
-    font-weight:800;
+    font-size:14px;
+    font-weight:700;
 
     cursor:pointer;
 
@@ -43,7 +48,7 @@ style.innerHTML = `
     transition:.25s;
 }
 
-#langSwitcher button:hover{
+#langSelect:hover{
     transform:translateY(-2px);
 }
 
@@ -54,7 +59,7 @@ style.innerHTML = `
     pointer-events:none;
 }
 
-/* Cache la barre Google en haut */
+/* Cache complètement Google */
 iframe.goog-te-banner-frame,
 .goog-te-banner-frame,
 .skiptranslate iframe{
@@ -68,7 +73,6 @@ body{
     position:static!important;
 }
 
-/* Cache éléments Google */
 .goog-logo-link,
 .goog-te-gadget span,
 .goog-te-gadget-icon{
@@ -79,42 +83,52 @@ body{
     font-size:0!important;
 }
 
+/* Mobile */
 @media(max-width:768px){
+
     #langSwitcher{
         bottom:15px;
         right:15px;
     }
 
-    #langSwitcher button{
-        padding:10px 13px;
-        font-size:14px;
+    #langSelect{
+        font-size:13px;
+        padding:10px 14px;
         border-radius:14px;
+        max-width:170px;
     }
 }
 `;
+
 document.head.appendChild(style);
 
 // ─────────────────────────────
-// INITIALISATION GOOGLE TRANSLATE
+// GOOGLE TRANSLATE
 // ─────────────────────────────
 
 window.googleTranslateElementInit = function () {
+
     new google.translate.TranslateElement({
         pageLanguage: "fr",
-        includedLanguages: "fr,en",
+        includedLanguages: "fr,en,es,de,it",
         autoDisplay: false
     }, "google_translate_element");
+
 };
 
 const script = document.createElement("script");
-script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+
+script.src =
+    "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+
 document.body.appendChild(script);
 
 // ─────────────────────────────
-// CHANGER DE LANGUE
+// CHANGER LANGUE
 // ─────────────────────────────
 
 function setLang(lang) {
+
     const select = document.querySelector(".goog-te-combo");
 
     if (!select) {
@@ -127,13 +141,15 @@ function setLang(lang) {
 }
 
 // ─────────────────────────────
-// NETTOYAGE BARRE GOOGLE
+// SUPPRESSION BARRE GOOGLE
 // ─────────────────────────────
 
 function cleanGoogleBar() {
+
     document.body.style.top = "0px";
 
     document.querySelectorAll("iframe").forEach(frame => {
+
         const src = frame.src || "";
 
         if (
