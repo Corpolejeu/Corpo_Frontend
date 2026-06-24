@@ -62,8 +62,6 @@
                 En attente de 4 collaborateurs pour démarrer...
             </p>
 
-            <button id="startBtn" class="btn">Lancer le meeting</button>
-
         </div>
     </main>
 
@@ -81,34 +79,33 @@
 
         document.getElementById("userPseudo").textContent = pseudo;
         document.getElementById("partyCode").textContent = code;
-        // 🔥 Afficher le nom de la partie
+
         fetch(`${API_URL}/party/verify/${code}`)
             .then(r => r.json())
-            .then(d => { if (d.name) document.querySelector("h1").textContent = d.name; }); localStorage.setItem("partyCode", code);
+            .then(d => { if (d.name) document.querySelector("h1").textContent = d.name; });
+
+        localStorage.setItem("partyCode", code);
 
         let partyId = null;
         let hostId = null;
         let partyLaunched = false;
 
-        // -------------------------------------------------------------------------
-        // 🔥 FIX : Ajout du paramètre obligatoire ?player_id= pour ouvrir la room
-        // -------------------------------------------------------------------------
+        // TIMER AUTO-START
+        let autoStartTimer = null;
+        let countdown = 30;
+
+        // WebSocket
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`);
 
         ws.onopen = () => {
-            console.log("✅ Connexion WebSocket établie avec succès dans la room :", code);
+            console.log("Connexion WebSocket OK :", code);
         };
 
         ws.onmessage = (event) => {
-            console.log("📩 Signal reçu du serveur :", event.data);
             if (event.data === "start" || event.data === "phase:decouverte_role") {
                 partyLaunched = true;
                 window.location.href = `decouverte_role.html?code=${code}`;
             }
-        };
-
-        ws.onerror = (error) => {
-            console.error("❌ Erreur WebSocket :", error);
         };
 
         async function loadPartyInfo() {
@@ -142,19 +139,47 @@
                 });
 
                 const waitingMsg = document.getElementById("waitingMsg");
-                const startBtn = document.getElementById("startBtn");
 
-                // Note : Ajuste à 1 ou 2 si tu testes seul ou à deux joueurs pour la phase de dev
+                // -----------------------------
+                // AUTO-START LOGIC
+                // -----------------------------
                 if (players.length < 4) {
                     waitingMsg.textContent = `En attente de collaborateurs (${players.length}/4)...`;
-                    waitingMsg.style.display = "block";
-                    startBtn.style.display = "none";
+
+                    if (autoStartTimer) {
+                        clearInterval(autoStartTimer);
+                        autoStartTimer = null;
+                        countdown = 30;
+                    }
+
                 } else {
-                    waitingMsg.style.display = "none";
-                    if (Number(playerId) === Number(hostId)) {
-                        startBtn.style.display = "block";
+                    if (!autoStartTimer) {
+                        countdown = 30;
+                        waitingMsg.textContent = `4 collaborateurs présents ! Démarrage automatique dans ${countdown}s...`;
+
+                        autoStartTimer = setInterval(async () => {
+                            countdown--;
+                            waitingMsg.textContent = `4 collaborateurs présents ! Démarrage automatique dans ${countdown}s...`;
+
+                            if (countdown <= 0) {
+                                clearInterval(autoStartTimer);
+                                autoStartTimer = null;
+
+                                try {
+                                    const res = await fetch(`${API_URL}/party/start/${partyId}`, { method: "POST" });
+                                    const data = await res.json();
+
+                                    if (!res.ok) {
+                                        alert(data.detail || "Impossible de lancer la partie automatiquement.");
+                                    }
+                                } catch (e) {
+                                    console.error("Erreur auto-start :", e);
+                                }
+                            }
+                        }, 1000);
                     }
                 }
+
             } catch (e) {
                 console.error("Erreur loadPlayers :", e);
             }
@@ -162,37 +187,13 @@
 
         async function initLobby() {
             await loadPartyInfo();
-            // Charger une première fois immédiatement
             await loadPlayers();
-            // Puis actualiser la liste toutes les 2 secondes
             setInterval(loadPlayers, 2000);
-
-            document.getElementById("startBtn").addEventListener("click", async () => {
-                if (!partyId) {
-                    alert("Erreur : partyId non défini !");
-                    return;
-                }
-
-                partyLaunched = true;
-
-                try {
-                    const res = await fetch(`${API_URL}/party/start/${partyId}`, { method: "POST" });
-                    const data = await res.json();
-
-                    if (!res.ok) {
-                        partyLaunched = false;
-                        alert(data.detail || "Impossible de lancer la partie.");
-                    }
-                } catch (e) {
-                    partyLaunched = false;
-                    console.error("Erreur lors du lancement de la partie :", e);
-                }
-            });
         }
 
         initLobby();
 
-        // Heartbeat pour maintenir la session active
+        // Heartbeat
         function sendHeartbeat() {
             if (playerId) {
                 fetch(`${API_URL}/party/heartbeat/${playerId}`, { method: "POST" }).catch(() => { });
@@ -207,7 +208,10 @@
             }
         });
     </script>
+
     <script src="../assets/js/translate.js"></script>
+    <script src="../assets/js/music.js"></script>
+
 
 </body>
 
