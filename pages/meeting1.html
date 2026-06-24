@@ -390,48 +390,76 @@
             }
         }
 
-        @media(max-width: 600px) {
+        @media(max-width: 768px) {
+
             .meeting-page {
-                margin: 20px auto;
-                padding: 0 10px;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 18px 0 !important;
+                padding: 0 14px !important;
+                gap: 14px !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+
+            .table-col,
+            .action-col {
+                width: 100% !important;
             }
 
             .box-table {
-                padding: 15px;
-            }
-
-            .box-table h2 {
-                font-size: 17px;
+                width: 100% !important;
+                padding: 14px !important;
+                border-radius: 28px !important;
             }
 
             .oval-wrap {
-                padding-bottom: 85%;
+                width: 100% !important;
+                padding-bottom: 78% !important;
+            }
+
+            .oval-surface {
+                inset: 9% !important;
             }
 
             .seat-avatar {
-                width: 38px;
-                height: 38px;
+                width: 42px !important;
+                height: 42px !important;
             }
 
             .seat-name {
-                font-size: 8px;
-                max-width: 45px;
-            }
-
-            .neighbor-badge {
-                display: none !important;
-            }
-
-            #tableTurnRole {
-                font-size: 15px;
+                font-size: 10px !important;
+                max-width: 58px !important;
             }
 
             #timerCenter {
-                font-size: 22px;
+                font-size: 28px !important;
+            }
+
+            #myRoleBadge {
+                width: 100% !important;
+                margin-top: 0 !important;
+                font-size: 24px !important;
+                padding: 22px !important;
+                border-radius: 28px !important;
             }
 
             .box {
-                padding: 16px;
+                width: 100% !important;
+                padding: 24px !important;
+                border-radius: 28px !important;
+            }
+
+            .box h3 {
+                font-size: 22px !important;
+            }
+
+            #turnStatusText {
+                font-size: 22px !important;
+            }
+
+            #turnInstructionText {
+                font-size: 19px !important;
             }
         }
     </style>

@@ -85,6 +85,7 @@ NAVBAR
 
 .navbar {
 
+    width: 100%;
 
     height: 78px;
 
@@ -130,7 +131,7 @@ NAVBAR
 .logo {
 
 
-    font-size: 30px;
+    font-size: 26px !important;
 
 
     font-weight: 800;
@@ -1983,6 +1984,7 @@ html {
         font-size: 19px;
     }
 }
+
 /* MOBILE ONLY — CREER / REJOINDRE */
 @media (max-width: 768px) {
 
@@ -2052,4 +2054,152 @@ html {
         padding: 18px !important;
         border-radius: 22px !important;
     }
+}
+
+/* ================================
+   FIX MOBILE GLOBAL
+================================ */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        min-height: 78px !important;
+        height: auto !important;
+        padding: 18px 28px !important;
+    }
+
+    .logo {
+        font-size: 34px !important;
+        line-height: 1.05 !important;
+    }
+
+    .nav-user {
+        font-size: 22px !important;
+        white-space: nowrap !important;
+    }
+
+    .nav-links {
+        display: none !important;
+    }
+
+    .main {
+        padding: 24px 18px !important;
+        align-items: flex-start !important;
+    }
+
+    .waiting-box {
+        width: calc(100vw - 36px) !important;
+        max-width: none !important;
+        margin: 28px auto 0 !important;
+        padding: 42px 28px !important;
+        border-radius: 34px !important;
+    }
+
+    .waiting-box h2 {
+        font-size: 34px !important;
+        line-height: 1.15 !important;
+    }
+
+    .waiting-box p {
+        font-size: 22px !important;
+        line-height: 1.4 !important;
+    }
+
+    .victoire-box,
+    .defaite-box {
+        width: calc(100vw - 36px) !important;
+        max-width: none !important;
+        padding: 34px 24px !important;
+        border-radius: 34px !important;
+    }
+
+    .victoire-text,
+    .defaite-text {
+        font-size: 24px !important;
+        line-height: 1.35 !important;
+    }
+
+    .end-actions .btn,
+    .idea-box .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 78px !important;
+        padding: 20px !important;
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+        white-space: normal !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .social-title {
+        font-size: 20px !important;
+        line-height: 1.35 !important;
+    }
+
+    .social-link {
+        font-size: 20px !important;
+        padding: 16px 20px !important;
+        border-radius: 18px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: auto !important;
+        min-height: 72px !important;
+        padding: 16px 22px !important;
+        gap: 14px !important;
+    }
+
+    .logo {
+        font-size: 30px !important;
+        line-height: 1.05 !important;
+        max-width: 180px !important;
+        white-space: normal !important;
+    }
+
+    .nav-user {
+        font-size: 20px !important;
+        margin-left: auto !important;
+        white-space: nowrap !important;
+    }
+
+    .nav-links {
+        display: none !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .create-box h1,
+    .box h1 {
+
+        font-size: 27px !important;
+        line-height: 1.15 !important;
+
+        text-align: center !important;
+
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+        width: 100% !important;
+    }
+
+    .create-box p,
+    .box p,
+
+    .create-box h2,
+    .box h2 {
+
+        text-align: center !important;
+
+        font-size: 18px !important;
+
+        line-height: 1.5 !important;
+    }
+
 }

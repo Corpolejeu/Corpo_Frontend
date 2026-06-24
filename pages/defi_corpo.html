@@ -816,8 +816,13 @@
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (!text) return;
+
+            // On envoie au serveur
             ws.send(JSON.stringify({ type: "chat", pseudo: eliminatedPseudo + " (réponse)", message: text }));
-            addMessage(`${eliminatedPseudo} : ${text}`, "chatMessages");
+
+            // LIGNE SUPPRIMÉE ICI pour éviter le doublon !
+
+            // On vide simplement le champ de texte
             input.value = "";
         }
 
