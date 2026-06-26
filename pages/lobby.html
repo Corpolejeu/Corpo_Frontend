@@ -121,7 +121,6 @@
         const playerId = localStorage.getItem("playerId");
 
         document.getElementById("userPseudo").textContent = pseudo;
-        document.getElementById("partyCode").textContent = code;
 
         fetch(`${API_URL}/party/verify/${code}`)
             .then(r => r.json())
