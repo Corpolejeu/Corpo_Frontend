@@ -2203,3 +2203,176 @@ html {
     }
 
 }
+
+/* ===== CHAT / RÉPONSE DÉFI ===== */
+
+#zoneEliminated,
+#zoneOthers {
+    width: 100%;
+    max-width: 720px;
+}
+
+.chat-box {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, .92);
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, .10),
+        0 0 0 1px rgba(255, 49, 49, .08);
+}
+
+.chat-messages {
+    height: 230px;
+    overflow-y: auto;
+    padding: 16px;
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, #fffafa, #ffffff);
+    border: 2px solid rgba(255, 49, 49, .10);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-messages p {
+    width: fit-content;
+    max-width: 88%;
+    padding: 12px 15px;
+    margin: 0;
+    border-radius: 16px 16px 16px 5px;
+    background: white;
+    color: #2c3e50;
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 600;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, .06);
+}
+
+.chat-input-area {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 20px;
+    background: #fff3f3;
+    border: 2px solid rgba(255, 49, 49, .12);
+}
+
+.chat-input-area input {
+    width: 100%;
+    height: 54px;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    padding: 0 16px;
+    background: white;
+    color: #2c3e50;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: inset 0 0 0 2px #f0f0f0;
+}
+
+.chat-input-area input:focus {
+    box-shadow:
+        inset 0 0 0 2px #ff3131,
+        0 0 0 4px rgba(255, 49, 49, .12);
+}
+
+.chat-send-btn {
+    min-height: 54px;
+    border: none;
+    padding: 0 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #ff3131, #ff5c5c);
+    box-shadow: 0 10px 25px rgba(255, 49, 49, .28);
+    transition: .2s;
+}
+
+.chat-send-btn:hover {
+    transform: translateY(-2px);
+}
+
+#doneBtn {
+    margin-top: 14px !important;
+    min-height: 58px !important;
+    border-radius: 18px !important;
+    background: linear-gradient(135deg, #27ae60, #40d77a) !important;
+    font-size: 16px !important;
+    box-shadow: 0 10px 25px rgba(39, 174, 96, .25) !important;
+}
+
+/* ===== MOBILE CHAT DÉFI ===== */
+
+@media(max-width:768px) {
+
+    #zoneEliminated,
+    #zoneOthers {
+        width: 100% !important;
+    }
+
+    .chat-box {
+        width: 100% !important;
+        padding: 14px !important;
+        border-radius: 26px !important;
+        margin-top: 4px !important;
+    }
+
+    .chat-messages {
+        height: 190px !important;
+        padding: 14px !important;
+        border-radius: 22px !important;
+    }
+
+    .chat-messages p {
+        font-size: 16px !important;
+        line-height: 1.35 !important;
+        max-width: 94% !important;
+        padding: 12px 14px !important;
+    }
+
+    .chat-input-area {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 14px !important;
+        border-radius: 24px !important;
+        background: linear-gradient(135deg, #fff2f2, #ffffff) !important;
+    }
+
+    .chat-input-area input {
+        height: 62px !important;
+        font-size: 18px !important;
+        border-radius: 18px !important;
+        text-align: center !important;
+    }
+
+    .chat-send-btn {
+        width: 100% !important;
+        min-height: 62px !important;
+        border-radius: 20px !important;
+        font-size: 19px !important;
+    }
+
+    #doneBtn {
+        min-height: 66px !important;
+        font-size: 19px !important;
+        border-radius: 22px !important;
+    }
+
+    #zoneEliminated>p {
+        font-size: 15px !important;
+        line-height: 1.4 !important;
+        background: #fff3f3 !important;
+        padding: 12px 14px !important;
+        border-radius: 16px !important;
+        color: #666 !important;
+    }
+}

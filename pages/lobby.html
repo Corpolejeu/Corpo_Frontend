@@ -92,7 +92,7 @@
 
         // TIMER AUTO-START
         let autoStartTimer = null;
-        let countdown = 30;
+        let countdown = 20;
 
         // WebSocket
         const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`);
@@ -149,12 +149,12 @@
                     if (autoStartTimer) {
                         clearInterval(autoStartTimer);
                         autoStartTimer = null;
-                        countdown = 30;
+                        countdown = 20;
                     }
 
                 } else {
                     if (!autoStartTimer) {
-                        countdown = 30;
+                        countdown = 20;
                         waitingMsg.textContent = `4 collaborateurs présents ! Démarrage dans ${countdown}s...`;
 
                         autoStartTimer = setInterval(async () => {

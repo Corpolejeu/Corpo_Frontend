@@ -941,6 +941,15 @@
                 return;
             }
 
+            if (msg.startsWith("manager_timeout_random:")) {
+                const victim = msg.split(":")[1];
+                // Afficher un message d'alerte visible
+                const alertEl = document.getElementById("choMessage") || document.createElement("p");
+                alertEl.textContent = `⚠️ Les Managers ont trop tardé… ${victim} risque d'être licencié(e) !`;
+                alertEl.style.cssText = "color:#FF3131;font-weight:bold;text-align:center;";
+                document.querySelector(".meeting-box")?.appendChild(alertEl);
+            }
+
             if (msg.startsWith("pascal_result:")) {
                 const p = msg.split(":");
                 const isManager = p[1] === "true";
