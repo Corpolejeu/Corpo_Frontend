@@ -1017,10 +1017,19 @@
                 return;
             }
 
+            // APRÈS
+            // APRÈS (complet)
             if (msg.startsWith("manager_timeout_random:")) {
                 const victim = msg.split(":")[1];
+                document.getElementById("tableTurnRole").textContent = "⚠️ Temps écoulé !";
+                document.getElementById("tableTurnLabel").textContent = `🎲 ${victim} licencié(e) aléatoirement`;
+                document.getElementById("timerCenter").textContent = "";
                 document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoReveal").textContent = `⚠️ Les Managers ont trop tardé… ${victim} a été désigné(e) aléatoirement !`;
+                document.getElementById("infoReveal").textContent = `⚠️ Fabien n'a pas choisi à temps — ${victim} est licencié(e) aléatoirement !`;
+                // Bloquer l'action de Fabien
+                document.getElementById("actionBox").style.display = "none";
+                document.getElementById("actionButtons").innerHTML = "";
+                clearInterval(displayTimerInterval);
                 return;
             }
 
