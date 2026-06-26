@@ -113,24 +113,51 @@
     </div>
 
     <script>
+        // APRÈS
         const API_URL = "https://corpo-backend.onrender.com";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
 
         const pseudo = localStorage.getItem("pseudo");
-        const playerId = localStorage.getItem("playerId");
+        let playerId = localStorage.getItem("playerId");
+
+        if (!pseudo) {
+            localStorage.setItem("pendingPartyCode", code);
+            window.location.href = "accueil.html";
+        }
 
         document.getElementById("userPseudo").textContent = pseudo;
-
-        fetch(`${API_URL}/party/verify/${code}`)
-            .then(r => r.json())
-            .then(d => { if (d.name) document.querySelector("h1").textContent = d.name; });
-
         localStorage.setItem("partyCode", code);
 
         let partyId = null;
         let hostId = null;
         let partyLaunched = false;
+
+        // Si le joueur arrive via un lien d'invitation → rejoindre automatiquement
+        async function joinIfNeeded() {
+            try {
+                const verif = await fetch(`${API_URL}/party/verify/${code}`);
+                const verifData = await verif.json();
+                if (verifData.name) document.querySelector("h1").textContent = verifData.name;
+
+                // Si pas de playerId OU si le joueur n'est pas dans cette partie → rejoindre
+                const res = await fetch(`${API_URL}/party/join`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ pseudo, code })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem("playerId", data.player_id);
+                    playerId = data.player_id;
+                } else if (data.detail) {
+                    // Déjà dans la partie ou partie commencée → utiliser le playerId existant
+                    console.log("Join info:", data.detail);
+                }
+            } catch (e) {
+                console.error("Erreur joinIfNeeded :", e);
+            }
+        }
 
         // TIMER AUTO-START
         let autoStartTimer = null;
@@ -233,8 +260,8 @@
             setInterval(loadPlayers, 2000);
         }
 
-        initLobby();
-
+        // APRÈS
+        joinIfNeeded().then(() => initLobby());
         // Heartbeat
         function sendHeartbeat() {
             if (playerId) {
