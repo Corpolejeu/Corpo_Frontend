@@ -390,116 +390,64 @@
             }
         }
 
-        @media(max-width: 768px) {
-
-            .meeting-page {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 18px 0 !important;
-                padding: 0 14px !important;
-                gap: 14px !important;
-                flex-direction: column !important;
-                align-items: center !important;
-            }
-
-            .table-col,
-            .action-col {
-                width: 100% !important;
-            }
-
-            .box-table {
-                width: 100% !important;
-                padding: 14px !important;
-                border-radius: 28px !important;
-            }
+        @media (max-width: 768px) {
 
             .oval-wrap {
-                width: 100% !important;
-                padding-bottom: 78% !important;
+                padding-bottom: 95% !important;
+                margin-top: 10px !important;
             }
 
             .oval-surface {
-                inset: 9% !important;
+                top: 10% !important;
+                left: 6% !important;
+                right: 6% !important;
+                bottom: 10% !important;
+
+                border-radius: 50% / 42% !important;
+                transform: none !important;
             }
 
-            .seat-avatar {
-                width: 42px !important;
-                height: 42px !important;
+            #tableTurnRole {
+                font-size: 30px !important;
+                margin-bottom: 4px !important;
             }
 
-            .seat-name {
-                font-size: 10px !important;
-                max-width: 58px !important;
+            #tableTurnLabel {
+                font-size: 17px !important;
+                margin-bottom: 10px !important;
+            }
+
+            #roleImg {
+                width: 74px !important;
+                height: 74px !important;
+                margin: 8px auto 12px !important;
             }
 
             #timerCenter {
-                font-size: 28px !important;
-            }
+                position: static !important;
+                transform: none !important;
 
-            #myRoleBadge {
-                width: 100% !important;
-                margin-top: 0 !important;
-                font-size: 24px !important;
-                padding: 22px !important;
-                border-radius: 28px !important;
-            }
-
-            .box {
-                width: 100% !important;
-                padding: 24px !important;
-                border-radius: 28px !important;
-            }
-
-            .box h3 {
-                font-size: 22px !important;
-            }
-
-            #turnStatusText {
-                font-size: 22px !important;
-            }
-
-            #turnInstructionText {
-                font-size: 19px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            #timerCenter {
-                position: absolute !important;
-                left: 50% !important;
-                bottom: 18% !important;
-                transform: translateX(-50%) !important;
-
-                z-index: 20 !important;
+                display: block !important;
+                margin-top: 8px !important;
 
                 font-size: 34px !important;
                 font-weight: 900 !important;
-
                 color: #ff3131 !important;
-                background: rgba(255, 255, 255, .92) !important;
 
-                padding: 8px 18px !important;
-                border-radius: 999px !important;
-
-                box-shadow: 0 8px 25px rgba(255, 49, 49, .25) !important;
-                border: 3px solid rgba(255, 49, 49, .20) !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
             }
 
-            #timerCenter.urgent {
-                color: white !important;
-                background: linear-gradient(135deg, #ff3131, #ff5b5b) !important;
-                animation: timerPulseMobile .5s infinite alternate !important;
+            .seat-avatar {
+                width: 48px !important;
+                height: 48px !important;
             }
 
-            @keyframes timerPulseMobile {
-                from {
-                    transform: translateX(-50%) scale(1);
-                }
-
-                to {
-                    transform: translateX(-50%) scale(1.08);
-                }
+            .seat-name {
+                font-size: 13px !important;
+                max-width: 70px !important;
             }
         }
     </style>
