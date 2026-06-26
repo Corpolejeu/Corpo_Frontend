@@ -267,20 +267,12 @@
 
 
         .chat-messages {
-
-
             background: #fafafa;
-
             border: 1px solid #eee;
-
-            height: 220px;
-
+            height: 400px;
             overflow-y: auto;
-
             padding: 18px;
-
             border-radius: 18px;
-
         }
 
 
@@ -565,6 +557,12 @@
 
             }
 
+            .chat-messages {
+                height: 55vh;
+                min-height: 250px;
+                max-height: 450px;
+            }
+
         }
     </style>
 </head>
@@ -598,16 +596,25 @@
                 <!-- Zone joueur éliminé -->
                 <div id="zoneEliminated" style="display:none;">
                     <div class="chat-box">
-                        <div class="chat-messages" id="chatMessages">
-                        </div>
+
+                        <!-- Zone de saisie EN HAUT -->
                         <div class="chat-input-area">
                             <input type="text" id="chatInput" placeholder="Ta réponse…" maxlength="300">
-                            <button class="chat-send-btn" id="sendBtn">Envoyer</button>
+                            <button class="chat-send-btn" id="sendBtn">
+                                Envoyer
+                            </button>
                         </div>
+
+                        <!-- Réponses EN DESSOUS -->
+                        <div class="chat-messages" id="chatMessages" style="margin-top:15px;">
+                        </div>
+
                     </div>
+
                     <p style="font-size:13px; color:#888; margin-top:8px; text-align:center;">
                         Envoie ta réponse dans le chat, puis clique sur "J'ai terminé".
                     </p>
+
                     <button class="chat-send-btn" id="doneBtn"
                         style="width:100%;margin-top:10px;padding:12px;background:#27ae60;border-radius:8px;">
                         ✅ J'ai terminé mon défi !

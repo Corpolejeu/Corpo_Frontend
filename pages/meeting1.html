@@ -410,136 +410,137 @@
 
         @media(max-width: 768px) {
             .meeting-page {
-                margin: 18px auto;
-                padding: 0 14px;
+                margin: 12px auto;
+                padding: 0 12px;
+                gap: 16px;
             }
 
             .box-table {
                 width: 100%;
-                padding: 22px 8px 30px;
+                padding: 18px 8px 22px;
                 border-radius: 34px;
             }
 
             .box-table h2 {
-                font-size: 36px;
+                font-size: 34px;
                 line-height: 1.05;
-                margin-bottom: 8px;
+                margin-bottom: 6px;
             }
 
             .oval-wrap {
-                height: 760px;
+                height: 480px;
                 width: 100%;
                 overflow: visible;
             }
 
             .oval-surface {
-                top: 180px;
-                left: 5%;
-                right: 5%;
-                bottom: 180px;
-                border-radius: 50% / 43%;
+                top: 88px;
+                left: 6%;
+                right: 6%;
+                bottom: 88px;
+                border-radius: 50% / 42%;
             }
 
             #tableTurnRole {
                 position: absolute;
-                top: 48px;
+                top: 38px;
                 left: 50%;
                 transform: translateX(-50%);
-                font-size: 38px;
+                font-size: 34px;
                 white-space: nowrap;
+                z-index: 30;
             }
 
             #tableTurnLabel {
                 position: absolute;
-                top: 96px;
+                top: 80px;
                 left: 50%;
                 transform: translateX(-50%);
-                font-size: 19px;
+                font-size: 17px;
                 white-space: nowrap;
+                z-index: 30;
             }
 
             #roleImg {
                 position: absolute;
-                top: 185px;
+                top: 145px;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 100px !important;
-                height: 100px !important;
+                width: 86px !important;
+                height: 86px !important;
                 margin: 0 !important;
+                z-index: 30;
             }
 
             #timerCenter {
                 position: absolute;
                 left: 50%;
-                bottom: 95px;
+                bottom: 42px;
                 transform: translateX(-50%);
-                font-size: 56px;
-
-                background: rgba(255, 255, 255, .95);
-                padding: 12px 24px;
+                font-size: 42px;
+                background: rgba(255, 255, 255, .94);
+                padding: 8px 18px;
                 border-radius: 999px;
-
-                border: 3px solid rgba(255, 49, 49, .2);
-                box-shadow: 0 12px 35px rgba(255, 49, 49, .25);
-
-                z-index: 100;
+                border: 3px solid rgba(255, 49, 49, .20);
+                box-shadow: 0 10px 28px rgba(255, 49, 49, .22);
+                z-index: 60;
             }
 
             .seat-avatar {
-                width: 62px;
-                height: 62px;
+                width: 56px;
+                height: 56px;
             }
 
             .seat-name {
-                font-size: 15px;
-                max-width: 90px;
+                font-size: 14px;
+                max-width: 82px;
                 text-shadow: 0 2px 8px white;
             }
 
             .neighbor-badge {
-                font-size: 13px;
-                padding: 4px 8px;
+                font-size: 12px;
+                padding: 3px 7px;
                 border-radius: 10px;
             }
 
             #myRoleBadge {
-                font-size: 26px;
-                padding: 24px 18px;
+                font-size: 25px;
+                padding: 22px 16px;
                 border-radius: 30px;
             }
         }
 
         @media(max-width: 390px) {
             .oval-wrap {
-                height: 660px;
+                height: 500px;
             }
 
             .oval-surface {
-                top: 165px;
-                bottom: 160px;
-                left: 4%;
-                right: 4%;
+                top: 95px;
+                bottom: 95px;
+                left: 5%;
+                right: 5%;
             }
 
             #tableTurnRole {
-                top: 56px;
-                font-size: 34px;
+                top: 40px;
+                font-size: 32px;
             }
 
             #tableTurnLabel {
-                top: 100px;
-                font-size: 17px;
+                top: 78px;
+                font-size: 16px;
             }
 
             #roleImg {
-                top: 205px;
-                width: 96px !important;
-                height: 96px !important;
+                top: 150px;
+                width: 82px !important;
+                height: 82px !important;
             }
 
             #timerCenter {
-                bottom: 95px;
-                font-size: 52px;
+                bottom: 46px;
+                font-size: 40px;
             }
         }
     </style>

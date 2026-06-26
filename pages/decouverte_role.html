@@ -206,13 +206,19 @@
 
             <div class="role-body" id="roleBody" style="display:none;">
 
-                <!-- Description courte -->
-                <div class="role-description" id="roleDesc"></div>
-
-                <!-- Rôle pendant le meeting -->
+                <!-- Ton rôle -->
                 <div class="role-meeting-box">
-                    <h3>🏢 Ton rôle pendant le meeting</h3>
+                    <h3>🏢 Ton rôle</h3>
                     <p id="roleMeeting"></p>
+                </div>
+
+                <!-- Description -->
+                <div class="role-description">
+                    <h3
+                        style="margin:0 0 10px;color:#ff3131;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">
+                        📖 Description
+                    </h3>
+                    <p id="roleDesc" style="margin:0;font-style:normal;"></p>
                 </div>
 
                 <!-- Phrase cliché -->
@@ -222,7 +228,7 @@
                 <div id="timerBar">
                     <div id="timerFill"></div>
                 </div>
-                <div id="timerText">Meeting dans 15s…</div>
+                <div id="timerText">Meeting dans 20s…</div>
 
             </div>
 
@@ -239,7 +245,7 @@
 
         document.getElementById("userPseudo").textContent = pseudo;
 
-        const DURATION = 15; // secondes avant redirection
+        const DURATION = 20; // secondes avant redirection
 
         function startWheel() {
             const wheel = document.getElementById("wheelImg");
