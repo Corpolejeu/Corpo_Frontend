@@ -133,8 +133,7 @@
 
                     if (isPrivate) {
                         // Afficher le lien à partager
-                        const link = `${window.location.origin}/frontend/pages/rejoindre_partie.html?name=${encodeURIComponent(partyName)}`;
-                        document.getElementById("shareLink").style.display = "block";
+                        const link = `https://corpo-frontend.onrender.com/pages/lobby.html?code=${data.code}`; document.getElementById("shareLink").style.display = "block";
                         document.getElementById("shareLinkInput").value = link;
                         document.getElementById("shareLinkInput").select();
                         btn.textContent = "✅ Meeting créé !";

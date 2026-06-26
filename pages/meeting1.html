@@ -462,6 +462,46 @@
                 font-size: 19px !important;
             }
         }
+
+        @media (max-width: 768px) {
+
+            #timerCenter {
+                position: absolute !important;
+                left: 50% !important;
+                bottom: 18% !important;
+                transform: translateX(-50%) !important;
+
+                z-index: 20 !important;
+
+                font-size: 34px !important;
+                font-weight: 900 !important;
+
+                color: #ff3131 !important;
+                background: rgba(255, 255, 255, .92) !important;
+
+                padding: 8px 18px !important;
+                border-radius: 999px !important;
+
+                box-shadow: 0 8px 25px rgba(255, 49, 49, .25) !important;
+                border: 3px solid rgba(255, 49, 49, .20) !important;
+            }
+
+            #timerCenter.urgent {
+                color: white !important;
+                background: linear-gradient(135deg, #ff3131, #ff5b5b) !important;
+                animation: timerPulseMobile .5s infinite alternate !important;
+            }
+
+            @keyframes timerPulseMobile {
+                from {
+                    transform: translateX(-50%) scale(1);
+                }
+
+                to {
+                    transform: translateX(-50%) scale(1.08);
+                }
+            }
+        }
     </style>
 </head>
 
@@ -943,11 +983,9 @@
 
             if (msg.startsWith("manager_timeout_random:")) {
                 const victim = msg.split(":")[1];
-                // Afficher un message d'alerte visible
-                const alertEl = document.getElementById("choMessage") || document.createElement("p");
-                alertEl.textContent = `⚠️ Les Managers ont trop tardé… ${victim} risque d'être licencié(e) !`;
-                alertEl.style.cssText = "color:#FF3131;font-weight:bold;text-align:center;";
-                document.querySelector(".meeting-box")?.appendChild(alertEl);
+                document.getElementById("infoBox").style.display = "block";
+                document.getElementById("infoReveal").textContent = `⚠️ Les Managers ont trop tardé… ${victim} a été désigné(e) aléatoirement !`;
+                return;
             }
 
             if (msg.startsWith("pascal_result:")) {
