@@ -28,6 +28,38 @@
             margin-top: 20px;
             display: none;
         }
+
+        .rules-box {
+            margin: 20px 0;
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff3f3, #ffffff);
+            border: 2px solid rgba(255, 49, 49, .18);
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .rules-box p {
+            margin-bottom: 12px;
+        }
+
+        .rules-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .rules-box strong {
+            color: #ff3131;
+        }
+
+        @media(max-width:768px) {
+            .rules-box {
+                font-size: 17px;
+                line-height: 1.5;
+                padding: 20px;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
@@ -50,8 +82,19 @@
             <h1>Lobby</h1>
             <p>En attente des collaborateurs...</p>
 
-            <h3>Code de la partie :</h3>
-            <p id="partyCode" style="font-size:28px; font-weight:bold; letter-spacing:4px;"></p>
+            <div class="rules-box">
+                <p>
+                    Deux équipes s’affrontent pour prendre le contrôle de l'entreprise.
+                    <strong>Managers toxiques</strong> vs <strong>Collaborateurs</strong>.
+                    À vous de récolter des indices pour savoir qui est dans votre équipe.
+                </p>
+
+                <p>
+                    Avant de se faire licencier, chaque joueur a un
+                    <strong>joker / défi Corpo</strong> qui lui permettra de revenir dans la partie
+                    sans dévoiler son identité !
+                </p>
+            </div>
 
             <h3>Collaborateurs connectés :</h3>
             <div id="playersList" class="player-list">
@@ -211,7 +254,6 @@
 
     <script src="../assets/js/translate.js"></script>
     <script src="../assets/js/music.js"></script>
-    <script src="../assets/js/motion.js"></script>
 
 
 

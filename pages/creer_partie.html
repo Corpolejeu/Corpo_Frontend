@@ -86,6 +86,13 @@
             </label></br>
 
             <button class="btn" id="createBtn">Créer un meeting</button>
+            <div id="shareLink" style="display:none; margin-top:16px;">
+                <p style="font-weight:700;color:#c0392b;">🔗 Partage ce lien avec tes potes :</p>
+                <input type="text" id="shareLinkInput" readonly
+                    style="width:100%;padding:10px;border-radius:8px;border:2px solid #c0392b;font-size:13px;">
+                <button onclick="navigator.clipboard.writeText(document.getElementById('shareLinkInput').value)"
+                    class="btn" style="margin-top:8px;width:100%;">📋 Copier le lien</button>
+            </div>
         </div>
     </main>
 
@@ -105,15 +112,8 @@
             const partyName = document.getElementById("partyName").value.trim();
             const isPrivate = document.getElementById("isPrivate").checked;
 
-            if (!partyName) {
-                alert("Veuillez entrer un nom pour votre meeting !");
-                return;
-            }
-
-            if (!savedPseudo) {
-                alert("Tu dois être connecté pour créer un meeting !");
-                return;
-            }
+            if (!partyName) { alert("Veuillez entrer un nom !"); return; }
+            if (!savedPseudo) { alert("Tu dois être connecté !"); return; }
 
             const btn = document.getElementById("createBtn");
             btn.disabled = true;
@@ -123,31 +123,32 @@
                 const response = await fetch("https://corpo-backend.onrender.com/party/create", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        pseudo: savedPseudo,
-                        name: partyName,
-                        is_private: isPrivate
-                    })
+                    body: JSON.stringify({ pseudo: savedPseudo, name: partyName, is_private: isPrivate })
                 });
-
                 const data = await response.json();
 
                 if (response.ok) {
-                    btn.textContent = "✅ Meeting créé !";
                     localStorage.setItem("partyCode", data.code);
                     localStorage.setItem("playerId", data.player_id);
 
-                    setTimeout(() => {
+                    if (isPrivate) {
+                        // Afficher le lien à partager
+                        const link = `${window.location.origin}/frontend/pages/rejoindre_partie.html?name=${encodeURIComponent(partyName)}`;
+                        document.getElementById("shareLink").style.display = "block";
+                        document.getElementById("shareLinkInput").value = link;
+                        document.getElementById("shareLinkInput").select();
+                        btn.textContent = "✅ Meeting créé !";
+                        setTimeout(() => window.location.href = `lobby.html?code=${data.code}`, 3000);
+                    } else {
                         window.location.href = `lobby.html?code=${data.code}`;
-                    }, 600);
+                    }
                 } else {
-                    alert(data.detail || "Erreur lors de la création du meeting");
+                    alert(data.detail || "Erreur");
                     btn.disabled = false;
                     btn.textContent = "Créer un meeting";
                 }
-            } catch (error) {
-                alert("Erreur de connexion au serveur !");
-                console.error(error);
+            } catch (e) {
+                alert("Erreur serveur !");
                 btn.disabled = false;
                 btn.textContent = "Créer un meeting";
             }
@@ -155,7 +156,6 @@
     </script>
     <script src="../assets/js/translate.js"></script>
     <script src="../assets/js/music.js"></script>
-    <script src="../assets/js/motion.js"></script>
 
 
 
