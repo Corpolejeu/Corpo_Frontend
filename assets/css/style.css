@@ -2413,13 +2413,9 @@ body {
     }
 
     .logo {
-        font-size: 21px !important;
-        line-height: 1 !important;
-
+        font-size: 18px !important;
+        font-weight: 800 !important;
         white-space: nowrap !important;
-        max-width: none !important;
-
-        flex: 0 0 auto !important;
     }
 
     .nav-links {
@@ -2431,21 +2427,21 @@ body {
 
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-end !important;
-        gap: 8px !important;
 
-        font-size: 15px !important;
-        white-space: nowrap !important;
+        gap: 6px !important;
 
-        min-width: 0 !important;
-        flex-shrink: 1 !important;
+        font-size: 14px !important;
+    }
+
+    #userPseudo {
+        font-size: 14px !important;
+        font-weight: 700 !important;
     }
 
     #logoutBtn {
-        padding: 9px 12px !important;
-        font-size: 13px !important;
-        border-radius: 12px !important;
+        padding: 7px 10px !important;
+        font-size: 12px !important;
+        border-radius: 10px !important;
         white-space: nowrap !important;
-        flex-shrink: 0 !important;
     }
 }
