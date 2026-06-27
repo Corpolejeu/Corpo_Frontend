@@ -1042,18 +1042,25 @@
             }
 
             // APRÈS
-            // APRÈS (complet)
             if (msg.startsWith("manager_timeout_random:")) {
                 const victim = msg.split(":")[1];
                 document.getElementById("tableTurnRole").textContent = "⚠️ Temps écoulé !";
-                document.getElementById("tableTurnLabel").textContent = `🎲 ${victim} licencié(e) aléatoirement`;
-                document.getElementById("timerCenter").textContent = "";
+                document.getElementById("tableTurnLabel").textContent = `🎲 Licenciement aléatoire !`;
+                document.getElementById("timerCenter").textContent = "5s";
                 document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoReveal").textContent = `⚠️ Fabien n'a pas choisi à temps — ${victim} est licencié(e) aléatoirement !`;
-                // Bloquer l'action de Fabien
+                document.getElementById("infoReveal").textContent = `⚠️ Les Managers ont trop tardé — ${victim} est désigné(e) aléatoirement !`;
                 document.getElementById("actionBox").style.display = "none";
                 document.getElementById("actionButtons").innerHTML = "";
                 clearInterval(displayTimerInterval);
+
+                // Countdown 5s visible
+                let left = 5;
+                const countEl = document.getElementById("timerCenter");
+                const countdown = setInterval(() => {
+                    left--;
+                    countEl.textContent = `${left}s`;
+                    if (left <= 0) clearInterval(countdown);
+                }, 1000);
                 return;
             }
 
