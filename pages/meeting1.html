@@ -449,7 +449,7 @@
                 top: 44px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
-                font-size: 30px !important;
+                font-size: 24px !important;
                 line-height: 1 !important;
                 white-space: nowrap !important;
                 z-index: 50 !important;
@@ -460,18 +460,18 @@
                 top: 82px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
-                font-size: 16px !important;
+                font-size: 14px !important;
                 white-space: nowrap !important;
                 z-index: 50 !important;
             }
 
             #roleImg {
                 position: absolute !important;
-                top: 150px !important;
+                top: 130px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
-                width: 72px !important;
-                height: 72px !important;
+                width: 58px !important;
+                height: 58px !important;
                 margin: 0 !important;
                 z-index: 45 !important;
             }
@@ -479,17 +479,17 @@
             #timerCenter {
                 position: absolute !important;
                 left: 50% !important;
-                bottom: 48px !important;
+                bottom: 58px !important;
                 transform: translateX(-50%) !important;
 
-                font-size: 38px !important;
+                font-size: 28px !important;
                 font-weight: 900 !important;
                 line-height: 1 !important;
 
                 color: #ff3131 !important;
                 background: rgba(255, 255, 255, .96) !important;
 
-                padding: 8px 18px !important;
+                padding: 5px 14px !important;
                 border-radius: 999px !important;
 
                 border: 3px solid rgba(255, 49, 49, .18) !important;
@@ -537,24 +537,25 @@
             }
 
             #tableTurnRole {
-                top: 40px;
-                font-size: 32px;
+                top: 42px;
+                font-size: 24px;
             }
 
             #tableTurnLabel {
-                top: 78px;
-                font-size: 16px;
+                top: 72px;
+                font-size: 14px;
             }
 
             #roleImg {
-                top: 150px;
-                width: 82px !important;
-                height: 82px !important;
+                top: 120px;
+                width: 58px !important;
+                height: 58px !important;
             }
 
             #timerCenter {
-                bottom: 46px;
-                font-size: 40px;
+                bottom: 58px;
+                font-size: 28px;
+                padding: 5px 14px;
             }
         }
     </style>
@@ -702,8 +703,16 @@
                 const seat = document.createElement("div");
                 seat.classList.add("player-seat");
                 seat.id = `seat-${p.id}`;
+                let finalY = y;
+
+                const isBottom = Math.sin(angle) > 0.85;
+
+                if (window.innerWidth <= 768 && isBottom) {
+                    finalY += 4;
+                }
+
                 seat.style.left = `${x}%`;
-                seat.style.top = `${y}%`;
+                seat.style.top = `${finalY}%`;
 
                 const roleImages = {
                     "Fabien": "Fabien.png", "Claire": "Claire.png",
