@@ -276,15 +276,17 @@
                                 clearInterval(autoStartTimer);
                                 autoStartTimer = null;
 
-                                try {
-                                    const res = await fetch(`${API_URL}/party/start/${partyId}`, { method: "POST" });
-                                    const data = await res.json();
-
-                                    if (!res.ok) {
-                                        alert(data.detail || "Impossible de lancer la partie.");
+                                // 🔥 Seulement le host lance la partie
+                                if (Number(playerId) === Number(hostId)) {
+                                    try {
+                                        const res = await fetch(`${API_URL}/party/start/${partyId}`, { method: "POST" });
+                                        const data = await res.json();
+                                        if (!res.ok) {
+                                            alert(data.detail || "Impossible de lancer la partie.");
+                                        }
+                                    } catch (e) {
+                                        console.error("Erreur auto-start :", e);
                                     }
-                                } catch (e) {
-                                    console.error("Erreur auto-start :", e);
                                 }
                             }
                         }, 1000);
