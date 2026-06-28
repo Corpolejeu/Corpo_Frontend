@@ -1043,23 +1043,21 @@
 
             // APRÈS
             if (msg.startsWith("manager_timeout_random:")) {
-                const victim = msg.split(":")[1];
-                document.getElementById("tableTurnRole").textContent = "⚠️ Temps écoulé !";
-                document.getElementById("tableTurnLabel").textContent = `🎲 Licenciement aléatoire !`;
-                document.getElementById("timerCenter").textContent = "5s";
-                document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoReveal").textContent = `⚠️ Les Managers ont trop tardé — ${victim} est désigné(e) aléatoirement !`;
+                const overlay = document.getElementById("randomOverlay");
+                overlay.style.display = "flex";
                 document.getElementById("actionBox").style.display = "none";
-                document.getElementById("actionButtons").innerHTML = "";
                 clearInterval(displayTimerInterval);
 
-                // Countdown 5s visible
                 let left = 5;
-                const countEl = document.getElementById("timerCenter");
+                const countEl = document.getElementById("randomCountdown");
+                countEl.textContent = left;
                 const countdown = setInterval(() => {
                     left--;
-                    countEl.textContent = `${left}s`;
-                    if (left <= 0) clearInterval(countdown);
+                    countEl.textContent = left;
+                    if (left <= 0) {
+                        clearInterval(countdown);
+                        overlay.style.display = "none";
+                    }
                 }, 1000);
                 return;
             }
@@ -1163,7 +1161,26 @@
     <script src="../assets/js/translate.js"></script>
     <script src="../assets/js/music.js"></script>
 
-
+    <!-- Overlay licenciement random -->
+    <div id="randomOverlay" style="
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.75);
+    z-index:9999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    color:white;
+">
+        <div style="font-size:60px;">🎲</div>
+        <div style="font-size:28px;font-weight:900;margin:15px 0;">Licenciement aléatoire !</div>
+        <div style="font-size:18px;color:#ffb020;">Les Managers ont trop tardé…<br>Un collaborateur est désigné au
+            hasard !</div>
+        <div id="randomCountdown" style="font-size:50px;font-weight:900;margin-top:20px;color:#FF3131;">5</div>
+    </div>
 </body>
 
 </html>
