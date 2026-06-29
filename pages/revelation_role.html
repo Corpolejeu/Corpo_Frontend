@@ -115,7 +115,7 @@
             const pid = localStorage.getItem("playerId");
             if (!pid) return;
             try {
-                const r = await fetch(`https://corpo-backend.onrender.com/party/is_alive/${pid}`);
+                const r = await fetch(`http://18.196.1.80:8000/party/is_alive/${pid}`);
                 const d = await r.json();
                 if (!d.is_alive) {
                     // Désactiver tous les boutons et inputs
@@ -131,7 +131,7 @@
             } catch (e) { }
         })();
 
-        const API_URL = "https://corpo-backend.onrender.com";
+        const API_URL = "http://18.196.1.80:8000";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code") || localStorage.getItem("partyCode");
         const partyCode = localStorage.getItem("partyCode");
@@ -141,7 +141,7 @@
         document.getElementById("userPseudo").textContent = pseudo;
 
         // 🔥 WebSocket — écouter le signal go_defi pour rediriger tout le monde
-        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}`);
+        const ws = new WebSocket(`ws://18.196.1.80:8000/ws/${partyCode}`);
         ws.onmessage = (event) => {
             if (event.data === "go_defi") {
                 window.location.href = `defi_corpo.html?code=${partyCode}`;

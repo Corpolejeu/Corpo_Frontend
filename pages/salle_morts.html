@@ -261,7 +261,7 @@
     </div>
 
     <script>
-        const API_URL = "https://corpo-backend.onrender.com";
+        const API_URL = "http://18.196.1.80:8000";
         const partyCode = localStorage.getItem("partyCode");
         const pseudo = localStorage.getItem("pseudo");
         const playerId = localStorage.getItem("playerId");
@@ -309,7 +309,7 @@
         }
 
         // WebSocket
-        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${partyCode}?player_id=${playerId}`);
+        const ws = new WebSocket(`ws://18.196.1.80:8000/ws/${partyCode}?player_id=${playerId}`);
 
         ws.onmessage = (event) => {
             const msg = event.data;

@@ -156,7 +156,7 @@
 
     <script>
         // APRÈS
-        const API_URL = "https://corpo-backend.onrender.com";
+        const API_URL = "http://18.196.1.80:8000";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code");
 
@@ -206,7 +206,7 @@
         let countdown = 20;
 
         // WebSocket
-        const ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`);
+        const ws = new WebSocket(`ws://18.196.1.80:8000/ws/${code}?player_id=${playerId}`);
 
         ws.onopen = () => {
             console.log("Connexion WebSocket OK :", code);

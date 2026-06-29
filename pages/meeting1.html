@@ -626,7 +626,7 @@
     </div>
 
     <script>
-        const API_URL = "https://corpo-backend.onrender.com";
+        const API_URL = "http://18.196.1.80:8000";
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get("code") || localStorage.getItem("partyCode");
         const playerId = localStorage.getItem("playerId");
@@ -1149,7 +1149,7 @@
         }
 
         function connectWS() {
-            ws = new WebSocket(`wss://corpo-backend.onrender.com/ws/${code}?player_id=${playerId}`); ws.onopen = () => { sendReady(); if (!readyInterval) readyInterval = setInterval(sendReady, 2000); };
+            ws = new WebSocket(`ws://18.196.1.80:8000/ws/${code}?player_id=${playerId}`); ws.onopen = () => { sendReady(); if (!readyInterval) readyInterval = setInterval(sendReady, 2000); };
             ws.onmessage = (e) => handleWSMessage(e.data);
             ws.onclose = () => setTimeout(connectWS, 1000);
             ws.onerror = () => ws.close();

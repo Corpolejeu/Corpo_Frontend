@@ -9,7 +9,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     message.style.color = "black";
 
     try {
-        const response = await fetch("https://corpo-backend.onrender.com/account/register", {
+        const response = await fetch("http://18.196.1.80:8000/account/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
