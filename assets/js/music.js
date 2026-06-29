@@ -38,7 +38,7 @@ function createMusicButton() {
 
     btn.id = "musicToggle";
     btn.type = "button";
-    btn.textContent = "🔊 Musique";
+    btn.textContent = "Musique ON";
 
     // Style directement en JavaScript
     btn.style.cssText = `
@@ -85,14 +85,14 @@ function updateMusicButton() {
     // Si la musique est arrêtée
     if (corpoMusic.paused) {
 
-        btn.textContent = "🔇 Musique";
+        btn.textContent = "Musique OFF";
 
     }
 
     // Si elle joue
     else {
 
-        btn.textContent = "🔊 Musique";
+        btn.textContent = "Musique ON";
 
     }
 
